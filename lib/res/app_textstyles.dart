@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portalixmx_app/res/app_colors.dart';
 
 class AppTextStyles {
   static final TextStyle headingTextStyle = TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.white);
@@ -8,5 +9,7 @@ class AppTextStyles {
   static final TextStyle tabsTextStyle = TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.white);
   static final TextStyle tileTitleTextStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xff5B5B5B));
   static final TextStyle tileSubtitleTextStyle = TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Color(0xff919191));
+  static final TextStyle hintTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.greyColor);
+
 
 }
