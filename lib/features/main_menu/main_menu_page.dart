@@ -15,9 +15,9 @@ class MainMenuPage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Consumer<TabChangeProvider>(builder: (ctx, provider, _){
       return Scaffold(
-        backgroundColor: Colors.purple,
         bottomNavigationBar: SizedBox(
           height: 110,
           child: BottomNavigationBar(
@@ -39,32 +39,42 @@ class MainMenuPage extends StatelessWidget{
 
               ]),
         ),
-        body: SafeArea(child: _buildPage(provider.currentIndex)),
+        body: Stack(
+          children: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: size.height*0.7,
+                width: double.infinity,
+                alignment: Alignment.bottomCenter,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                    AppColors.btnColor,
+                    AppColors.btnColor.withOpacity(0.0)
+
+                  ])
+                ),
+              ),
+            ),
+
+            Positioned(
+              right: 10,
+              top: 50,
+              child: Image.asset(AppIcons.icScreenBg, height: 150,),
+            ),
+
+            SafeArea(child: _buildPage(provider.currentIndex)),
+          ],
+        ),
       );
     },
     );
   }
 
   BottomNavigationBarItem _buildBottomNavigationItemWidget({required String icon, required String label, required bool isSelected}) =>
-     /* BottomNavigationBarItem(
-        icon:  Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(vertical: 10),
-          decoration: isSelected ? BoxDecoration(
-            color: AppColors.btnColor,
-            shape: BoxShape.circle
-          ) : null,
-          child: isSelected ? SvgPicture.asset(icon):  Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SvgPicture.asset(icon),
-              Text(isSelected ? '' : label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.white),)
-            ],
-          )
-        ),
-        label: '',
-      );*/
     BottomNavigationBarItem(
         icon: isSelected ? Container(
           padding: const EdgeInsets.all(12.0),
