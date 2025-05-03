@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portalixmx_app/features/main_menu/vistors/visitor_detail_page.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 
@@ -68,6 +69,7 @@ class _HomePageState extends State<HomePage> {
                     return Card(
                       margin: EdgeInsets.only(bottom: 10),
                       child: ListTile(
+                        onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> VisitorDetailPage())),
                         contentPadding: EdgeInsets.only(left: 10),
                         leading: CircleAvatar(
                           backgroundColor: AppColors.btnColor,

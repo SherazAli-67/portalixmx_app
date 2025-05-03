@@ -5,13 +5,13 @@ import '../res/app_textstyles.dart';
 class PrimaryBtn extends StatelessWidget{
   final VoidCallback onTap;
   final String btnText;
-
-  const PrimaryBtn({super.key, required this.onTap, required this.btnText});
+  final Color color;
+  const PrimaryBtn({super.key, required this.onTap, required this.btnText, this.color = AppColors.btnColor});
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.btnColor
+            backgroundColor: color
         ),
         onPressed: onTap, child: Text(btnText
       ,style: AppTextStyles.btnTextStyle,));

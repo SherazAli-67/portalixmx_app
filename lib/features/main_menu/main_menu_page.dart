@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:portalixmx_app/features/home_page.dart';
+import 'package:portalixmx_app/features/main_menu/vistors/home_page.dart';
 import 'package:portalixmx_app/features/main_menu/access_page.dart';
 import 'package:portalixmx_app/features/main_menu/maintenance_page.dart';
 import 'package:portalixmx_app/features/main_menu/payments_menu.dart';
@@ -59,13 +59,11 @@ class MainMenuPage extends StatelessWidget{
                 ),
               ),
             ),
-
             Positioned(
               right: 10,
               top: 50,
               child: Image.asset(AppIcons.icScreenBg, height: 150,),
             ),
-
             SafeArea(child: _buildPage(provider.currentIndex)),
           ],
         ),

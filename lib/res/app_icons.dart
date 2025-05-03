@@ -6,5 +6,6 @@ class AppIcons {
   static const icMaintenance = 'assets/icons/ic_maintainence_menu.svg';
   static const icAccess = 'assets/icons/ic_access_menu.svg';
   static const icMenu = 'assets/icons/ic_menu.svg';
+  static const icQRCode = 'assets/icons/ic_qrcode.png';
 
 }
