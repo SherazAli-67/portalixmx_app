@@ -12,4 +12,5 @@ class AppColors {
   static const borderColor = Color(0xffE8E8E8);
   static const greyColor2 = Color(0xff777777);
   static const darkGreyColor2 = Color(0xff606060);
+  static const serviceSubTitleGreyColor = Color(0xff818181);
 }
