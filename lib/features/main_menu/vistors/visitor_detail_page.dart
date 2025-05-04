@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:portalixmx_app/app_data/app_data.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
@@ -19,24 +20,14 @@ class VisitorDetailPage extends StatelessWidget{
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios_rounded, color: Colors.white,)),
+                IconButton(onPressed: ()=> Navigator.of(context).pop(), icon: Icon(Icons.arrow_back_ios_rounded, color: Colors.white,)),
                 Column(
                   children: [
                     Text("Name", style: AppTextStyles.regularTextStyle,),
                     Text("Regular Visitor", style: AppTextStyles.tileSubtitleTextStyle,)
                   ],
                 ),
-                PopupMenuButton(
-                    elevation: 0,
-                    color: Colors.white,
-                    position: PopupMenuPosition.under,
-                    padding: EdgeInsets.zero,
-                    icon: Icon(Icons.more_vert_rounded, color: Colors.white,),
-                    itemBuilder: (ctx){
-                      return [
-                        PopupMenuItem(child: Text("Menu Item"))
-                      ];
-                    })
+                IconButton(onPressed: ()=> _showEditBottomSheet(context), icon: Icon(Icons.more_vert_rounded, color: Colors.white,))
               ],
             ),
             Expanded(
@@ -128,4 +119,33 @@ class VisitorDetailPage extends StatelessWidget{
     );
   }
 
+  void _showEditBottomSheet(BuildContext context){
+     showModalBottomSheet(
+         backgroundColor: Colors.white,
+         context: context, builder: (ctx){
+       return Padding(
+         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 35),
+         child: Column(
+           mainAxisSize: MainAxisSize.min,
+           spacing: 10,
+           children: [
+             _buildEditDeleteItem(icon: AppIcons.icEdit, text: "Edit", onTap: (){}),
+             _buildEditDeleteItem(icon: AppIcons.icDelete, text: "Delete", onTap: (){}),
+
+           ],
+         ),
+       );
+     });
+  }
+
+  Row _buildEditDeleteItem({required String icon, required String text, required VoidCallback onTap}) {
+    return Row(
+      spacing: 20,
+      children: [
+        IconButton(
+            onPressed: onTap, icon: SvgPicture.asset(icon)),
+        Text(text, style: AppTextStyles.visitorDetailSubtitleTextStyle,)
+      ],
+    );
+  }
 }

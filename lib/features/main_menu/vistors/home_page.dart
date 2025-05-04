@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portalixmx_app/features/main_menu/vistors/add_guest_page.dart';
 import 'package:portalixmx_app/features/main_menu/vistors/visitor_detail_page.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
                   style: IconButton.styleFrom(
                     backgroundColor: AppColors.btnColor
                   ),
-                  onPressed: (){}, icon: Icon(Icons.add_rounded, color: Colors.white,)),
+                  onPressed: _onAddGuestTap, icon: Icon(Icons.add_rounded, color: Colors.white,)),
             ),
             Row(
               spacing: 10,
@@ -98,5 +99,22 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void _onAddGuestTap(){
+    showModalBottomSheet(
+        backgroundColor: Colors.white,
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return FractionallySizedBox(
+            heightFactor: 0.9,
+            child: AddGuestPage(),
+          );
+        });
+   /* showModalBottomSheet(
+        backgroundColor: Colors.white,
+        isScrollControlled: true,
+        context: context, builder: (ctx)=> AddGuestPage());*/
   }
 }

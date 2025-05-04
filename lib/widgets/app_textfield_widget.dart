@@ -10,8 +10,11 @@ class AppTextField extends StatefulWidget {
     required String hintText,
     this.isPassword = false,
     this.readOnly = false,
-    TextInputType? textInputType
-  }) : _textController = textController,_hintText = hintText, _textInputType = textInputType;
+    TextInputType? textInputType,
+    Color fillColor = Colors.white,
+    Color hintTextColor = AppColors.greyColor,
+    Color borderColor = Colors.transparent,
+  }) : _textController = textController,_hintText = hintText, _textInputType = textInputType, _fillColor = fillColor, _hintTextColor = hintTextColor, _borderColor = borderColor;
 
   final TextEditingController _textController;
   final String _hintText;
@@ -19,6 +22,9 @@ class AppTextField extends StatefulWidget {
   final bool isPassword;
   final bool readOnly;
   final TextInputType? _textInputType;
+  final Color _fillColor;
+  final Color _hintTextColor;
+  final Color _borderColor;
   @override
   State<AppTextField> createState() => _AppTextFieldState();
 }
@@ -34,15 +40,17 @@ class _AppTextFieldState extends State<AppTextField> {
       keyboardType: widget._textInputType,
       decoration: InputDecoration(
           hintText: widget._hintText,
-          hintStyle: AppTextStyles.hintTextStyle,
+          hintStyle: AppTextStyles.hintTextStyle.copyWith(color: widget._hintTextColor),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: widget._borderColor)
           ),
           suffixIcon: widget.isPassword ? TextButton(
               onPressed: () => setState(() => hidePassword = !hidePassword),
               child: Text(hidePassword ? "Show" :"Hide", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.primaryColor),)) : null,
-          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8),),
-          fillColor: Colors.white,
+          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: widget._borderColor)),
+          fillColor: widget._fillColor,
           filled: true
       ),
     );
