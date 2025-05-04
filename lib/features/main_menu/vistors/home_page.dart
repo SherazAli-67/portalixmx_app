@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
         isScrollControlled: true,
         builder: (context) {
           return FractionallySizedBox(
-            heightFactor: 0.9,
+            heightFactor: 0.82,
             child: AddGuestPage(),
           );
         });

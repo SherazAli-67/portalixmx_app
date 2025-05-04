@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portalixmx_app/features/main_menu/vistors/visitor_added_summary_page.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
@@ -41,7 +42,7 @@ class _AddGuestPageState extends State<AddGuestPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 23),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +62,9 @@ class _AddGuestPageState extends State<AddGuestPage> {
           SizedBox(
             height: 50,
             width: double.infinity,
-            child: PrimaryBtn(onTap: (){}, btnText: "Submit"),
+            child: PrimaryBtn(onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> VisitorAddedSummaryPage()));
+            }, btnText: "Submit"),
           )
         ],
       ),
