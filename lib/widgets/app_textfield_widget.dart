@@ -40,7 +40,6 @@ class _AppTextFieldState extends State<AppTextField> {
       readOnly: widget.readOnly,
       obscureText: widget.isPassword && hidePassword,
       keyboardType: widget._textInputType,
-      maxLines: widget._maxLines,
       decoration: InputDecoration(
           hintText: widget._hintText,
           hintStyle: AppTextStyles.hintTextStyle.copyWith(color: widget._hintTextColor),
