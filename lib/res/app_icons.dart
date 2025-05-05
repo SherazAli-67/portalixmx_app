@@ -11,6 +11,10 @@ class AppIcons {
   static const icDelete = 'assets/icons/ic_delete.svg';
   static const icCamera = 'assets/icons/ic_camera.svg';
   static const icUploadPhotos = 'assets/icons/ic_upload_photos.svg';
+  static const icGame = 'assets/icons/ic_game.svg';
+  static const icGym = 'assets/icons/ic_gym.svg';
+  static const icPool = 'assets/icons/ic_pool.svg';
+
 
   static const icComplaintImageUrl = 'https://images.unsplash.com/photo-1554224155-1696413565d3?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 }

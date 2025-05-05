@@ -13,8 +13,8 @@ class VisitorInfoItemWidget extends StatelessWidget{
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(_title, style: AppTextStyles.visitorDetailTitleTextStyle,),
-        Text(_subtitle, style: AppTextStyles.visitorDetailSubtitleTextStyle,),
+        Text(_title, style: AppTextStyles.visitorDetailTitleTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w400),),
+        Text(_subtitle, style: AppTextStyles.visitorDetailSubtitleTextStyle.copyWith(fontSize: 14),),
         const SizedBox(height: 20,),
         if(_showDivider)
           Divider(color: AppColors.dividerColor,)

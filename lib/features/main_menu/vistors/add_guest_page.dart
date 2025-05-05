@@ -7,6 +7,7 @@ import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 import 'package:portalixmx_app/widgets/app_textfield_widget.dart';
 import 'package:portalixmx_app/widgets/drop_down_textfield_widget.dart';
+import 'package:portalixmx_app/widgets/from_date_and_time_widget.dart';
 import 'package:portalixmx_app/widgets/primary_btn.dart';
 
 class AddGuestPage extends StatefulWidget{
@@ -79,50 +80,6 @@ class _AddGuestPageState extends State<AddGuestPage> {
   }
 
 
-  Widget _buildToFromWidget({required String title, required VoidCallback onDateTap, required VoidCallback onTimeTap, DateTime? dateTime, TimeOfDay? time}){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 5,
-      children: [
-        Text(title, style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.btnColor),),
-        Row(
-          spacing: 20,
-          children: [
-            Expanded(child: Container(
-                padding: EdgeInsets.only(left: 15,  top: 2, bottom: 2),
-                decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.borderColor),
-                    color: AppColors.fillColorGrey,
-                    borderRadius: BorderRadius.circular(8)
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(dateTime != null ? DateTimeFormatHelpers.formatDateTime(dateTime) : "Date", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.greyColor2),),
-                    IconButton(onPressed: onDateTap, icon: Icon(Icons.calendar_month_outlined, color: AppColors.darkGreyColor2,))
-                  ],
-                )
-            ),),
-            Expanded(child: Container(
-                padding: EdgeInsets.only(left: 15, top: 2, bottom: 2),
-                decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.borderColor),
-                    color: AppColors.fillColorGrey,
-                    borderRadius: BorderRadius.circular(8)
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(time != null ? DateTimeFormatHelpers.formatTime(time) :"Time", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.greyColor2),),
-                    IconButton(onPressed: onTimeTap, icon: Icon(Icons.access_time, color: AppColors.darkGreyColor2,))
-                  ],
-                )
-            ),)
-          ],
-        )
-      ],
-    );
-  }
 
   void _onFromDateTap() async {
     _selectedFromDateTime = await showDatePicker(context: context,
@@ -167,8 +124,8 @@ class _AddGuestPageState extends State<AddGuestPage> {
         AppTextField(textController: _carPlatNumberController, hintText: "Car Plate Number", fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
         AppTextField(textController: _vehicleModelController, hintText: "Vehicle Model", fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
         AppTextField(textController: _colorController, hintText: "Color", fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
-        _buildToFromWidget(title: 'From',onDateTap: _onFromDateTap, onTimeTap: _onFromTimeTap, dateTime: _selectedFromDateTime, time: _selectedFromTime),
-        _buildToFromWidget(title: 'To',onDateTap: _onToDateTap, onTimeTap: _onToTimeTap, dateTime: _selectedToDateTime, time: _selectedToTime),
+        FromDateAndTimeWidget(title: 'From',onDateTap: _onFromDateTap, onTimeTap: _onFromTimeTap, selectedDate: _selectedFromDateTime, selectedTime: _selectedFromTime),
+        FromDateAndTimeWidget(title: 'To',onDateTap: _onToDateTap, onTimeTap: _onToTimeTap, selectedDate: _selectedToDateTime, selectedTime: _selectedToTime),
       ],
     );
   }
@@ -213,3 +170,4 @@ class _AddGuestPageState extends State<AddGuestPage> {
     }
   }
 }
+

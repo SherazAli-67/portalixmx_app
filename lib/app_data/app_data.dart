@@ -1,3 +1,6 @@
+import 'package:portalixmx_app/models/access_request_model.dart';
+import 'package:portalixmx_app/res/app_icons.dart';
+
 class AppData {
   static final List<String> days = [
     'MON', 'TUE','WED', 'THU', 'FRI','SAT', 'SUN'
@@ -21,7 +24,14 @@ class AppData {
         return 'SUN';
       default:
         return 'MON';
-
     }
+  }
+
+  static List<AccessRequestModel> get getRequestAccessList {
+    return [
+      AccessRequestModel(id: 1, icon: AppIcons.icPool, title: "Pool"),
+      AccessRequestModel(id: 2, icon: AppIcons.icGame, title: "Game"),
+      AccessRequestModel(id: 3, icon: AppIcons.icGym, title: "Gym"),
+    ];
   }
 }

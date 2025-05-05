@@ -43,7 +43,7 @@ class ComplaintSummaryPage extends StatelessWidget{
                     children: [
                       Expanded(
                         child: VisitorInfoItemWidget(
-                          title: 'Date', subTitle: 'Sep 20, 2024',),
+                          title: 'Date', subTitle: 'Sep 20, 2024', ),
                       ),
                       Expanded(
                           child: VisitorInfoItemWidget(
