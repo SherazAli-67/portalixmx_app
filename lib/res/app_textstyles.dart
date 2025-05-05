@@ -12,5 +12,6 @@ class AppTextStyles {
   static final TextStyle hintTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.greyColor);
   static final TextStyle visitorDetailTitleTextStyle = TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.visitorDetailTitleColor);
   static final TextStyle visitorDetailSubtitleTextStyle = TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.darkGreyColor);
+  static final TextStyle bottomSheetHeadingTextStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.primaryColor);
 
 }

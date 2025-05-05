@@ -15,7 +15,7 @@ class VisitorDetailPage extends StatelessWidget{
   Widget build(BuildContext context) {
     return BgGradientScreen(
         paddingFromTop: 50,
-        child:  Column(
+        child: Column(
           spacing: 11,
           children: [
             Row(

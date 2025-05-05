@@ -9,5 +9,6 @@ class AppIcons {
   static const icQRCode = 'assets/icons/ic_qrcode.png';
   static const icEdit = 'assets/icons/ic_edit.svg';
   static const icDelete = 'assets/icons/ic_delete.svg';
-
+  static const icCamera = 'assets/icons/ic_camera.svg';
+  static const icUploadPhotos = 'assets/icons/ic_upload_photos.svg';
 }

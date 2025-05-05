@@ -40,8 +40,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Text("Welcome Alex!", style: AppTextStyles.regularTextStyle,)
-
-
               ],
             ),
             const SizedBox(height: 20,),

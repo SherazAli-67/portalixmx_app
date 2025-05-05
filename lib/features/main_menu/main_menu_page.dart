@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/features/main_menu/vistors/home_page.dart';
 import 'package:portalixmx_app/features/main_menu/access_page.dart';
-import 'package:portalixmx_app/features/main_menu/maintenance_page.dart';
+import 'package:portalixmx_app/features/main_menu/maintenance/maintenance_page.dart';
 import 'package:portalixmx_app/features/main_menu/payments_menu.dart';
 import 'package:portalixmx_app/features/main_menu/profile_page.dart';
 import 'package:portalixmx_app/providers/tab_change_provider.dart';

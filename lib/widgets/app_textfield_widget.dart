@@ -14,7 +14,8 @@ class AppTextField extends StatefulWidget {
     Color fillColor = Colors.white,
     Color hintTextColor = AppColors.greyColor,
     Color borderColor = Colors.transparent,
-  }) : _textController = textController,_hintText = hintText, _textInputType = textInputType, _fillColor = fillColor, _hintTextColor = hintTextColor, _borderColor = borderColor;
+    int? maxLines,
+  }) : _textController = textController,_hintText = hintText, _textInputType = textInputType, _fillColor = fillColor, _hintTextColor = hintTextColor, _borderColor = borderColor, _maxLines = maxLines;
 
   final TextEditingController _textController;
   final String _hintText;
@@ -25,6 +26,7 @@ class AppTextField extends StatefulWidget {
   final Color _fillColor;
   final Color _hintTextColor;
   final Color _borderColor;
+  final int? _maxLines;
   @override
   State<AppTextField> createState() => _AppTextFieldState();
 }
@@ -38,6 +40,7 @@ class _AppTextFieldState extends State<AppTextField> {
       readOnly: widget.readOnly,
       obscureText: widget.isPassword && hidePassword,
       keyboardType: widget._textInputType,
+      maxLines: widget._maxLines,
       decoration: InputDecoration(
           hintText: widget._hintText,
           hintStyle: AppTextStyles.hintTextStyle.copyWith(color: widget._hintTextColor),
