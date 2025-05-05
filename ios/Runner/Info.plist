@@ -28,6 +28,10 @@
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+        <string>The app requires photos permission to select images for complaints, reports and Profile </string>
+        <key>NSCameraUsageDescription</key>
+        <string>The app requires camera permission to select images for complaints, reports and Profile </string>
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>

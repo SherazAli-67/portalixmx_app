@@ -48,8 +48,7 @@ class VisitorAddedSummaryPage extends StatelessWidget{
             ),
           )
         ],
-      ),
-    );
+      ),);
   }
 
   Widget _buildGuestWidget() {
