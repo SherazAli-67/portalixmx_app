@@ -3,7 +3,7 @@ import 'package:portalixmx_app/features/main_menu/vistors/home_page.dart';
 import 'package:portalixmx_app/features/main_menu/access/access_page.dart';
 import 'package:portalixmx_app/features/main_menu/maintenance/maintenance_page.dart';
 import 'package:portalixmx_app/features/main_menu/payments_menu.dart';
-import 'package:portalixmx_app/features/main_menu/profile_page.dart';
+import 'package:portalixmx_app/features/main_menu/profile_menu/profile_page.dart';
 import 'package:portalixmx_app/providers/tab_change_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:provider/provider.dart';

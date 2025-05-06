@@ -1,4 +1,5 @@
 import 'package:portalixmx_app/models/access_request_model.dart';
+import 'package:portalixmx_app/models/emergency_contact_model.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 
 class AppData {
@@ -32,6 +33,14 @@ class AppData {
       AccessRequestModel(id: 1, icon: AppIcons.icPool, title: "Pool"),
       AccessRequestModel(id: 2, icon: AppIcons.icGame, title: "Game"),
       AccessRequestModel(id: 3, icon: AppIcons.icGym, title: "Gym"),
+    ];
+  }
+
+  static List<EmergencyContactModel> get emergencyContacts {
+    return [
+      EmergencyContactModel(id: 1, name: "Isela Trujillo", phoneNumber: "+92 3072215500"),
+      EmergencyContactModel(id: 1, name: "Sheraz Ali", phoneNumber: "+92 3072215500"),
+
     ];
   }
 }

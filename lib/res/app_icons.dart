@@ -20,6 +20,7 @@ class AppIcons {
   static const icCarPooling = 'assets/icons/ic_car.svg';
   static const icEmergencyCalls = 'assets/icons/ic_emergency_calls.svg';
   static const icCommunityPolls = 'assets/icons/ic_community_polls.svg';
+  static const icProfileEdit = 'assets/icons/ic_profile_edit.svg';
 
 
   static const icUserImageUrl = 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTJ8fFVzZXJ8ZW58MHx8MHx8fDA%3D';

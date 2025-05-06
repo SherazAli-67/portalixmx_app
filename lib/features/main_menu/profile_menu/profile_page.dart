@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:portalixmx_app/features/main_menu/profile_menu/edit_profile_page.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 
@@ -28,7 +29,9 @@ class ProfileMenu extends StatelessWidget{
                 ),
                 Text("Muhammad Ali", style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.white),),
                 InkWell(
-                    onTap: (){},
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> EditProfilePage()));
+                    },
                     child: Text("View Profile", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.white),))
               ],
             ),
