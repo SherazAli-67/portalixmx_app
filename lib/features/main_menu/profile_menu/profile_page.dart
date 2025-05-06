@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:portalixmx_app/features/main_menu/profile_menu/community_calendar.dart';
+import 'package:portalixmx_app/features/main_menu/profile_menu/community_polls_page.dart';
+import 'package:portalixmx_app/features/main_menu/profile_menu/directory_page.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/edit_profile_page.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
@@ -39,9 +42,9 @@ class ProfileMenu extends StatelessWidget{
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ProfileItemWidget(title: "Directory", icon: AppIcons.icDirectory,  onTap: (){}),
-              ProfileItemWidget(title: "Community Calendar", icon: AppIcons.icCalendar, onTap: (){}),
-              ProfileItemWidget(title: "Community Polls", icon: AppIcons.icCommunityPolls,  onTap: (){}),
+              ProfileItemWidget(title: "Directory", icon: AppIcons.icDirectory,  onTap: ()=> _onDirectoryTap(context)),
+              ProfileItemWidget(title: "Community Calendar", icon: AppIcons.icCalendar, onTap: ()=> _onCommunityCalendarTap(context)),
+              ProfileItemWidget(title: "Community Polls", icon: AppIcons.icCommunityPolls,  onTap: ()=> _onCommunityPollsTap(context)),
               ProfileItemWidget(title: "Guards", icon: AppIcons.icGuards, onTap: (){}),
               ProfileItemWidget(title: "Car Pooling", icon: AppIcons.icCarPooling, onTap: (){}),
               ProfileItemWidget(title: "Emergency Calls", icon: AppIcons.icEmergencyCalls, onTap: (){}),
@@ -53,6 +56,18 @@ class ProfileMenu extends StatelessWidget{
         ],
       ),
     );
+  }
+
+  void _onDirectoryTap(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> DirectoryPage()));
+  }
+
+  void _onCommunityCalendarTap(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> CommunityCalendarPage()));
+  }
+
+  void _onCommunityPollsTap(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> CommunityPollsPage()));
   }
 }
 
@@ -68,6 +83,7 @@ class ProfileItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: _onTap,
       contentPadding: EdgeInsets.only(left: 15),
       leading: SvgPicture.asset(_icon, colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn)),
       title: Text(_title, style: AppTextStyles.tileTitleTextStyle2),

@@ -14,4 +14,7 @@ class AppColors {
   static const greyColor2 = Color(0xff777777);
   static const darkGreyColor2 = Color(0xff606060);
   static const serviceSubTitleGreyColor = Color(0xff818181);
+  static const lightGreyBackgroundColor = Color(0xffEFEFEF);
+  static const postGreyColor = Color(0xff7A7A7A);
+
 }
