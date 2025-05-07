@@ -5,6 +5,8 @@ import 'package:portalixmx_app/features/main_menu/profile_menu/community_calenda
 import 'package:portalixmx_app/features/main_menu/profile_menu/community_polls_page.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/directory_page.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/edit_profile_page.dart';
+import 'package:portalixmx_app/features/main_menu/profile_menu/emergency_calls_page.dart';
+import 'package:portalixmx_app/features/main_menu/profile_menu/profile_guards_page.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 
@@ -45,9 +47,9 @@ class ProfileMenu extends StatelessWidget{
               ProfileItemWidget(title: "Directory", icon: AppIcons.icDirectory,  onTap: ()=> _onDirectoryTap(context)),
               ProfileItemWidget(title: "Community Calendar", icon: AppIcons.icCalendar, onTap: ()=> _onCommunityCalendarTap(context)),
               ProfileItemWidget(title: "Community Polls", icon: AppIcons.icCommunityPolls,  onTap: ()=> _onCommunityPollsTap(context)),
-              ProfileItemWidget(title: "Guards", icon: AppIcons.icGuards, onTap: (){}),
-              ProfileItemWidget(title: "Car Pooling", icon: AppIcons.icCarPooling, onTap: (){}),
-              ProfileItemWidget(title: "Emergency Calls", icon: AppIcons.icEmergencyCalls, onTap: (){}),
+              ProfileItemWidget(title: "Guards", icon: AppIcons.icGuards, onTap: ()=> _onGuardsTap(context)),
+              ProfileItemWidget(title: "Car Pooling", icon: AppIcons.icCarPooling, onTap: () {}),
+              ProfileItemWidget(title: "Emergency Calls", icon: AppIcons.icEmergencyCalls, onTap: ()=> _onEmergencyTap(context)),
               TextButton(onPressed: (){}, child: Text("Privacy Policy", style: AppTextStyles.tileTitleTextStyle2,)),
               TextButton(onPressed: (){}, child: Text("Log out", style: AppTextStyles.tileTitleTextStyle2,)),
 
@@ -68,6 +70,14 @@ class ProfileMenu extends StatelessWidget{
 
   void _onCommunityPollsTap(BuildContext context){
     Navigator.of(context).push(MaterialPageRoute(builder: (_)=> CommunityPollsPage()));
+  }
+
+  void _onGuardsTap(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ProfileGuardsPage()));
+  }
+
+  void _onEmergencyTap(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EmergencyCallsPage()));
   }
 }
 
