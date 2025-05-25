@@ -14,8 +14,6 @@ class UserViewModel extends ChangeNotifier {
   final String _userIDKey = 'userID';
   final String _userNameKey = 'userName';
   final String _userEmailKey = 'emailAddress';
-  List<Visitor> _visitors  = [];
-  List<Guest> _guests  = [];
   String? _token;
   String? _userID;
   String? _userName;
@@ -25,8 +23,6 @@ class UserViewModel extends ChangeNotifier {
   String? get userID => _userID;
   String? get userName => _userName;
   String? get emailAddress => _emailAddress;
-  List<Visitor> get visitors => _visitors;
-  List<Guest> get guests => _guests;
 
 
   UserViewModel(){
@@ -58,32 +54,4 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  Future<Map<String, dynamic>?> getAllVisitors() async{
-
-    try{
-      final response =  await _apiService.getRequest(endpoint: ApiConstants.allVisitorsEndPoint, token: token!);
-      VisitorResponse apiResponse = VisitorResponse.fromJson(jsonDecode(response.body));
-      _visitors = apiResponse.data;
-      notifyListeners();
-    }catch(e){
-      debugPrint("Error while logging in: ${e.toString()}");
-    }
-
-    return null;
-  }
-
-  Future<Map<String, dynamic>?> getAllGuests() async{
-
-    try{
-      final response =  await _apiService.getRequest(endpoint: ApiConstants.allGuestsEndPoint, token: token!);
-      GuestResponse apiResponse = GuestResponse.fromJson(jsonDecode(response.body));
-      _guests = apiResponse.data;
-      notifyListeners();
-    }catch(e){
-      debugPrint("Error while logging in: ${e.toString()}");
-    }
-
-    return null;
-  }
 }

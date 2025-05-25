@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:portalixmx_app/app_data/app_data.dart';
-import 'package:portalixmx_app/features/main_menu/vistors/visitor_added_summary_page.dart';
 import 'package:portalixmx_app/models/day_time_model.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
+import 'package:portalixmx_app/providers/home_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 import 'package:portalixmx_app/widgets/app_textfield_widget.dart';
 import 'package:portalixmx_app/widgets/drop_down_textfield_widget.dart';
 import 'package:portalixmx_app/widgets/from_date_and_time_widget.dart';
 import 'package:portalixmx_app/widgets/primary_btn.dart';
+import 'package:provider/provider.dart';
 
 class AddGuestPage extends StatefulWidget{
-  const AddGuestPage({super.key});
-
+  const AddGuestPage({super.key, required this.token});
+  final String token;
   @override
   State<AddGuestPage> createState() => _AddGuestPageState();
 }
@@ -24,7 +26,7 @@ class _AddGuestPageState extends State<AddGuestPage> {
   final TextEditingController _vehicleModelController = TextEditingController();
   final TextEditingController _colorController = TextEditingController();
 
-  final List<String> _guestType = [
+  final List<String> _guestTypes = [
     'Regular Visitor', 'Guest'
   ];
   String selectedGuestType = 'Guest';
@@ -38,6 +40,7 @@ class _AddGuestPageState extends State<AddGuestPage> {
   @override
   void initState() {
     _regularVisitorTIme = List.generate(7, (index)=> DayTimeModel(dayID: index));
+
     super.initState();
   }
   @override
@@ -61,19 +64,19 @@ class _AddGuestPageState extends State<AddGuestPage> {
               alignment: Alignment.center,
               child: Text("Add Guest", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.primaryColor),)),
           AppTextField(textController: _nameController, hintText: "Name", fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor, borderColor: AppColors.borderColor,),
-          DropdownTextfieldWidget(isEmpty: selectedGuestType.isEmpty, selectedValue: selectedGuestType, onChanged: (val)=> setState(()=> selectedGuestType = val!), guestTypes: _guestType, width: double.infinity, hintText: 'Guest'),
-          AppTextField(textController: _contactNumberController, hintText: "Contact Number",fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor, borderColor: AppColors.borderColor,),
+          DropdownTextfieldWidget(isEmpty: selectedGuestType.isEmpty, selectedValue: selectedGuestType, onChanged: (val)=> setState(()=> selectedGuestType = val!), guestTypes: _guestTypes, width: double.infinity, hintText: 'Guest'),
+          AppTextField(textController: _contactNumberController, hintText: "Contact Number",fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor, borderColor: AppColors.borderColor, textInputType: TextInputType.numberWithOptions(),),
           
           selectedGuestType == 'Guest' ? _buildGuestWidget() : _buildRegularVisitorWidget(),
           
          
-          SizedBox(
-            height: 50,
-            width: double.infinity,
-            child: PrimaryBtn(onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> VisitorAddedSummaryPage()));
-            }, btnText: "Submit"),
-          )
+          Consumer<HomeProvider>(builder: (ctx,provider,_){
+            return SizedBox(
+              height: 50,
+              width: double.infinity,
+              child: PrimaryBtn(onTap: _onSubmitTap, btnText: "Submit", isLoading: provider.addingGuestVisitor,),
+            );
+          })
         ],
       ),
     );
@@ -167,6 +170,60 @@ class _AddGuestPageState extends State<AddGuestPage> {
     if(pickedTime != null){
       _regularVisitorTIme[index].time = pickedTime;
       setState(() {});
+    }
+  }
+
+  Future<void> _onSubmitTap() async {
+    debugPrint("Submit tap");
+    if(selectedGuestType.isEmpty){
+      //return
+    }
+    debugPrint("Below Submit tap");
+    String name = _nameController.text.trim();
+    String contactNum = _contactNumberController.text.trim();
+
+
+
+    if(selectedGuestType == _guestTypes[0]){
+     /* final map = {
+        'name': name,
+        'contactNumber' : contactNum,
+        'type' : 'Regular Visitor',
+        'moTime' : ''
+      };*/
+    }else {
+      String carPlateNum = _carPlatNumberController.text.trim();
+      String vehicleModel = _vehicleModelController.text.trim();
+      String color = _colorController.text.trim();
+
+      debugPrint("Inside else");
+      //guest
+      String fromDate = DateFormat('yyyy-MM-dd').format(_selectedFromDateTime!);
+      String fromTime = DateTimeFormatHelpers.formatTime(_selectedFromTime!);
+
+      String toDate = DateFormat('yyyy-MM-dd').format(_selectedToDateTime!);
+      String toTime = DateTimeFormatHelpers.formatTime(_selectedToTime!);
+
+      final map = {
+        'name' : name,
+        'type' : 'guest',
+        'contactNumber' : contactNum,
+        'carPlateNumber' : carPlateNum,
+        'vehicleModel' : vehicleModel,
+        'color' : color,
+        'fromDate' : fromDate,
+        'fromTime' : fromTime,
+        'toDate' : toDate,
+        'toTime' : toTime,
+
+      };
+
+      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+      bool result = await homeProvider.addGuest(token: widget.token, data: map);
+      if(result){
+        await homeProvider.getAllGuests(token: widget.token);
+        Navigator.of(context).pop();
+      }
     }
   }
 }

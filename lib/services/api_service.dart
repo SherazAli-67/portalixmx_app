@@ -58,7 +58,7 @@ class ApiService {
       url,
       headers: headers,
     );
-    debugPrint("GET Api $endpoint response: ${response.body}");
+    // debugPrint("GET Api $endpoint response: ${response.body}");
     return response;
   }
 

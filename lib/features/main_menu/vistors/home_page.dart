@@ -3,11 +3,13 @@ import 'package:portalixmx_app/features/main_menu/vistors/add_guest_page.dart';
 import 'package:portalixmx_app/features/main_menu/vistors/visitor_detail_page.dart';
 import 'package:portalixmx_app/models/guest_api_response.dart';
 import 'package:portalixmx_app/models/visitor_api_response.dart';
+import 'package:portalixmx_app/providers/home_provider.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
-import 'package:portalixmx_app/repositories/home_repo.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 import 'package:provider/provider.dart';
+
+import '../../../widgets/loading_widget.dart';
 
 class HomePage extends StatefulWidget{
   const HomePage({super.key});
@@ -17,74 +19,96 @@ class HomePage extends StatefulWidget{
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selecteedTab = 0;
-  final _homeRepo = HomeRepository();
+  int _selectedTab = 0;
+  String? token;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      final provider = Provider.of<HomeProvider>(context, listen: false);
+      final userProvider = Provider.of<UserViewModel>(context, listen: false);
+      token = userProvider.token;
+      provider.getAllVisitors(token: token!);
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<UserViewModel>(context);
+    final provider = Provider.of<HomeProvider>(context,);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
         child: Column(
+          spacing: 20,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
+            Consumer<UserViewModel>(builder: (ctx, provider, _){
+              return Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
 
-                  style: IconButton.styleFrom(
-                    backgroundColor: AppColors.btnColor
+                        style: IconButton.styleFrom(
+                            backgroundColor: AppColors.btnColor
+                        ),
+                        onPressed: _onAddGuestTap, icon: Icon(Icons.add_rounded, color: Colors.white,)),
                   ),
-                  onPressed: _onAddGuestTap, icon: Icon(Icons.add_rounded, color: Colors.white,)),
-            ),
-            Row(
-              spacing: 10,
-              children: [
-                CircleAvatar(
-                  backgroundColor: AppColors.btnColor,
-                  child: Center(
-                    child:  Icon(Icons.person, color: Colors.white,),
+                  Row(
+                    spacing: 10,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: AppColors.btnColor,
+                        child: Center(
+                          child:  Icon(Icons.person, color: Colors.white,),
+                        ),
+                      ),
+                      Text("Welcome ${provider.userName}", style: AppTextStyles.regularTextStyle,)
+                    ],
                   ),
-                ),
-                Text("Welcome ${provider.userName}", style: AppTextStyles.regularTextStyle,)
-              ],
-            ),
-            const SizedBox(height: 20,),
-            Row(
+                ],
+              );
+            }),
+          Expanded(
+            child: token == null ? LoadingWidget() : Column(
               spacing: 20,
               children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _selecteedTab == 0 ?  AppColors.btnColor : Colors.white
-                    ),
-                    onPressed: (){
-                      if(_selecteedTab != 0){
-                        _selecteedTab = 0;
-                        provider.getAllVisitors();
-                        setState(() {});
-                      }
-                    }, child: Text("Regular Visitors", style: AppTextStyles.tabsTextStyle.copyWith(color: _selecteedTab == 0 ?  Colors.white : AppColors.primaryColor),)),
-
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: _selecteedTab == 1 ?  AppColors.btnColor : Colors.white
-                    ),
-                    onPressed: (){
-                      if(_selecteedTab != 1){
-                        _selecteedTab = 1;
-                        provider.getAllGuests();
-                        setState(() {});
-                      }
-                    }, child: Text("Guest", style: AppTextStyles.tabsTextStyle.copyWith(color: _selecteedTab == 1 ?  Colors.white : AppColors.primaryColor),)),
-
+                Row(
+                  spacing: 20,
+                  children: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: _selectedTab == 0 ?  AppColors.btnColor : Colors.white
+                        ),
+                        onPressed: (){
+                          if(_selectedTab != 0){
+                            _selectedTab = 0;
+                            provider.getAllVisitors(token: token!);
+                            setState(() {});
+                          }
+                        }, child: Text("Regular Visitors", style: AppTextStyles.tabsTextStyle.copyWith(color: _selectedTab == 0 ?  Colors.white : AppColors.primaryColor),)),
+            
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: _selectedTab == 1 ?  AppColors.btnColor : Colors.white
+                        ),
+                        onPressed: (){
+                          if(_selectedTab != 1){
+                            _selectedTab = 1;
+                            provider.getAllGuests(token: token!);
+                            setState(() {});
+                          }
+                        }, child: Text("Guest", style: AppTextStyles.tabsTextStyle.copyWith(color: _selectedTab == 1 ?  Colors.white : AppColors.primaryColor),)),
+            
+                  ],
+                ),
+                _selectedTab == 0
+                    ? _buildAllVisitorPage(visitors: provider.visitors)
+                    : _buildAllGuestsPage(guests: provider.guests)
               ],
             ),
-            const SizedBox(height: 20,),
-
-            Consumer<UserViewModel>(builder: (ctx, provider, _){
-
-              return _selecteedTab == 0 ? _buildAllVisitorPage(visitors: provider.visitors) : _buildAllGuestsPage(guests: provider.guests);
-            })
+          )
+          /*  */
           ],
         ),
       ),
@@ -99,7 +123,10 @@ class _HomePageState extends State<HomePage> {
         builder: (context) {
           return FractionallySizedBox(
             heightFactor: 0.82,
-            child: AddGuestPage(),
+            child: Padding(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: AddGuestPage(token: token!,),
+            ),
           );
         });
    /* showModalBottomSheet(
@@ -117,7 +144,7 @@ class _HomePageState extends State<HomePage> {
             return Card(
               margin: EdgeInsets.only(bottom: 10),
               child: ListTile(
-                onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> VisitorDetailPage())),
+                onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> VisitorDetailPage(visitor: visitor,))),
                 contentPadding: EdgeInsets.only(left: 10),
                 leading: CircleAvatar(
                   backgroundColor: AppColors.btnColor,
@@ -153,7 +180,7 @@ class _HomePageState extends State<HomePage> {
             return Card(
               margin: EdgeInsets.only(bottom: 10),
               child: ListTile(
-                onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> VisitorDetailPage())),
+                onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> VisitorDetailPage(guest: guest,))),
                 contentPadding: EdgeInsets.only(left: 10),
                 leading: CircleAvatar(
                   backgroundColor: AppColors.btnColor,
