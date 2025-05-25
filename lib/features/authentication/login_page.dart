@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/features/authentication/otp_page.dart';
 import 'package:portalixmx_app/features/main_menu/main_menu_page.dart';
+import 'package:portalixmx_app/repositories/auth_repo.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 import 'package:portalixmx_app/widgets/app_textfield_widget.dart';
 import 'package:portalixmx_app/widgets/bg_logo_screen.dart';
@@ -35,7 +36,15 @@ class _LoginPageState extends State<LoginPage> {
               height: 50,
               width: double.infinity,
               child: PrimaryBtn(onTap: (){
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=> MainMenuPage()), (val)=> false);
+                String email = _emailController.text.trim();
+                String password = _passwordController.text.trim();
+
+                if(email.isEmpty || password.isEmpty){
+                  return;
+                }
+
+                final authRepo = AuthRepository();
+                authRepo.loginUser(email: email, password: password);
               }, btnText: "Log in"),
             ),
             TextButton(onPressed: (){

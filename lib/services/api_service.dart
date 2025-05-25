@@ -7,18 +7,41 @@ import '../res/api_constants.dart';
 
 class ApiService {
 
-  Future<http.Response> postRequest({required String endpoint, required Map<String, dynamic> data}) async {
-    var url = Uri.parse(ApiConstants.baseUrl + endpoint);
-    Map<String, String> headers = await _getApiHeaderWithoutCookies();
+  // Singleton instance
+  static final ApiService _instance = ApiService._internal();
+
+  // Factory constructor
+  factory ApiService() {
+    return _instance;
+  }
+
+  // Private constructor
+  ApiService._internal();
+  final String _baseUrl = ApiConstants.baseUrl;
+
+  Future<http.Response> postRequest({required String endpoint, required Map<String, dynamic> data, }) async {
+    var url = Uri.parse(_baseUrl + endpoint);
+    Map<String, String> headers =  await _getApiHeader();
     final response = await http.post(
       url,
       headers: headers,
-      // headers: {'Content-Type': 'application/json', 'X-Bypass-Auth-Key' : ApiConstants.universalToken},
       body: jsonEncode(data),
     );
 
-
     debugPrint("Post request response: ${response.body}");
+    return response;
+  }
+
+  Future<http.Response> postRequestWithToken({required String endpoint, required Map<String, dynamic> data, required String token}) async {
+    var url = Uri.parse(_baseUrl + endpoint);
+    Map<String, String> headers =  await _getApiHeaderWithBearerToken(token);
+    final response = await http.post(
+      url,
+      headers: headers,
+      body: jsonEncode(data),
+    );
+
+    debugPrint("Post request with token response: ${response.body}");
     return response;
   }
 
@@ -27,7 +50,7 @@ class ApiService {
     String url = '${ApiConstants.baseUrl}$endpoint';
     final Uri uri = Uri.parse(url).replace(queryParameters: queryParams);
 
-    Map<String, String> headers = await _getApiHeaderWithoutCookies();
+    Map<String, String> headers = await _getApiHeader();
     final http.Response response = await http.get(uri, headers: headers);
 
     return response;
@@ -36,7 +59,7 @@ class ApiService {
   Future<http.Response> postRequestChangeEmail({required String endpoint, required Map<String, dynamic> data}) async {
     var url = Uri.parse(ApiConstants.baseUrl + endpoint);
     debugPrint("Post url: $url");
-    final headers = await _getApiHeaderWithoutCookies();
+    final headers = await _getApiHeader();
     final response = await http.post(
       url,
       headers: headers,
@@ -53,7 +76,7 @@ class ApiService {
     var url = Uri.parse(ApiConstants.baseUrl + endpoint);
     debugPrint("Delete Url: $url");
 
-    final headers = await _getApiHeaderWithoutCookies();
+    final headers = await _getApiHeader();
     final response = await http.delete(url, headers: headers);
 
     debugPrint("$endpoint Api response: ${response.statusCode}");
@@ -63,7 +86,7 @@ class ApiService {
   Future<http.Response> postRequestWithCookies({required String endpoint, required Map<String, dynamic> data}) async {
     var url = Uri.parse(ApiConstants.baseUrl + endpoint);
     debugPrint("Post with cookies Url: $url");
-    final headers = await _getApiHeaderWithoutCookies();
+    final headers = await _getApiHeader();
     final response = await http.post(
       url,
       headers: headers,
@@ -77,7 +100,7 @@ class ApiService {
     var url = Uri.parse(ApiConstants.baseUrl + endpoint);
     debugPrint("Patch Url: $url");
 
-    final headers = await _getApiHeaderWithoutCookies();
+    final headers = await _getApiHeader();
     final response = await http.patch(
       url,
       headers: headers,
@@ -92,7 +115,7 @@ class ApiService {
     var url = Uri.parse(ApiConstants.baseUrl + endpoint);
     debugPrint("Get URL: $url");
 
-    final headers = await _getApiHeaderWithoutCookies();
+    final headers = await _getApiHeader();
     final response = await http.get(
       url,
       headers: headers,
@@ -118,10 +141,12 @@ class ApiService {
 */
 
 
-
-  Future<Map<String, String>> _getApiHeaderWithoutCookies()async{
-
+  Future<Map<String, String>> _getApiHeader() async {
     return {'Content-Type': 'application/json',};
   }
 
+  Future<Map<String, String>> _getApiHeaderWithBearerToken(String token) async {
+    return { 'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',};
+  }
 }
