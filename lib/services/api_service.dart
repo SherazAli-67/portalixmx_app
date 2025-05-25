@@ -22,6 +22,8 @@ class ApiService {
   Future<http.Response> postRequest({required String endpoint, required Map<String, dynamic> data, }) async {
     var url = Uri.parse(_baseUrl + endpoint);
     Map<String, String> headers =  await _getApiHeader();
+    debugPrint("Post request url: $url\nData: $data\nHeaders: $headers");
+
     final response = await http.post(
       url,
       headers: headers,
@@ -35,6 +37,8 @@ class ApiService {
   Future<http.Response> postRequestWithToken({required String endpoint, required Map<String, dynamic> data, required String token}) async {
     var url = Uri.parse(_baseUrl + endpoint);
     Map<String, String> headers =  await _getApiHeaderWithBearerToken(token);
+    debugPrint("Post request with token url: $url\nData: $data\nHeaders: $headers");
+
     final response = await http.post(
       url,
       headers: headers,
