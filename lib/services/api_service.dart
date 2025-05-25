@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -47,6 +48,49 @@ class ApiService {
 
     debugPrint("Post request with token response: ${response.body}");
     return response;
+  }
+
+
+  Future<bool> postComplaintWithImages({
+    required String endpoint,
+    required String token,
+    required String complaintText,
+    required List<File> images,
+  }) async {
+    var url = Uri.parse(_baseUrl + endpoint);
+    var request = http.MultipartRequest('POST', url);
+
+    // Add authorization headers
+    request.headers.addAll(await _getApiHeaderWithBearerToken(token));
+
+    // Add the text field
+    request.fields['complainttext'] = complaintText;
+
+    // Add image files to 'img[]'
+    for (int i = 0; i < images.length; i++) {
+      File image = images[i];
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'Img', // Assuming your backend expects multiple files under same key: 'img'
+          image.path,
+        ),
+      );
+    }
+
+    // Send the request
+    final streamedResponse = await request.send();
+
+
+    // Handle response
+    final responseBody = await streamedResponse.stream.bytesToString();
+    // print("Response Code: ${streamedResponse.statusCode}");
+    print("Response Body: $responseBody");
+
+    if(streamedResponse.statusCode == 200){
+      return true;
+    }
+    return false;
+
   }
 
   Future<http.Response> getRequest({required String endpoint, required String token}) async {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:portalixmx_app/app_data/app_data.dart';
 import 'package:portalixmx_app/features/main_menu/vistors/widgets/vistor_info_item_widget.dart';
 import 'package:portalixmx_app/models/guest_api_response.dart';

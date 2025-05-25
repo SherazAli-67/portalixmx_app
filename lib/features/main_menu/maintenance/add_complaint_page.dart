@@ -1,12 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:portalixmx_app/features/main_menu/maintenance/complaint_summary_page.dart';
+import 'package:portalixmx_app/main.dart';
+import 'package:portalixmx_app/providers/maintenance_provider.dart';
+import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 import 'package:portalixmx_app/widgets/app_textfield_widget.dart';
 import 'package:portalixmx_app/widgets/primary_btn.dart';
+import 'package:provider/provider.dart';
 
 class AddComplaintPage extends StatefulWidget{
   const AddComplaintPage({super.key});
@@ -61,16 +67,16 @@ class _AddComplaintPageState extends State<AddComplaintPage> {
               ],
             );
           })),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 18.0),
-            child: SizedBox(
-              height: 50,
-              width: double.infinity,
-              child: PrimaryBtn(onTap: (){
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=> ComplaintSummaryPage()));
-              }, btnText: "Submit"),
-            ),
-          )
+          Consumer<MaintenanceProvider>(builder: (ctx,provider, _){
+            return  Padding(
+              padding: const EdgeInsets.only(bottom: 18.0),
+              child: SizedBox(
+                height: 50,
+                width: double.infinity,
+                child: PrimaryBtn(onTap: _onAddComplaintTap, btnText: "Submit", isLoading: provider.addingComplaint,),
+              ),
+            );
+          })
         ],
       ),
     );
@@ -111,6 +117,22 @@ class _AddComplaintPageState extends State<AddComplaintPage> {
     if(pickedFiles != null){
       _pickedImages.add(pickedFiles) ;
       setState(() {});
+    }
+  }
+
+  void _onAddComplaintTap()async{
+    String complaint = _complaintTextEditingController.text.trim();
+    List<File> files = _pickedImages.map((image)=> File(image.path)).toList();
+
+    final data = {
+      'Img' : files,
+      'complainttext': complaint
+    };
+    final userProvider = Provider.of<UserViewModel>(context, listen: false);
+    final maintenanceProvider = Provider.of<MaintenanceProvider>(context, listen: false);
+    bool result = await maintenanceProvider.addComplaint(token: userProvider.token!, files: files, complaint: complaint);
+    if(result){
+      Navigator.of(context).pop();
     }
   }
 }

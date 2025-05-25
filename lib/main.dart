@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:portalixmx_app/features/authentication/login_page.dart';
 import 'package:portalixmx_app/features/main_menu/main_menu_page.dart';
 import 'package:portalixmx_app/providers/home_provider.dart';
+import 'package:portalixmx_app/providers/maintenance_provider.dart';
 import 'package:portalixmx_app/providers/tab_change_provider.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
@@ -14,7 +15,8 @@ void main() {
       ChangeNotifierProvider(create: (_)=> TabChangeProvider()),
 
       ChangeNotifierProvider(create: (_)=> UserViewModel()),
-      ChangeNotifierProvider(create: (_)=> HomeProvider())
+      ChangeNotifierProvider(create: (_)=> HomeProvider()),
+      ChangeNotifierProvider(create: (_)=> MaintenanceProvider()),
     ], child: const MyApp(),)
   );
 }
