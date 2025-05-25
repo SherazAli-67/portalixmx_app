@@ -50,13 +50,23 @@ class _HomePageState extends State<HomePage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _selecteedTab == 0 ?  AppColors.btnColor : Colors.white
                     ),
-                    onPressed: (){}, child: Text("Regular Visitors", style: AppTextStyles.tabsTextStyle.copyWith(color: _selecteedTab == 0 ?  Colors.white : AppColors.primaryColor),)),
+                    onPressed: (){
+                      if(_selecteedTab != 0){
+                        _selecteedTab = 0;
+                        setState(() {});
+                      }
+                    }, child: Text("Regular Visitors", style: AppTextStyles.tabsTextStyle.copyWith(color: _selecteedTab == 0 ?  Colors.white : AppColors.primaryColor),)),
 
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: _selecteedTab == 1 ?  AppColors.btnColor : Colors.white
                     ),
-                    onPressed: (){}, child: Text("Guest", style: AppTextStyles.tabsTextStyle.copyWith(color: _selecteedTab == 1 ?  Colors.white : AppColors.primaryColor),)),
+                    onPressed: (){
+                      if(_selecteedTab != 1){
+                        _selecteedTab = 1;
+                        setState(() {});
+                      }
+                    }, child: Text("Guest", style: AppTextStyles.tabsTextStyle.copyWith(color: _selecteedTab == 1 ?  Colors.white : AppColors.primaryColor),)),
 
               ],
             ),

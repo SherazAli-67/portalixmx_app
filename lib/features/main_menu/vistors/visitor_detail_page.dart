@@ -39,7 +39,7 @@ class VisitorDetailPage extends StatelessWidget{
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30))
                 ),
-                child: Padding(
+                child: SingleChildScrollView(
                   padding: const EdgeInsets.only(top: 36.0, left: 18, right: 18),
                   child: Column(
                     children: [

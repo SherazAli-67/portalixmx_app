@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:portalixmx_app/features/main_menu/vistors/home_page.dart';
-import 'package:portalixmx_app/features/main_menu/access/access_page.dart';
-import 'package:portalixmx_app/features/main_menu/maintenance/maintenance_page.dart';
 import 'package:portalixmx_app/features/main_menu/payments_menu.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/profile_page.dart';
-import 'package:portalixmx_app/providers/tab_change_provider.dart';
-import 'package:portalixmx_app/res/app_colors.dart';
+import 'package:portalixmx_app/features/main_menu/vistors/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../providers/tab_change_provider.dart';
+import '../../res/app_colors.dart';
 import '../../res/app_icons.dart';
+import 'access/access_page.dart';
+import 'maintenance/maintenance_page.dart';
 class MainMenuPage extends StatelessWidget{
   const MainMenuPage({super.key});
 
