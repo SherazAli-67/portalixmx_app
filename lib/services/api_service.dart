@@ -49,6 +49,19 @@ class ApiService {
     return response;
   }
 
+  Future<http.Response> getRequest({required String endpoint, required String token}) async {
+    var url = Uri.parse(ApiConstants.baseUrl + endpoint);
+    debugPrint("Get URL: $url");
+
+    final headers = await _getApiHeaderWithBearerToken(token);
+    final response = await http.get(
+      url,
+      headers: headers,
+    );
+    debugPrint("GET Api $endpoint response: ${response.body}");
+    return response;
+  }
+
   Future<http.Response> getRequestWithQueryParams({required String endpoint,}) async {
     final Map<String, String> queryParams = {'isRedirect': "false",};
     String url = '${ApiConstants.baseUrl}$endpoint';
@@ -100,33 +113,9 @@ class ApiService {
     return response;
   }
 
-  Future<http.Response> patchRequest({required String endpoint, required Map<String, dynamic> data}) async {
-    var url = Uri.parse(ApiConstants.baseUrl + endpoint);
-    debugPrint("Patch Url: $url");
 
-    final headers = await _getApiHeader();
-    final response = await http.patch(
-      url,
-      headers: headers,
-      body: jsonEncode(data),
-    );
 
-    debugPrint("$endpoint Api response: ${response.statusCode}");
-    return response;
-  }
 
-  Future<http.Response> getRequest({required String endpoint,}) async {
-    var url = Uri.parse(ApiConstants.baseUrl + endpoint);
-    debugPrint("Get URL: $url");
-
-    final headers = await _getApiHeader();
-    final response = await http.get(
-      url,
-      headers: headers,
-    );
-    debugPrint("$endpoint Api response: ${response.statusCode}");
-    return response;
-  }
 
 
 /*

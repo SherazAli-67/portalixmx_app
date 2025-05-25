@@ -63,8 +63,8 @@ class _LoginPageState extends State<LoginPage> {
       String userID = map['userId'];
       String name = map['name'];
 
-      final provider = Provider.of<UserInfoProvider>(context,listen: false);
-      provider.setUserInfo(name: name, userID: userID, email: email);
+      final provider = Provider.of<UserViewModel>(context,listen: false);
+      provider.setUserInfo(token: token, name: name, userID: userID, email: email);
 
      Navigator.of(context).push(MaterialPageRoute(builder: (_)=> VerifyOTPPage(token: token)));
     }
