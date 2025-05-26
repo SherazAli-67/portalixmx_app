@@ -20,7 +20,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return ScreenWithBgLogo(
@@ -37,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 50,
               width: double.infinity,
-              child: PrimaryBtn(onTap: _onLoginTap, btnText: "Log in", isLoading: isLoading,),
+              child: PrimaryBtn(onTap: _onLoginTap, btnText: "Log in"),
             ),
             TextButton(onPressed: (){
 
@@ -56,12 +55,8 @@ class _LoginPageState extends State<LoginPage> {
     if(email.isEmpty || password.isEmpty){
       return;
     }
-    setState(()=> isLoading = true);
-    await Future.delayed(const Duration(seconds: 2));
-    setState(()=> isLoading = false);
-    String token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJ1c2VySWQiOiI2ODJjYzI0MWVjNDNiZTMyYTQ5MmYxNDQiLCJyZW1lbWJlckZsYWciOmZhbHNlLCJpYXQiOjE3NDgxNjcwMzAsImV4cCI6MTc0ODI1MzQzMH0.AhVTpIu3ISqWufNLQ9OH4DyLSuY0l6KAn8aGzEIEQSE';
-    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> VerifyOTPPage(token: token)));
-    /*final authRepo = AuthRepository();
+
+    final authRepo = AuthRepository();
     Map<String,dynamic>? map =  await authRepo.loginUser(email: email, password: password);
     if(map !=  null){
       String token = map['token'];
@@ -72,6 +67,6 @@ class _LoginPageState extends State<LoginPage> {
       provider.setUserInfo(token: token, name: name, userID: userID, email: email);
 
      Navigator.of(context).push(MaterialPageRoute(builder: (_)=> VerifyOTPPage(token: token)));
-    }*/
+    }
   }
 }

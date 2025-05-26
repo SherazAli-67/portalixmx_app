@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_){
       final provider = Provider.of<HomeProvider>(context, listen: false);
       final userProvider = Provider.of<UserViewModel>(context, listen: false);
-      debugPrint("UserID: ${userProvider.userID}, Name: ${userProvider.userName}, email: ${userProvider.emailAddress}\nToken: ${userProvider.token}");
+      // debugPrint("UserID: ${userProvider.userID}, Name: ${userProvider.userName}, email: ${userProvider.emailAddress}\nToken: ${userProvider.token}");
       token = userProvider.token;
       provider.getAllVisitors(token: token!);
     });

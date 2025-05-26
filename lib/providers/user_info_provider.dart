@@ -38,10 +38,10 @@ class UserViewModel extends ChangeNotifier {
 
   void _initUserInfo()async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    _token = sharedPreferences.getString(_tokenKey) ?? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJ1c2VySWQiOiI2ODJjYzI0MWVjNDNiZTMyYTQ5MmYxNDQiLCJyZW1lbWJlckZsYWciOmZhbHNlLCJpYXQiOjE3NDgxNjcwMzAsImV4cCI6MTc0ODI1MzQzMH0.AhVTpIu3ISqWufNLQ9OH4DyLSuY0l6KAn8aGzEIEQSE';
-    _userID = sharedPreferences.getString(_userIDKey) ?? '682cc241ec43be32a492f144';
-    _emailAddress = sharedPreferences.getString(_userEmailKey) ?? 'admin.portalix@gmail.com';
-    _userName = sharedPreferences.getString(_userNameKey) ?? 'Portalix ADMIN';
+    _token = sharedPreferences.getString(_tokenKey);
+    _userID = sharedPreferences.getString(_userIDKey);
+    _emailAddress = sharedPreferences.getString(_userEmailKey);
+    _userName = sharedPreferences.getString(_userNameKey);
 
     notifyListeners();
   }
