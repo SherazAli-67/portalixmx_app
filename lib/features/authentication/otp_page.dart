@@ -17,6 +17,9 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
 
   final TextEditingController _otpController = TextEditingController();
   final _authRepo = AuthRepository();
+
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return ScreenWithBgLogo(
@@ -33,7 +36,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
             SizedBox(
               height: 50,
               width: double.infinity,
-              child: PrimaryBtn(onTap: _onVerifyOTPTap, btnText: "Submit"),
+              child: PrimaryBtn(onTap: _onVerifyOTPTap, btnText: "Submit", isLoading: isLoading,),
             ),
             TextButton(onPressed: (){}, child: Text("Need Help", style: AppTextStyles.btnTextStyle,))
           ],
@@ -43,9 +46,11 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
   }
 
   void _onVerifyOTPTap() async{
-    String otp = _otpController.text.trim();
-    debugPrint("OTP Found: $otp");
-    await _authRepo.verifyOTP(otp: otp, token: widget._token);
+    setState(() => isLoading = true);
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() => isLoading = false);
+   /* String otp = _otpController.text.trim();
+    await _authRepo.verifyOTP(otp: otp, token: widget._token);*/
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MainMenuPage()), (val)=> false);
   }
 }

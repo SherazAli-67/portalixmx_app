@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
         )
       ),
       home: Consumer<UserViewModel>(builder: (ctx, provider, _){
+        return LoginPage();
         return provider.userID != null ? MainMenuPage() : LoginPage();
       })
     );

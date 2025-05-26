@@ -17,7 +17,6 @@ class AuthRepository {
     try{
      final response =  await _apiService.postRequest(endpoint: ApiConstants.loginEndPoint, data: data);
      final Map<String,dynamic> map = jsonDecode(response.body)['data']['token']!;
-
      return map;
     }catch(e){
       debugPrint("Error while logging in: ${e.toString()}");
