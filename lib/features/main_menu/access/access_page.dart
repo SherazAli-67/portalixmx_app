@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:portalixmx_app/features/main_menu/access/request_access_page.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 
 import '../../../res/app_textstyles.dart';
@@ -24,7 +25,7 @@ class AccessMenu extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(width: 40,),
-                  Text("Access Requests", style: AppTextStyles.regularTextStyle,),
+                  Text(AppLocalizations.of(context)!.accessRequests, style: AppTextStyles.regularTextStyle,),
                   IconButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.btnColor
@@ -42,7 +43,7 @@ class AccessMenu extends StatelessWidget{
                           child: ListTile(
                             contentPadding: EdgeInsets.only(left: 15),
                             leading: SvgPicture.asset(AppIcons.icGame, colorFilter: ColorFilter.mode(AppColors.primaryColor, BlendMode.srcIn),),
-                            title: Text("Pool Access", style: AppTextStyles.tileTitleTextStyle),
+                            title: Text(AppLocalizations.of(context)!.poolAccess, style: AppTextStyles.tileTitleTextStyle),
                             subtitle: Text("Sep 20, 2025", style: AppTextStyles.tileSubtitleTextStyle,),
                             trailing: IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_rounded)),
                           ),

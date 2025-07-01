@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/features/authentication/otp_page.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/repositories/auth_repo.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
@@ -8,6 +9,7 @@ import 'package:portalixmx_app/widgets/bg_logo_screen.dart';
 import 'package:portalixmx_app/widgets/primary_btn.dart';
 import 'package:provider/provider.dart';
 
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -28,19 +30,18 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           spacing: 16,
           children: [
-            Text("Resident Login", style: AppTextStyles.headingTextStyle),
+            Text(AppLocalizations.of(context)!.residentLogin, style: AppTextStyles.headingTextStyle),
             const SizedBox(height: 16,),
-            AppTextField(textController: _emailController, hintText: "Email",textInputType: TextInputType.emailAddress,),
-            AppTextField(textController: _passwordController, hintText: "Password", isPassword: true,),
+            AppTextField(textController: _emailController, hintText: AppLocalizations.of(context)!.email,textInputType: TextInputType.emailAddress,),
+            AppTextField(textController: _passwordController, hintText: AppLocalizations.of(context)!.password, isPassword: true,),
             const Spacer(),
             SizedBox(
               height: 50,
               width: double.infinity,
-              child: PrimaryBtn(onTap: _onLoginTap, btnText: "Log in"),
+              child: PrimaryBtn(onTap: _onLoginTap, btnText: AppLocalizations.of(context)!.login),
             ),
             TextButton(onPressed: (){
-
-            }, child: Text("Forgot your password", style: AppTextStyles.btnTextStyle,))
+            }, child: Text(AppLocalizations.of(context)!.forgetPassword, style: AppTextStyles.btnTextStyle,))
           ],
         ),
       ),

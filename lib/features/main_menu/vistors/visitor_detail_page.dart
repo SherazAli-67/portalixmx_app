@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:portalixmx_app/app_data/app_data.dart';
 import 'package:portalixmx_app/features/main_menu/vistors/widgets/vistor_info_item_widget.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/models/guest_api_response.dart';
 import 'package:portalixmx_app/models/visitor_api_response.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
@@ -32,7 +33,7 @@ class VisitorDetailPage extends StatelessWidget{
                 Column(
                   children: [
                     Text(_guest != null ? _guest.name :_visitor!.name, style: AppTextStyles.regularTextStyle,),
-                    Text(_guest != null ? 'Guest' : 'Regular Visitor', style: AppTextStyles.tileSubtitleTextStyle,)
+                    Text(_guest != null ? AppLocalizations.of(context)!.guest : AppLocalizations.of(context)!.regularVisitor, style: AppTextStyles.tileSubtitleTextStyle,)
                   ],
                 ),
                 IconButton(onPressed: ()=> _showEditBottomSheet(context), icon: Icon(Icons.more_vert_rounded, color: Colors.white,))
@@ -55,7 +56,7 @@ class VisitorDetailPage extends StatelessWidget{
                         children: [
                           Expanded(
                             child: VisitorInfoItemWidget(
-                                title: 'REQUESTED TIME',
+                                title: AppLocalizations.of(context)!.requestedTime,
                                 subTitle: _guest != null
                                     ? DateTimeFormatHelpers.formatDateTime(
                                     _guest.createdAt)
@@ -64,7 +65,7 @@ class VisitorDetailPage extends StatelessWidget{
                                 showDivider: true),
                           ),
                           Expanded(
-                              child: VisitorInfoItemWidget(title: 'ACCESS FOR', subTitle: 'Teacher',  showDivider: true)
+                              child: VisitorInfoItemWidget(title: AppLocalizations.of(context)!.accessFor, subTitle: AppLocalizations.of(context)!.teacher,  showDivider: true)
                           ),
                         ],
                       ),
@@ -73,21 +74,21 @@ class VisitorDetailPage extends StatelessWidget{
                         spacing: 20,
                         children: [
                           Expanded(
-                            child: VisitorInfoItemWidget(title: 'Access Approved Date', subTitle:_guest != null
+                            child: VisitorInfoItemWidget(title: AppLocalizations.of(context)!.accessApprovedDate, subTitle:_guest != null
                                 ? DateTimeFormatHelpers.formatDateTime(
                                 _guest.createdAt)
                                 : DateTimeFormatHelpers.formatDateTime(
                                 _visitor!.createdAt), ),
                           ),
                           Expanded(
-                              child: VisitorInfoItemWidget(title: 'Contact No', subTitle: _guest != null
+                              child: VisitorInfoItemWidget(title: AppLocalizations.of(context)!.contactNum, subTitle: _guest != null
                                   ? _guest.contactNumber
                                   : _visitor!.contactNumber,)
                           ),
                         ],
                       ),
                       Divider(),
-                      _guest != null ? _buildGuestDetailPage() : _buildVisitorDetailPage()
+                      _guest != null ? _buildGuestDetailPage(context) : _buildVisitorDetailPage(context)
 
                     ],
                   ),
@@ -108,8 +109,8 @@ class VisitorDetailPage extends StatelessWidget{
            mainAxisSize: MainAxisSize.min,
            spacing: 10,
            children: [
-             _buildEditDeleteItem(icon: AppIcons.icEdit, text: "Edit", onTap: (){}),
-             _buildEditDeleteItem(icon: AppIcons.icDelete, text: "Delete", onTap: (){}),
+             _buildEditDeleteItem(icon: AppIcons.icEdit, text: AppLocalizations.of(context)!.edit, onTap: (){}),
+             _buildEditDeleteItem(icon: AppIcons.icDelete, text: AppLocalizations.of(context)!.delete, onTap: (){}),
 
            ],
          ),
@@ -128,7 +129,7 @@ class VisitorDetailPage extends StatelessWidget{
     );
   }
 
-  Widget _buildGuestDetailPage() {
+  Widget _buildGuestDetailPage(BuildContext context) {
     return Column(
         children: [
           Column(
@@ -138,7 +139,7 @@ class VisitorDetailPage extends StatelessWidget{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("From",
+                    Text(AppLocalizations.of(context)!.from,
                       style: AppTextStyles.visitorDetailTitleTextStyle,),
                     Text('${DateFormat('EEEE').format(_guest!.fromDate)} - ${_guest.fromTime}',
                       style: AppTextStyles.visitorDetailSubtitleTextStyle,)
@@ -159,7 +160,7 @@ class VisitorDetailPage extends StatelessWidget{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("To",
+                    Text(AppLocalizations.of(context)!.to,
                       style: AppTextStyles.visitorDetailTitleTextStyle,),
                     Text('${DateFormat('EEEE').format(_guest.toDate)} - ${_guest.toTime}',
                       style: AppTextStyles.visitorDetailSubtitleTextStyle,)
@@ -186,13 +187,13 @@ class VisitorDetailPage extends StatelessWidget{
           SizedBox(
             height: 50,
             width: double.infinity,
-            child: PrimaryBtn(onTap: (){}, btnText: "Share Key", color: AppColors.primaryColor,),
+            child: PrimaryBtn(onTap: (){}, btnText: AppLocalizations.of(context)!.shareKey, color: AppColors.primaryColor,),
           )
         ],
     );
   }
 
-  Widget _buildVisitorDetailPage() {
+  Widget _buildVisitorDetailPage(BuildContext context) {
     return Column(
       children: [
         Column(
@@ -218,13 +219,13 @@ class VisitorDetailPage extends StatelessWidget{
               );
             })
         ),
-        Text("QR CODE", style: AppTextStyles.visitorDetailTitleTextStyle,),
+        Text(AppLocalizations.of(context)!.qrCode, style: AppTextStyles.visitorDetailTitleTextStyle,),
         Image.asset(AppIcons.icQRCode),
         const SizedBox(height: 20,),
         SizedBox(
           height: 50,
           width: double.infinity,
-          child: PrimaryBtn(onTap: (){}, btnText: "Share Key", color: AppColors.primaryColor,),
+          child: PrimaryBtn(onTap: (){}, btnText: AppLocalizations.of(context)!.shareKey, color: AppColors.primaryColor,),
         )
       ],
     );

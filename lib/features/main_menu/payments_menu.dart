@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 
@@ -24,14 +25,14 @@ class _PaymentsMenuState extends State<PaymentsMenu> {
               alignment: Alignment.center,
               child: Padding(
                 padding: const EdgeInsets.only(top: 35.0),
-                child: Text("Payments & Billing", textAlign: TextAlign.center, style: AppTextStyles.headingTextStyle,),
+                child: Text(AppLocalizations.of(context)!.paymentsAndBilling, textAlign: TextAlign.center, style: AppTextStyles.headingTextStyle,),
               )),
           const SizedBox(height: 20,),
           Row(
             spacing: 10,
             children: [
-              _buildServiceTypeTab(serviceTypeTitle: "Current Service", index: 0),
-              _buildServiceTypeTab(serviceTypeTitle: "Other Services", index: 1),
+              _buildServiceTypeTab(serviceTypeTitle: AppLocalizations.of(context)!.currentService, index: 0),
+              _buildServiceTypeTab(serviceTypeTitle: AppLocalizations.of(context)!.otherServices, index: 1),
 
 
             ],
@@ -63,15 +64,15 @@ class _PaymentsMenuState extends State<PaymentsMenu> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Service Name", style: AppTextStyles.tileTitleTextStyle.copyWith(color: AppColors.primaryColor),),
+                                  Text(AppLocalizations.of(context)!.serviceName, style: AppTextStyles.tileTitleTextStyle.copyWith(color: AppColors.primaryColor),),
                                   Text("\$500", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.btnColor),)
                                 ],
                               ),
                               Text("Sep 20, 2024", style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: AppColors.serviceSubTitleGreyColor),),
                               const SizedBox(height: 3,),
-                              _buildServiceInfoItemWidget(serviceText: 'Maintenance', serviceCharges: 300),
-                              _buildServiceInfoItemWidget(serviceText: 'Cleaning of common areas', serviceCharges: 200),
-                              _buildServiceInfoItemWidget(serviceText: 'Garbage Collection', serviceCharges: 100),
+                              _buildServiceInfoItemWidget(serviceText: AppLocalizations.of(context)!.maintenance, serviceCharges: 300),
+                              _buildServiceInfoItemWidget(serviceText: AppLocalizations.of(context)!.cleaningOfCommonAreas, serviceCharges: 200),
+                              _buildServiceInfoItemWidget(serviceText: AppLocalizations.of(context)!.garbageCollection, serviceCharges: 100),
                             ],
                           ),
                         )

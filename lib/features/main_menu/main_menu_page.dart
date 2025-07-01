@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:portalixmx_app/features/main_menu/payments_menu.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/profile_page.dart';
 import 'package:portalixmx_app/features/main_menu/vistors/home_page.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -31,11 +32,11 @@ class MainMenuPage extends StatelessWidget{
               unselectedLabelStyle: TextStyle(fontSize: 12, color: Colors.white),
 
               items: [
-                _buildBottomNavigationItemWidget(icon: AppIcons.icHomeMenu, label: 'Home', isSelected: provider.currentIndex == 0),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icPaymentsMenu, label: 'Payments', isSelected: provider.currentIndex == 1),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icMaintenance, label: 'Maintenance', isSelected: provider.currentIndex == 2),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icAccess, label: 'Access', isSelected: provider.currentIndex == 3),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icMenu, label: 'Menu', isSelected: provider.currentIndex == 4),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icHomeMenu, label: AppLocalizations.of(context)!.home, isSelected: provider.currentIndex == 0),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icPaymentsMenu, label: AppLocalizations.of(context)!.payments, isSelected: provider.currentIndex == 1),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icMaintenance, label: AppLocalizations.of(context)!.maintenance, isSelected: provider.currentIndex == 2),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icAccess, label: AppLocalizations.of(context)!.access, isSelected: provider.currentIndex == 3),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icMenu, label: AppLocalizations.of(context)!.menu, isSelected: provider.currentIndex == 4),
 
               ]),
         ),

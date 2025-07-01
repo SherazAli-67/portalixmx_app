@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/features/main_menu/main_menu_page.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/repositories/auth_repo.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 import 'package:portalixmx_app/widgets/app_textfield_widget.dart';
@@ -25,17 +26,17 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
         child: Column(
           spacing: 16,
           children: [
-            Text("2 Step Verification", style: AppTextStyles.headingTextStyle),
-            Text("Enter the 2 step verification code sent on your email address",textAlign: TextAlign.center, style: AppTextStyles.subHeadingTextStyle,),
+            Text(AppLocalizations.of(context)!.twoStepVerification, style: AppTextStyles.headingTextStyle),
+            Text(AppLocalizations.of(context)!.twoStepVerificationDescription,textAlign: TextAlign.center, style: AppTextStyles.subHeadingTextStyle,),
             const SizedBox(height: 16,),
-            AppTextField(textController: _otpController, hintText: "OTP", textInputType: TextInputType.number,),
+            AppTextField(textController: _otpController, hintText: AppLocalizations.of(context)!.otp, textInputType: TextInputType.number,),
             const Spacer(),
             SizedBox(
               height: 50,
               width: double.infinity,
-              child: PrimaryBtn(onTap: _onVerifyOTPTap, btnText: "Submit"),
+              child: PrimaryBtn(onTap: _onVerifyOTPTap, btnText: AppLocalizations.of(context)!.submit),
             ),
-            TextButton(onPressed: (){}, child: Text("Need Help", style: AppTextStyles.btnTextStyle,))
+            TextButton(onPressed: (){}, child: Text(AppLocalizations.of(context)!.needHelp, style: AppTextStyles.btnTextStyle,))
           ],
         ),
       ),

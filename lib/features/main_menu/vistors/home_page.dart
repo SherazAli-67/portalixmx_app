@@ -4,6 +4,7 @@ import 'package:portalixmx_app/features/main_menu/vistors/visitor_detail_page.da
 import 'package:portalixmx_app/models/guest_api_response.dart';
 import 'package:portalixmx_app/models/visitor_api_response.dart';
 import 'package:portalixmx_app/providers/home_provider.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
@@ -64,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                           child:  Icon(Icons.person, color: Colors.white,),
                         ),
                       ),
-                      Text("Welcome ${provider.userName}", style: AppTextStyles.regularTextStyle,)
+                      Text(AppLocalizations.of(context)!.welcomeMessage(provider.userName!), style: AppTextStyles.regularTextStyle,)
                     ],
                   ),
                 ],
@@ -87,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                             provider.getAllVisitors(token: token!);
                             setState(() {});
                           }
-                        }, child: Text("Regular Visitors", style: AppTextStyles.tabsTextStyle.copyWith(color: _selectedTab == 0 ?  Colors.white : AppColors.primaryColor),)),
+                        }, child: Text(AppLocalizations.of(context)!.regularVisitors, style: AppTextStyles.tabsTextStyle.copyWith(color: _selectedTab == 0 ?  Colors.white : AppColors.primaryColor),)),
             
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -99,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                             provider.getAllGuests(token: token!);
                             setState(() {});
                           }
-                        }, child: Text("Guest", style: AppTextStyles.tabsTextStyle.copyWith(color: _selectedTab == 1 ?  Colors.white : AppColors.primaryColor),)),
+                        }, child: Text(AppLocalizations.of(context)!.guest, style: AppTextStyles.tabsTextStyle.copyWith(color: _selectedTab == 1 ?  Colors.white : AppColors.primaryColor),)),
             
                   ],
                 ),
