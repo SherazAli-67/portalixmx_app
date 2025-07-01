@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/directory_detail_page.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 
@@ -35,7 +36,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BackButton(color: Colors.white),
-                Text("Directory", style: AppTextStyles.regularTextStyle),
+                Text(AppLocalizations.of(context)!.directory, style: AppTextStyles.regularTextStyle),
                 const SizedBox(width: 40),
               ],
             ),
@@ -65,7 +66,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                               borderRadius: BorderRadius.circular(99),
                               borderSide: BorderSide.none
                           ),
-                          hintText: "Search",
+                          hintText: AppLocalizations.of(context)!.search,
                           hintStyle: AppTextStyles.hintTextStyle
                         ),
                       )

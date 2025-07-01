@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:portalixmx_app/features/main_menu/maintenance/complaint_summary_page.dart';
-import 'package:portalixmx_app/main.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/maintenance_provider.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
@@ -36,14 +35,14 @@ class _AddComplaintPageState extends State<AddComplaintPage> {
       child: Column(
         spacing: 15,
         children: [
-          Text("Complaint", style: AppTextStyles.bottomSheetHeadingTextStyle,),
+          Text(AppLocalizations.of(context)!.complaint, style: AppTextStyles.bottomSheetHeadingTextStyle,),
           const SizedBox(height: 10,),
-          AppTextField(textController: _complaintTextEditingController, hintText: "Complaint", fillColor: AppColors.fillColorGrey, maxLines: 5,),
+          AppTextField(textController: _complaintTextEditingController, hintText: AppLocalizations.of(context)!.complaint, fillColor: AppColors.fillColorGrey, maxLines: 5,),
           Row(
             spacing: 20,
             children: [
-              Expanded(child: _buildUploadPicturesWidget(title: "Upload Photos", icon: AppIcons.icUploadPhotos, onTap: _onUploadPhotosTap)),
-              Expanded(child: _buildUploadPicturesWidget(title: "Open Camera", icon: AppIcons.icCamera, onTap: _onOpenCameraTap)),
+              Expanded(child: _buildUploadPicturesWidget(title: AppLocalizations.of(context)!.uploadPhotos, icon: AppIcons.icUploadPhotos, onTap: _onUploadPhotosTap)),
+              Expanded(child: _buildUploadPicturesWidget(title: AppLocalizations.of(context)!.openCamera, icon: AppIcons.icCamera, onTap: _onOpenCameraTap)),
 
             ],
           ),
@@ -73,7 +72,7 @@ class _AddComplaintPageState extends State<AddComplaintPage> {
               child: SizedBox(
                 height: 50,
                 width: double.infinity,
-                child: PrimaryBtn(onTap: _onAddComplaintTap, btnText: "Submit", isLoading: provider.addingComplaint,),
+                child: PrimaryBtn(onTap: _onAddComplaintTap, btnText: AppLocalizations.of(context)!.submit, isLoading: provider.addingComplaint,),
               ),
             );
           })

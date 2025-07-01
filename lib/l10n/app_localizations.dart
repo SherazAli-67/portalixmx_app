@@ -337,6 +337,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Garbage Collection'**
   String get garbageCollection;
+
+  /// No description provided for @complaint.
+  ///
+  /// In en, this message translates to:
+  /// **'Complaint'**
+  String get complaint;
+
+  /// No description provided for @uploadPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload Photos'**
+  String get uploadPhotos;
+
+  /// No description provided for @openCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Camera'**
+  String get openCamera;
+
+  /// No description provided for @requestAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Access'**
+  String get requestAccess;
+
+  /// No description provided for @viewProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View Profile'**
+  String get viewProfile;
+
+  /// No description provided for @directory.
+  ///
+  /// In en, this message translates to:
+  /// **'Directory'**
+  String get directory;
+
+  /// No description provided for @communityCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Community Calendar'**
+  String get communityCalendar;
+
+  /// No description provided for @communityPolls.
+  ///
+  /// In en, this message translates to:
+  /// **'Community Polls'**
+  String get communityPolls;
+
+  /// No description provided for @guards.
+  ///
+  /// In en, this message translates to:
+  /// **'Guards'**
+  String get guards;
+
+  /// No description provided for @carPooling.
+  ///
+  /// In en, this message translates to:
+  /// **'Car Pooling'**
+  String get carPooling;
+
+  /// No description provided for @emergencyCalls.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency Calls'**
+  String get emergencyCalls;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// No description provided for @guardTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'Guard Tracking'**
+  String get guardTracking;
 }
 
 class _AppLocalizationsDelegate

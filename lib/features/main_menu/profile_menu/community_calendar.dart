@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/community_detail_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/directory_detail_page.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
@@ -38,7 +38,7 @@ class _CommunityCalendarPageState extends State<CommunityCalendarPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BackButton(color: Colors.white),
-                Text("Community Calendar", style: AppTextStyles.regularTextStyle),
+                Text(AppLocalizations.of(context)!.communityCalendar, style: AppTextStyles.regularTextStyle),
                 const SizedBox(width: 40),
               ],
             ),

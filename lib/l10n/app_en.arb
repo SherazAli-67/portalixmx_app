@@ -40,6 +40,21 @@
   "otherServices" : "Other Services",
   "serviceName" : "Service Name",
   "cleaningOfCommonAreas" : "Cleaning of common areas",
-  "garbageCollection" : "Garbage Collection"
-
+  "garbageCollection" : "Garbage Collection",
+  "complaint" : "Complaint",
+  "uploadPhotos" : "Upload Photos",
+  "openCamera" : "Open Camera",
+  "submit" : "Submit",
+  "requestAccess" : "Request Access",
+  "viewProfile"  :"View Profile",
+  "directory" : "Directory",
+  "communityCalendar" : "Community Calendar",
+  "communityPolls" : "Community Polls",
+  "guards" : "Guards",
+  "carPooling" : "Car Pooling",
+  "emergencyCalls" : "Emergency Calls",
+  "privacyPolicy" : "Privacy Policy",
+  "logout" : "Logout",
+  "search" : "Search",
+  "guardTracking" : "Guard Tracking"
 }

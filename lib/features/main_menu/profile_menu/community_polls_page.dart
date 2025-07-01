@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/community_polls_detail_page.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_constants.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
@@ -21,7 +22,7 @@ class CommunityPollsPage extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               BackButton(color: Colors.white,),
-              Text("Community Polls", style: AppTextStyles.regularTextStyle,),
+              Text(AppLocalizations.of(context)!.communityPolls, style: AppTextStyles.regularTextStyle,),
               const SizedBox(width: 20)
             ],
           ),

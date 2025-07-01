@@ -7,6 +7,7 @@ import 'package:portalixmx_app/features/main_menu/profile_menu/directory_page.da
 import 'package:portalixmx_app/features/main_menu/profile_menu/edit_profile_page.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/emergency_calls_page.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/profile_guards_page.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 
@@ -37,21 +38,21 @@ class ProfileMenu extends StatelessWidget{
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> EditProfilePage()));
                     },
-                    child: Text("View Profile", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.white),))
+                    child: Text(AppLocalizations.of(context)!.viewProfile, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.white),))
               ],
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ProfileItemWidget(title: "Directory", icon: AppIcons.icDirectory,  onTap: ()=> _onDirectoryTap(context)),
-              ProfileItemWidget(title: "Community Calendar", icon: AppIcons.icCalendar, onTap: ()=> _onCommunityCalendarTap(context)),
-              ProfileItemWidget(title: "Community Polls", icon: AppIcons.icCommunityPolls,  onTap: ()=> _onCommunityPollsTap(context)),
-              ProfileItemWidget(title: "Guards", icon: AppIcons.icGuards, onTap: ()=> _onGuardsTap(context)),
-              ProfileItemWidget(title: "Car Pooling", icon: AppIcons.icCarPooling, onTap: () {}),
-              ProfileItemWidget(title: "Emergency Calls", icon: AppIcons.icEmergencyCalls, onTap: ()=> _onEmergencyTap(context)),
-              TextButton(onPressed: (){}, child: Text("Privacy Policy", style: AppTextStyles.tileTitleTextStyle2,)),
-              TextButton(onPressed: (){}, child: Text("Log out", style: AppTextStyles.tileTitleTextStyle2,)),
+              ProfileItemWidget(title: AppLocalizations.of(context)!.directory, icon: AppIcons.icDirectory,  onTap: ()=> _onDirectoryTap(context)),
+              ProfileItemWidget(title: AppLocalizations.of(context)!.communityCalendar, icon: AppIcons.icCalendar, onTap: ()=> _onCommunityCalendarTap(context)),
+              ProfileItemWidget(title: AppLocalizations.of(context)!.communityPolls, icon: AppIcons.icCommunityPolls,  onTap: ()=> _onCommunityPollsTap(context)),
+              ProfileItemWidget(title: AppLocalizations.of(context)!.guards, icon: AppIcons.icGuards, onTap: ()=> _onGuardsTap(context)),
+              ProfileItemWidget(title: AppLocalizations.of(context)!.carPooling, icon: AppIcons.icCarPooling, onTap: () {}),
+              ProfileItemWidget(title: AppLocalizations.of(context)!.emergencyCalls, icon: AppIcons.icEmergencyCalls, onTap: ()=> _onEmergencyTap(context)),
+              TextButton(onPressed: (){}, child: Text(AppLocalizations.of(context)!.privacyPolicy, style: AppTextStyles.tileTitleTextStyle2,)),
+              TextButton(onPressed: (){}, child: Text(AppLocalizations.of(context)!.logout, style: AppTextStyles.tileTitleTextStyle2,)),
 
             ],
           )

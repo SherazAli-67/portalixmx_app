@@ -130,4 +130,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get garbageCollection => 'Garbage Collection';
+
+  @override
+  String get complaint => 'Complaint';
+
+  @override
+  String get uploadPhotos => 'Upload Photos';
+
+  @override
+  String get openCamera => 'Open Camera';
+
+  @override
+  String get requestAccess => 'Request Access';
+
+  @override
+  String get viewProfile => 'View Profile';
+
+  @override
+  String get directory => 'Directory';
+
+  @override
+  String get communityCalendar => 'Community Calendar';
+
+  @override
+  String get communityPolls => 'Community Polls';
+
+  @override
+  String get guards => 'Guards';
+
+  @override
+  String get carPooling => 'Car Pooling';
+
+  @override
+  String get emergencyCalls => 'Emergency Calls';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get guardTracking => 'Guard Tracking';
 }

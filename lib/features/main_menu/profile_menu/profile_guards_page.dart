@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/guard_tracking_map_page.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 
 import '../../../res/app_colors.dart';
@@ -20,7 +21,7 @@ class ProfileGuardsPage extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BackButton(color: Colors.white),
-                Text("Guard Tracking", style: AppTextStyles.regularTextStyle),
+                Text(AppLocalizations.of(context)!.guardTracking, style: AppTextStyles.regularTextStyle),
                 const SizedBox(width: 40),
               ],
             ),

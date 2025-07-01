@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:portalixmx_app/app_data/app_data.dart';
 import 'package:portalixmx_app/features/main_menu/access/access_summary_page.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/models/access_request_model.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/widgets/from_date_and_time_widget.dart';
@@ -31,10 +32,10 @@ class _RequestAccessPageState extends State<RequestAccessPage> {
         children: [
           Align(
               alignment: Alignment.center,
-              child: Text("Request Access", style: AppTextStyles.bottomSheetHeadingTextStyle,)),
+              child: Text(AppLocalizations.of(context)!.requestAccess, style: AppTextStyles.bottomSheetHeadingTextStyle,)),
           const SizedBox(height: 10,),
-          FromDateAndTimeWidget(title: "From", onDateTap: _onDateTap, onTimeTap: _onTimeTap, selectedDate: _selectedDate, selectedTime: _selectedTime, showTitle: false,),
-          Text("Access for", style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: Color(0xff666666)),),
+          FromDateAndTimeWidget(title: AppLocalizations.of(context)!.from, onDateTap: _onDateTap, onTimeTap: _onTimeTap, selectedDate: _selectedDate, selectedTime: _selectedTime, showTitle: false,),
+          Text(AppLocalizations.of(context)!.accessFor, style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: Color(0xff666666)),),
           Expanded(child: GridView.builder(
               itemCount: AppData.getRequestAccessList.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 10), itemBuilder: (ctx, index){
@@ -84,7 +85,7 @@ class _RequestAccessPageState extends State<RequestAccessPage> {
             width: double.infinity,
             child: PrimaryBtn(onTap: (){
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=> AccessSummaryPage()));
-            }, btnText: "Submit"),
+            }, btnText: AppLocalizations.of(context)!.submit),
           )
 
         ],
