@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:portalixmx_app/app_data/app_data.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/models/day_time_model.dart';
+import 'package:portalixmx_app/models/guest_api_response.dart';
+import 'package:portalixmx_app/models/visitor_api_response.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
 import 'package:portalixmx_app/providers/home_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
@@ -13,8 +17,10 @@ import 'package:portalixmx_app/widgets/primary_btn.dart';
 import 'package:provider/provider.dart';
 
 class AddGuestPage extends StatefulWidget{
-  const AddGuestPage({super.key, required this.token});
-  final String token;
+  const AddGuestPage({super.key, this.guest, this.visitor});
+  final Guest? guest;
+  final Visitor? visitor;
+
   @override
   State<AddGuestPage> createState() => _AddGuestPageState();
 }
@@ -29,18 +35,35 @@ class _AddGuestPageState extends State<AddGuestPage> {
   final List<String> _guestTypes = [
     'Regular Visitor', 'Guest'
   ];
-  String selectedGuestType = 'Guest';
+  int selectedGuestTypeIndex = 1;
   DateTime? _selectedFromDateTime;
   DateTime? _selectedToDateTime;
 
   TimeOfDay? _selectedFromTime;
   TimeOfDay? _selectedToTime;
 
-  List<DayTimeModel> _regularVisitorTIme = [];
+  List<DayTimeModel> _regularVisitorTime = [];
+  bool comingForEdit = false;
   @override
   void initState() {
-    _regularVisitorTIme = List.generate(7, (index)=> DayTimeModel(dayID: index));
+    _regularVisitorTime = List.generate(7, (index)=> DayTimeModel(dayID: index));
 
+    comingForEdit = widget.visitor != null || widget.guest != null;
+    if(comingForEdit){
+      selectedGuestTypeIndex = widget.visitor != null ? 0 : 1;
+      if(selectedGuestTypeIndex == 1){
+        _nameController.text = widget.guest!.name;
+        _contactNumberController.text = widget.guest!.contactNumber;
+        _carPlatNumberController.text = widget.guest!.carPlateNumber;
+        _vehicleModelController.text = widget.guest!.vehicleModel;
+        _colorController.text = widget.guest!.color;
+
+      }else{
+        _nameController.text = widget.visitor!.name;
+        _contactNumberController.text = widget.visitor!.contactNumber;
+
+      }
+    }
     super.initState();
   }
   @override
@@ -62,12 +85,12 @@ class _AddGuestPageState extends State<AddGuestPage> {
         children: [
           Align(
               alignment: Alignment.center,
-              child: Text("Add Guest", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.primaryColor),)),
-          AppTextField(textController: _nameController, hintText: "Name", fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor, borderColor: AppColors.borderColor,),
-          DropdownTextfieldWidget(isEmpty: selectedGuestType.isEmpty, selectedValue: selectedGuestType, onChanged: (val)=> setState(()=> selectedGuestType = val!), guestTypes: _guestTypes, width: double.infinity, hintText: 'Guest'),
-          AppTextField(textController: _contactNumberController, hintText: "Contact Number",fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor, borderColor: AppColors.borderColor, textInputType: TextInputType.numberWithOptions(),),
+              child: Text(comingForEdit ?  "Edit Guest" : "Add Guest", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.primaryColor),)),
+          AppTextField(textController: _nameController, hintText: AppLocalizations.of(context)!.name, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor, borderColor: AppColors.borderColor,),
+          DropdownTextfieldWidget(isEmpty: selectedGuestTypeIndex == -1, selectedValue: _guestTypes[selectedGuestTypeIndex], onChanged: (val)=> setState(()=> selectedGuestTypeIndex = _guestTypes.indexOf(val!)), guestTypes: _guestTypes, width: double.infinity, hintText: AppLocalizations.of(context)!.guest),
+          AppTextField(textController: _contactNumberController, hintText: AppLocalizations.of(context)!.contactNum,fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor, borderColor: AppColors.borderColor, textInputType: TextInputType.numberWithOptions(),),
           
-          selectedGuestType == 'Guest' ? _buildGuestWidget() : _buildRegularVisitorWidget(),
+          selectedGuestTypeIndex == 0 ? _buildRegularVisitorWidget() : _buildGuestWidget() ,
           
          
           Consumer<HomeProvider>(builder: (ctx,provider,_){
@@ -136,28 +159,49 @@ class _AddGuestPageState extends State<AddGuestPage> {
   Widget _buildRegularVisitorWidget() {
     return Column(
       spacing: 15,
-      children: List.generate(_regularVisitorTIme.length, (index){
-        int dayID = _regularVisitorTIme[index].dayID;
-        TimeOfDay? time = _regularVisitorTIme[index].time;
+      children: List.generate(_regularVisitorTime.length, (index){
+        int dayID = _regularVisitorTime[index].dayID;
+        TimeOfDay? time = _regularVisitorTime[index].time;
+        TimeOfDay? endTime = _regularVisitorTime[index].endTime;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 5,
           children: [
             Text(AppData.getDayByID(dayID), style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.btnColor),),
-            Container(
-                padding: EdgeInsets.only(left: 15, top: 2, bottom: 2),
-                decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.borderColor),
-                    color: AppColors.fillColorGrey,
-                    borderRadius: BorderRadius.circular(8)
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(time != null ? DateTimeFormatHelpers.formatTime(time) :"Time", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.greyColor2),),
-                    IconButton(onPressed: ()=> onTimeTap(index), icon: Icon(Icons.access_time, color: AppColors.darkGreyColor2,))
-                  ],
-                )
+            Row(
+              spacing: 20,
+              children: [
+                Expanded(child: Container(
+                    padding: EdgeInsets.only(left: 15, top: 2, bottom: 2),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.borderColor),
+                        color: AppColors.fillColorGrey,
+                        borderRadius: BorderRadius.circular(8)
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(time != null ? DateTimeFormatHelpers.formatTime(time) :"Time", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.greyColor2),),
+                        IconButton(onPressed: ()=> onTimeTap(index), icon: Icon(Icons.access_time, color: AppColors.darkGreyColor2,))
+                      ],
+                    )
+                )),
+                Expanded(child: Container(
+                    padding: EdgeInsets.only(left: 15, top: 2, bottom: 2),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.borderColor),
+                        color: AppColors.fillColorGrey,
+                        borderRadius: BorderRadius.circular(8)
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(endTime != null ? DateTimeFormatHelpers.formatTime(endTime) :"Time", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.greyColor2),),
+                        IconButton(onPressed: ()=> onEndTimeTap(index), icon: Icon(Icons.access_time, color: AppColors.darkGreyColor2,))
+                      ],
+                    )
+                ))
+              ],
             )
           ],
         );
@@ -168,35 +212,44 @@ class _AddGuestPageState extends State<AddGuestPage> {
   void onTimeTap(int index)async{
     TimeOfDay? pickedTime = await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if(pickedTime != null){
-      _regularVisitorTIme[index].time = pickedTime;
+      _regularVisitorTime[index].time = pickedTime;
+      setState(() {});
+    }
+  }
+
+  void onEndTimeTap(int index)async{
+    TimeOfDay? pickedTime = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if(pickedTime != null){
+      _regularVisitorTime[index].endTime = pickedTime;
       setState(() {});
     }
   }
 
   Future<void> _onSubmitTap() async {
-    debugPrint("Submit tap");
-    if(selectedGuestType.isEmpty){
+    if(selectedGuestTypeIndex == -1){
       //return
     }
-    debugPrint("Below Submit tap");
     String name = _nameController.text.trim();
     String contactNum = _contactNumberController.text.trim();
-
-
-
-    if(selectedGuestType == _guestTypes[0]){
-     /* final map = {
-        'name': name,
-        'contactNumber' : contactNum,
-        'type' : 'Regular Visitor',
-        'moTime' : ''
-      };*/
+    Map<String,dynamic> map = {};
+    if(selectedGuestTypeIndex == 0){
+       map = {
+        "name": name,
+        "type": "Regular Visitor",
+        "contactNumber": contactNum,
+        "moTime": _regularVisitorTime[0].time != null &&  _regularVisitorTime[0].endTime != null ? getFormattedTime(_regularVisitorTime[0]) : "",
+        "tueTime":  _regularVisitorTime[1].time != null &&  _regularVisitorTime[1].endTime != null ? getFormattedTime(_regularVisitorTime[1]) : "",
+        "wedTime":  _regularVisitorTime[2].time != null &&  _regularVisitorTime[2].endTime != null ? getFormattedTime(_regularVisitorTime[2]) : "",
+        "thuTime": _regularVisitorTime[3].time != null &&  _regularVisitorTime[3].endTime != null ? getFormattedTime(_regularVisitorTime[3]) : "",
+        "friTime": _regularVisitorTime[4].time != null &&  _regularVisitorTime[4].endTime != null ? getFormattedTime(_regularVisitorTime[4]) : "",
+        "satTime":_regularVisitorTime[5].time != null &&  _regularVisitorTime[5].endTime != null ? getFormattedTime(_regularVisitorTime[5]) : "",
+        "sunTime": _regularVisitorTime[6].time != null &&  _regularVisitorTime[6].endTime != null ? getFormattedTime(_regularVisitorTime[6]) : "",
+      };
     }else {
       String carPlateNum = _carPlatNumberController.text.trim();
       String vehicleModel = _vehicleModelController.text.trim();
       String color = _colorController.text.trim();
 
-      debugPrint("Inside else");
       //guest
       String fromDate = DateFormat('yyyy-MM-dd').format(_selectedFromDateTime!);
       String fromTime = DateTimeFormatHelpers.formatTime(_selectedFromTime!);
@@ -204,7 +257,7 @@ class _AddGuestPageState extends State<AddGuestPage> {
       String toDate = DateFormat('yyyy-MM-dd').format(_selectedToDateTime!);
       String toTime = DateTimeFormatHelpers.formatTime(_selectedToTime!);
 
-      final map = {
+       map = {
         'name' : name,
         'type' : 'guest',
         'contactNumber' : contactNum,
@@ -217,14 +270,30 @@ class _AddGuestPageState extends State<AddGuestPage> {
         'toTime' : toTime,
 
       };
-
-      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-      bool result = await homeProvider.addGuest(token: widget.token, data: map);
-      if(result){
-        await homeProvider.getAllGuests(token: widget.token);
-        Navigator.of(context).pop();
-      }
     }
+
+
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    bool result = false;
+    if(comingForEdit){
+      map['id'] = widget.visitor != null ? widget.visitor!.id : widget.guest!.id;
+    }
+    if(selectedGuestTypeIndex == 0){
+
+      result =  await homeProvider.addVisitor(data: map, comingForUpdate: comingForEdit);
+      await homeProvider.getAllVisitors();
+    }else{
+      result = await homeProvider.addGuest( data: map, comingForUpdate: comingForEdit);
+      await homeProvider.getAllGuests();
+    }
+    if(result){
+      Fluttertoast.showToast(msg: comingForEdit ? '$name has been updated' : '$name has been added as a $selectedGuestTypeIndex');
+      Navigator.of(context).pop();
+    }
+  }
+
+  String getFormattedTime(DayTimeModel time){
+    return '${time.time!.hour}:${time.time!.minute} - ${time.endTime!.hour}:${time.endTime!.minute}';
   }
 }
 

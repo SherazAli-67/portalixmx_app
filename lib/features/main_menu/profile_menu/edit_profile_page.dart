@@ -1,21 +1,61 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:portalixmx_app/app_data/app_data.dart';
-import 'package:portalixmx_app/models/emergency_contact_model.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/providers/home_provider.dart';
+import 'package:portalixmx_app/providers/profile_provider.dart';
+import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
+import 'package:portalixmx_app/widgets/app_textfield_widget.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 import 'package:portalixmx_app/widgets/primary_btn.dart';
+import 'package:provider/provider.dart';
 
 import '../../../res/app_icons.dart';
 
-class EditProfilePage extends StatelessWidget{
+class EditProfilePage extends StatefulWidget{
   const EditProfilePage({super.key});
 
   @override
+  State<EditProfilePage> createState() => _EditProfilePageState();
+}
+
+class _EditProfilePageState extends State<EditProfilePage> {
+
+  late String _userName;
+  late String _emailAddress;
+
+  late String _userPhone;
+  late String _vehicleName;
+  late String _vehicleColor;
+  late String _vehicleLicensePlate;
+  late String _vehicleRegistrationNum;
+
+  late List<String> _emergencyContacts;
+
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      final provider = Provider.of<ProfileProvider>(context, listen: false);
+      _userName = provider.user!.name;
+      _emailAddress = provider.user!.email;
+      _userPhone = provider.user!.mobile;
+      _emergencyContacts = provider.user!.emergencyContacts;
+      _vehicleName = provider.user!.additionalDetails.vehicleName;
+      _vehicleColor = provider.user!.additionalDetails.color;
+      _vehicleLicensePlate = provider.user!.additionalDetails.licensePlate;
+      _vehicleRegistrationNum = provider.user!.additionalDetails.registrationNumber;
+      setState(() {});
+    });
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final provider = Provider.of<ProfileProvider>(context);
     return BgGradientScreen(child: Column(
       children: [
         Padding(
@@ -24,7 +64,7 @@ class EditProfilePage extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               BackButton(color: Colors.white,),
-              Text("Profile", style: AppTextStyles.regularTextStyle,),
+              Text(AppLocalizations.of(context)!.profile, style: AppTextStyles.regularTextStyle,),
               const SizedBox(width: 40,)
             ],
           ),
@@ -50,42 +90,112 @@ class EditProfilePage extends StatelessWidget{
                           child: ListView(
                             children: [
                               EditProfileItemWidget(
-                                title: "Name", value: "Muhammad Ali", onTap: () {},),
+                                title: AppLocalizations.of(context)!.name,
+                                value: _userName,
+                                onTap: (){
+                                  _onEditTap(title: AppLocalizations.of(context)!.name, value: _userName, onUpdated: (val) {
+                                    if(val.isNotEmpty){
+                                      _userName = val;
+                                      setState(() {});
+                                    }
+                                  });
+                                },),
                               EditProfileItemWidget(
-                                title: "Email", value: "imtiazkhansoomro@gmail.com", onTap: () {},),
+                                title: AppLocalizations.of(context)!.email,
+                                value: _emailAddress,
+                                onTap: (){},),
                               EditProfileItemWidget(
-                                title: "Phone", value: "+92 3072215500", onTap: () {},),
+                                title: AppLocalizations.of(context)!.phone,
+                                value: _userPhone,
+                                onTap: (){
+                                  _onEditTap(title: AppLocalizations.of(context)!.phone,  value: _userPhone, onUpdated: (val) {
+                                    if(val.isNotEmpty){
+                                      _userPhone = val;
+                                      setState(() {});
+                                    }
+                                  });
+                                },),
                               EditProfileItemWidget(
-                                title: "Password", value: "*********", onTap: () {},),
-                              EditProfileItemWidget(title: "Emergency Contacts",
+                                title: AppLocalizations.of(context)!.password, value: "*********", onTap: () {},),
+                              EditProfileItemWidget(title: AppLocalizations.of(context)!.emergencyContacts,
                                 value: "",
                                 onTap: () {},
-                                emergencyContacts: AppData.emergencyContacts,),
+                                emergencyContacts: _emergencyContacts),
                               const SizedBox(height: 30,),
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.white,
                                       side: BorderSide(color: Colors.black26)
                                   ),
-                                  onPressed: () {}, child: Text("Add")),
+                                  onPressed: () {}, child: Text(AppLocalizations.of(context)!.add)),
                               const SizedBox(height: 30,),
-                              Text("Vehicle Information", style: TextStyle(fontSize: 15,
+                              Text(AppLocalizations.of(context)!.vehicleInformation, style: TextStyle(fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.primaryColor),),
 
                               EditProfileItemWidget(
-                                title: "Vehicle Name", value: "Motorolla Car", onTap: () {},),
-                              EditProfileItemWidget(title: "Color", value: "Red", onTap: () {},),
+                                title: AppLocalizations.of(context)!.vehicleName,
+                                value: _vehicleName,
+                                onTap: (){
+                                  _onEditTap(
+                                      title: AppLocalizations.of(context)!.vehicleName,
+                                      value: _vehicleName,
+                                      onUpdated: (val) {
+                                        if(val.isNotEmpty){
+                                          _vehicleName = val;
+                                          setState(() {});
+                                        }
+                                  });
+                                },),
                               EditProfileItemWidget(
-                                title: "License Plate Number", value: "KL76 HJ 8979", onTap: () {},),
+                                title: AppLocalizations.of(context)!.color,
+                                value: _vehicleColor,
+                                onTap: (){
+                                  _onEditTap(title: AppLocalizations.of(context)!.color,
+                                      value: _vehicleColor,
+                                      onUpdated: (val) {
+                                    if(val.isNotEmpty){
+                                      _vehicleColor = val;
+                                      setState(() {});
+                                    }
+                                  });
+                                },),
                               EditProfileItemWidget(
-                                title: "Registration Number", value: "KL76 HJ 8979", onTap: () {},),
+                                title: AppLocalizations.of(context)!.licensePlateNumber,
+                                value: _vehicleLicensePlate,
+                                onTap: (){
+                                  _onEditTap(title: AppLocalizations.of(context)!.licensePlateNumber,
+                                      value:_vehicleLicensePlate,
+                                      onUpdated: (val) {
+                                    if(val.isNotEmpty){
+                                      _vehicleLicensePlate = val;
+                                      setState(() {});
+                                    }
+                                  });
+                                },),
+                              EditProfileItemWidget(
+                                title: AppLocalizations.of(context)!.registrationNumber,
+                                value: _vehicleRegistrationNum,
+                                onTap: (){
+                                  _onEditTap(title: AppLocalizations.of(context)!.registrationNumber,
+                                      value: _vehicleRegistrationNum,
+                                      onUpdated: (val) {
+                                    if(val.isNotEmpty){
+                                      _vehicleRegistrationNum = val;
+                                      setState(() {});
+                                    }
+                                  });
+                                },),
                               Padding(
                                 padding: EdgeInsets.only(top: 40,bottom: size.height*0.05),
-                                child: SizedBox(
-                                  height: 50,
-                                  width: double.infinity,
-                                  child: PrimaryBtn(onTap: () {}, btnText: "Update"),
+                                child: Consumer<ProfileProvider>(
+                                  builder: (context, provider,  _) {
+                                    return SizedBox(
+                                      height: 50,
+                                      width: double.infinity,
+                                      child: PrimaryBtn(onTap: _onUpdateTap, btnText: AppLocalizations.of(context)!.update, isLoading: provider.updatingProfile,),
+                                    );
+                                  }
                                 ),
                               ),
                             ],
@@ -104,12 +214,12 @@ class EditProfilePage extends StatelessWidget{
                         backgroundImage: CachedNetworkImageProvider(AppIcons.icUserImageUrl),
                       ),
                     ),
-                    Text("Muhammad Ali", style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.black),),
-                    InkWell(
+                    Text(_userName ?? provider.user!.name, style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.black),),
+                  /*  InkWell(
                         onTap: (){
                           Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> EditProfilePage()));
                         },
-                        child: Text("View Profile", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black),))
+                        child: Text("View Profile", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black),))*/
                   ],
                 ),
               ],
@@ -120,62 +230,80 @@ class EditProfilePage extends StatelessWidget{
     ));
   }
 
-  SingleChildScrollView _buildProfileInfo() {
-    return SingleChildScrollView(
-      padding: EdgeInsets.only(top: 140, right: 15, left: 15), child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        EditProfileItemWidget(
-          title: "Name", value: "Muhammad Ali", onTap: () {},),
-        EditProfileItemWidget(
-          title: "Email", value: "imtiazkhansoomro@gmail.com", onTap: () {},),
-        EditProfileItemWidget(
-          title: "Phone", value: "+92 3072215500", onTap: () {},),
-        EditProfileItemWidget(
-          title: "Password", value: "*********", onTap: () {},),
-        EditProfileItemWidget(title: "Emergency Contacts",
-          value: "",
-          onTap: () {},
-          emergencyContacts: AppData.emergencyContacts,),
-        const SizedBox(height: 30,),
-        ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                side: BorderSide(color: Colors.black26)
-            ),
-            onPressed: () {}, child: Text("Add")),
-        const SizedBox(height: 30,),
-        Text("Vehicle Information", style: TextStyle(fontSize: 15,
-            fontWeight: FontWeight.w600,
-            color: AppColors.primaryColor),),
-
-        EditProfileItemWidget(
-          title: "Vehicle Name", value: "Motorolla Car", onTap: () {},),
-        EditProfileItemWidget(title: "Color", value: "Red", onTap: () {},),
-        EditProfileItemWidget(
-          title: "License Plate Number", value: "KL76 HJ 8979", onTap: () {},),
-        EditProfileItemWidget(
-          title: "Registration Number", value: "KL76 HJ 8979", onTap: () {},),
-        SizedBox(
-          height: 50,
-          width: double.infinity,
-          child: PrimaryBtn(onTap: () {}, btnText: "Update"),
+  void _onEditTap({required String title, required String value, required Function(String updatedVal) onUpdated}){
+    TextEditingController editingController = TextEditingController(text: value);
+    showModalBottomSheet(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+        context: context,
+        isScrollControlled: true,
+        builder: (ctx){
+      return Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            spacing: 16,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(AppLocalizations.of(context)!.editProfile, style: AppTextStyles.tileTitleTextStyle,),
+                  IconButton(onPressed: ()=> Navigator.of(context).pop(), icon: Icon(Icons.close_rounded))
+                ],
+              ),
+              Text(AppLocalizations.of(context)!.updateYour(title), style: AppTextStyles.btnTextStyle.copyWith(color: Colors.black),),
+              AppTextField(textController: editingController, hintText: title)
+            ],
+          ),
         ),
+      );
+    }).then((_){
+      onUpdated(editingController.text.trim());
+      editingController.dispose();
+    });
+  }
 
-      ],
-    ),);
+  Future<void> _onUpdateTap() async {
+
+    final map = {
+      'name' : _userName,
+      'mobile' : _userPhone,
+      "additionalDetails": {
+        "vehicleName": _vehicleName,
+        "color":  _vehicleColor,
+        "licensePlate": _vehicleLicensePlate,
+        "registrationNumber": _vehicleRegistrationNum
+      },
+      "emergencyContacts": [
+        {
+          "name": "Shahbaz Ali",
+          "mobile": "3441036561"
+        }
+      ]
+    };
+
+    final userViewModel = Provider.of<UserViewModel>(context, listen: false);
+    bool result = await context.read<ProfileProvider>().updateUserProfile(data: map);
+    if(result){
+      userViewModel.setUserName(_userName);
+      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.profileInfoUpdated);
+      Navigator.of(context).pop();
+    }
   }
 }
 
 class EditProfileItemWidget extends StatelessWidget {
   const EditProfileItemWidget({
     super.key,
-    required String title, required String value, required VoidCallback onTap, List<EmergencyContactModel>? emergencyContacts
+    required String title, required String value, required VoidCallback onTap, List<String>? emergencyContacts
   }): _title = title, _value = value, _onTap = onTap, _emergencyContacts = emergencyContacts;
   final String _title;
   final String _value;
   final VoidCallback _onTap;
-  final List<EmergencyContactModel>? _emergencyContacts;
+  final List<String>? _emergencyContacts;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -199,14 +327,15 @@ class EditProfileItemWidget extends StatelessWidget {
             ],
           ) : Column(
             spacing: 10,
-            children: _emergencyContacts.map((contact){
-              return Column(
+            children: _emergencyContacts!.map((contact){
+              return Text(contact, style: AppTextStyles.editProfileSubHeadingTextStyle,);
+              /*return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(contact.name, style: AppTextStyles.emergencyContactTitleTextStyle,),
                   Text(contact.phoneNumber, style: AppTextStyles.editProfileSubHeadingTextStyle,)
                 ],
-              );
+              );*/
             }).toList(),
           )
 

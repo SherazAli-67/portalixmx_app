@@ -175,4 +175,51 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get guardTracking => 'Guard Tracking';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get phone => 'Phone';
+
+  @override
+  String get emergencyContacts => 'Emergency Contacts';
+
+  @override
+  String get vehicleInformation => 'Vehicle Information';
+
+  @override
+  String get vehicleName => 'Vehicle Name';
+
+  @override
+  String get licensePlateNumber => 'License Plate Number';
+
+  @override
+  String get registrationNumber => 'Registration Number';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get color => 'Color';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get editProfile => 'Edit Profile';
+
+  @override
+  String updateYour(Object userInfo) {
+    return 'Update your $userInfo';
+  }
+
+  @override
+  String get addGuest => 'Add Guest';
+
+  @override
+  String get deleteComplaint => 'Delete Complaint';
+
+  @override
+  String get profileInfoUpdated => 'Profile information updated';
 }

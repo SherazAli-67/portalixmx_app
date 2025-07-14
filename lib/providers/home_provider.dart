@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:portalixmx_app/models/guest_api_response.dart';
 import 'package:portalixmx_app/services/api_service.dart';
 import '../models/visitor_api_response.dart';
@@ -16,12 +17,17 @@ class HomeProvider extends ChangeNotifier {
   List<Guest> get guests => _guests;
 
 
-  Future<Map<String, dynamic>?> getAllVisitors({required String token}) async{
+  Future<Map<String, dynamic>?> getAllVisitors() async{
 
     try{
-      final response =  await _apiService.getRequest(endpoint: ApiConstants.allVisitorsEndPoint, token: token);
+      final response =  await _apiService.getRequest(endpoint: ApiConstants.allVisitorsEndPoint,);
+      debugPrint("Visitor api response: ${response?.body}");
+      if(jsonDecode(response!.body)['message'] == 'Token expired'){
+        return null;
+      }
       VisitorResponse apiResponse = VisitorResponse.fromJson(jsonDecode(response.body));
       _visitors = apiResponse.data;
+      _visitors.sort((a, b)=> b.createdAt.compareTo(a.createdAt));
       notifyListeners();
     }catch(e){
       debugPrint("Error while logging in: ${e.toString()}");
@@ -30,13 +36,16 @@ class HomeProvider extends ChangeNotifier {
     return null;
   }
 
-  Future<Map<String, dynamic>?> getAllGuests({required String token}) async{
+  Future<Map<String, dynamic>?> getAllGuests() async{
 
     try{
-      final response =  await _apiService.getRequest(endpoint: ApiConstants.allGuestsEndPoint, token: token);
-      GuestResponse apiResponse = GuestResponse.fromJson(jsonDecode(response.body));
-      _guests = apiResponse.data;
-      notifyListeners();
+      final response =  await _apiService.getRequest(endpoint: ApiConstants.allGuestsEndPoint,);
+      if(response != null){
+        GuestResponse apiResponse = GuestResponse.fromJson(jsonDecode(response.body));
+        _guests = apiResponse.data;
+        _guests.sort((a, b)=> b.createdAt.compareTo(a.createdAt));
+        notifyListeners();
+      }
     }catch(e){
       debugPrint("Error while logging in: ${e.toString()}");
     }
@@ -44,14 +53,14 @@ class HomeProvider extends ChangeNotifier {
     return null;
   }
 
-  Future<bool> addGuest({required String token, required Map<String, dynamic> data}) async{
+  Future<bool> addGuest({required Map<String, dynamic> data, bool comingForUpdate = false}) async{
     bool result = false;
     addingGuestVisitor = true;
     notifyListeners();
     try{
-       final response = await _apiService.postRequestWithToken(endpoint: ApiConstants.addGuest, token: token, data: data);
-       if(response.statusCode == 200){
-         result = true;
+       final response = await _apiService.postRequestWithToken(endpoint: comingForUpdate ? ApiConstants.updateGuest : ApiConstants.addGuest, data: data);
+       if(response != null){
+         result = response.statusCode == 200;
        }
     }catch(e){
       debugPrint("Error while logging in: ${e.toString()}");
@@ -61,16 +70,53 @@ class HomeProvider extends ChangeNotifier {
     return result;
   }
 
-  Future<void> addVisitor({required String token, required Map<String, dynamic> data}) async{
+  Future<bool> addVisitor({ required Map<String, dynamic> data, bool comingForUpdate = false}) async{
+    bool result = false;
     addingGuestVisitor = true;
     notifyListeners();
     try{
-       await _apiService.postRequestWithToken(endpoint: ApiConstants.addVisitor, token: token, data: {});
-
+       final response = await _apiService.postRequestWithToken(endpoint: comingForUpdate ? ApiConstants.updateVisitor : ApiConstants.addVisitor, data: data);
+       if(response != null){
+         result = response.statusCode == 200;
+       }
     }catch(e){
-      debugPrint("Error while logging in: ${e.toString()}");
+      debugPrint("Error while adding user in: ${e.toString()}");
     }
     addingGuestVisitor = false;
     notifyListeners();
+    return result;
   }
+
+  Future<bool> deleteGuest({required String guestID, bool isVisitor = false}) async {
+    bool result = false;
+    debugPrint("Delete Api called");
+    try {
+      String endPoint = '${ApiConstants.deleteGuest}/$guestID';
+      if (isVisitor) {
+        endPoint = '${ApiConstants.deleteVisitor}/$guestID';
+      }
+
+      final response = await _apiService.getRequest(endpoint: endPoint,);
+      if(response != null){
+        debugPrint("Delete api response: ${response.body}");
+        if (response.statusCode == 200) {
+          result = true;
+
+          if (isVisitor) {
+            Fluttertoast.showToast(msg: "Visitor is removed successfully");
+            getAllVisitors();
+          } else {
+            Fluttertoast.showToast(msg: "Guest is removed successfully");
+            getAllGuests();
+          }
+        }
+      }
+
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+    return result;
+  }
+
+
 }

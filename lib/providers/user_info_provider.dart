@@ -21,6 +21,13 @@ class UserViewModel extends ChangeNotifier {
     _initUserInfo();
   }
 
+  Future<void> setUserName(String name) async {
+    _userName = name;
+    notifyListeners();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString(_userNameKey, name);
+  }
+
   void setUserInfo({required String token, required String name, required String userID, required String email})async{
     _token = token;
     _userName = name;
@@ -44,6 +51,16 @@ class UserViewModel extends ChangeNotifier {
     _userName = sharedPreferences.getString(_userNameKey);
 
     notifyListeners();
+  }
+
+  void reset() async {
+    _token = null;
+    _userID = null;
+    _emailAddress = null;
+    _userName = null;
+    notifyListeners();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.clear();
   }
 
 }

@@ -1,5 +1,5 @@
 class AccessRequestModel {
-  final int id;
+  final String id;
   final String icon;
   final String title;
 

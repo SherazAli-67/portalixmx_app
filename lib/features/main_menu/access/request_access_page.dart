@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:portalixmx_app/app_data/app_data.dart';
-import 'package:portalixmx_app/features/main_menu/access/access_summary_page.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/models/access_request_model.dart';
+import 'package:portalixmx_app/providers/request_access_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/widgets/from_date_and_time_widget.dart';
 import 'package:portalixmx_app/widgets/primary_btn.dart';
+import 'package:provider/provider.dart';
 import '../../../res/app_textstyles.dart';
 
 class RequestAccessPage extends StatefulWidget{
   const RequestAccessPage({super.key});
-
   @override
   State<RequestAccessPage> createState() => _RequestAccessPageState();
 }
@@ -21,7 +21,7 @@ class _RequestAccessPageState extends State<RequestAccessPage> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
 
-  int _selectedAccessRequestID = 1;
+  String _selectedAccessRequestID = '';
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -38,7 +38,11 @@ class _RequestAccessPageState extends State<RequestAccessPage> {
           Text(AppLocalizations.of(context)!.accessFor, style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: Color(0xff666666)),),
           Expanded(child: GridView.builder(
               itemCount: AppData.getRequestAccessList.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 10), itemBuilder: (ctx, index){
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4, mainAxisSpacing: 10,
+                childAspectRatio: 2/3
+              ),
+              itemBuilder: (ctx, index) {
                 AccessRequestModel request = AppData.getRequestAccessList[index];
                 bool isSelected = _selectedAccessRequestID == request.id;
                 debugPrint("isSelected: $isSelected");
@@ -80,13 +84,17 @@ class _RequestAccessPageState extends State<RequestAccessPage> {
               ],
             );
           })),
-          SizedBox(
-            height: 50,
-            width: double.infinity,
-            child: PrimaryBtn(onTap: (){
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=> AccessSummaryPage()));
-            }, btnText: AppLocalizations.of(context)!.submit),
-          )
+          Consumer<RequestAccessProvider>(builder: (ctx, provider, _){
+
+            return SizedBox(
+              height: 50,
+              width: double.infinity,
+              child: PrimaryBtn(
+                onTap: ()=> provider.addRequestAccessControl(id: '6834c003722289293bd0968a'),
+                btnText: AppLocalizations.of(context)!.submit,
+                isLoading: provider.addingRequestAccess,),
+            );
+          })
 
         ],
       ),

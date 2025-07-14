@@ -26,12 +26,12 @@ class AuthRepository {
     return null;
   }
 
-  Future<void> verifyOTP({required String otp, required String token}) async{
+  Future<void> verifyOTP({required String otp,}) async{
     final data = {
       'otp' : otp,
     };
     try{
-      await _apiService.postRequestWithToken(endpoint: ApiConstants.verifyOTPEndPoint, data: data, token: token);
+      await _apiService.postRequestWithToken(endpoint: ApiConstants.verifyOTPEndPoint, data: data,);
     }catch(e){
       debugPrint("Error while logging in: ${e.toString()}");
     }

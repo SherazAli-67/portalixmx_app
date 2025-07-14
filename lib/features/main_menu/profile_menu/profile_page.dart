@@ -8,55 +8,65 @@ import 'package:portalixmx_app/features/main_menu/profile_menu/edit_profile_page
 import 'package:portalixmx_app/features/main_menu/profile_menu/emergency_calls_page.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/profile_guards_page.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/providers/profile_provider.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
+import 'package:portalixmx_app/widgets/loading_widget.dart';
+import 'package:provider/provider.dart';
 
 class ProfileMenu extends StatelessWidget{
   const ProfileMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ProfileProvider>(context);
     return Center(
-      child: Column(
-        spacing: 34,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 45.0),
-            child: Column(
-              spacing: 5,
-              children: [
-                CircleAvatar(
-                  radius: 65,
-                  backgroundColor: Colors.white,
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage: CachedNetworkImageProvider(AppIcons.icUserImageUrl),
+      child: SingleChildScrollView(
+        child: Column(
+          spacing: 34,
+          children: [
+            provider.loadingProfile
+                ? LoadingWidget()
+                : provider.user != null
+                ? Padding(
+              padding: const EdgeInsets.only(top: 45.0),
+              child: Column(
+                spacing: 5,
+                children: [
+                  CircleAvatar(
+                    radius: 65,
+                    backgroundColor: Colors.white,
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: CachedNetworkImageProvider(provider.user!.image),
+                    ),
                   ),
-                ),
-                Text("Muhammad Ali", style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.white),),
-                InkWell(
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> EditProfilePage()));
-                    },
-                    child: Text(AppLocalizations.of(context)!.viewProfile, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.white),))
+                  Text(provider.user!.name, style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.white),),
+                  InkWell(
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> EditProfilePage()));
+                      },
+                      child: Text(AppLocalizations.of(context)!.viewProfile, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.white),))
+                ],
+              ),
+            )
+                : const SizedBox(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ProfileItemWidget(title: AppLocalizations.of(context)!.directory, icon: AppIcons.icDirectory,  onTap: ()=> _onDirectoryTap(context)),
+                ProfileItemWidget(title: AppLocalizations.of(context)!.communityCalendar, icon: AppIcons.icCalendar, onTap: ()=> _onCommunityCalendarTap(context)),
+                ProfileItemWidget(title: AppLocalizations.of(context)!.communityPolls, icon: AppIcons.icCommunityPolls,  onTap: ()=> _onCommunityPollsTap(context)),
+                ProfileItemWidget(title: AppLocalizations.of(context)!.guards, icon: AppIcons.icGuards, onTap: ()=> _onGuardsTap(context)),
+                ProfileItemWidget(title: AppLocalizations.of(context)!.carPooling, icon: AppIcons.icCarPooling, onTap: () {}),
+                ProfileItemWidget(title: AppLocalizations.of(context)!.emergencyCalls, icon: AppIcons.icEmergencyCalls, onTap: ()=> _onEmergencyTap(context)),
+                TextButton(onPressed: (){}, child: Text(AppLocalizations.of(context)!.privacyPolicy, style: AppTextStyles.tileTitleTextStyle2,)),
+                TextButton(onPressed: (){}, child: Text(AppLocalizations.of(context)!.logout, style: AppTextStyles.tileTitleTextStyle2,)),
+        
               ],
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ProfileItemWidget(title: AppLocalizations.of(context)!.directory, icon: AppIcons.icDirectory,  onTap: ()=> _onDirectoryTap(context)),
-              ProfileItemWidget(title: AppLocalizations.of(context)!.communityCalendar, icon: AppIcons.icCalendar, onTap: ()=> _onCommunityCalendarTap(context)),
-              ProfileItemWidget(title: AppLocalizations.of(context)!.communityPolls, icon: AppIcons.icCommunityPolls,  onTap: ()=> _onCommunityPollsTap(context)),
-              ProfileItemWidget(title: AppLocalizations.of(context)!.guards, icon: AppIcons.icGuards, onTap: ()=> _onGuardsTap(context)),
-              ProfileItemWidget(title: AppLocalizations.of(context)!.carPooling, icon: AppIcons.icCarPooling, onTap: () {}),
-              ProfileItemWidget(title: AppLocalizations.of(context)!.emergencyCalls, icon: AppIcons.icEmergencyCalls, onTap: ()=> _onEmergencyTap(context)),
-              TextButton(onPressed: (){}, child: Text(AppLocalizations.of(context)!.privacyPolicy, style: AppTextStyles.tileTitleTextStyle2,)),
-              TextButton(onPressed: (){}, child: Text(AppLocalizations.of(context)!.logout, style: AppTextStyles.tileTitleTextStyle2,)),
-
-            ],
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

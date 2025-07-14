@@ -10,8 +10,6 @@ import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 import 'package:provider/provider.dart';
 
-import '../../../widgets/loading_widget.dart';
-
 class HomePage extends StatefulWidget{
   const HomePage({super.key});
 
@@ -21,17 +19,12 @@ class HomePage extends StatefulWidget{
 
 class _HomePageState extends State<HomePage> {
   int _selectedTab = 0;
-  String? token;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_){
-      final provider = Provider.of<HomeProvider>(context, listen: false);
-      final userProvider = Provider.of<UserViewModel>(context, listen: false);
-      // debugPrint("UserID: ${userProvider.userID}, Name: ${userProvider.userName}, email: ${userProvider.emailAddress}\nToken: ${userProvider.token}");
-      token = userProvider.token;
-      provider.getAllVisitors(token: token!);
+      _initVisitors();
     });
   }
   @override
@@ -72,7 +65,7 @@ class _HomePageState extends State<HomePage> {
               );
             }),
           Expanded(
-            child: token == null ? LoadingWidget() : Column(
+            child:  Column(
               spacing: 20,
               children: [
                 Row(
@@ -85,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                         onPressed: (){
                           if(_selectedTab != 0){
                             _selectedTab = 0;
-                            provider.getAllVisitors(token: token!);
+                            provider.getAllVisitors();
                             setState(() {});
                           }
                         }, child: Text(AppLocalizations.of(context)!.regularVisitors, style: AppTextStyles.tabsTextStyle.copyWith(color: _selectedTab == 0 ?  Colors.white : AppColors.primaryColor),)),
@@ -97,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                         onPressed: (){
                           if(_selectedTab != 1){
                             _selectedTab = 1;
-                            provider.getAllGuests(token: token!);
+                            provider.getAllGuests();
                             setState(() {});
                           }
                         }, child: Text(AppLocalizations.of(context)!.guest, style: AppTextStyles.tabsTextStyle.copyWith(color: _selectedTab == 1 ?  Colors.white : AppColors.primaryColor),)),
@@ -105,12 +98,15 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 _selectedTab == 0
-                    ? _buildAllVisitorPage(visitors: provider.visitors)
-                    : _buildAllGuestsPage(guests: provider.guests)
+                    ? _buildAllVisitorPage(visitors: provider.visitors,  onDeleteTap: (Visitor visitor){
+                  debugPrint("Delete method");provider.deleteGuest(guestID: visitor.id, isVisitor: true);
+                })
+                    : _buildAllGuestsPage(guests: provider.guests, onDeleteTap: (Guest guest){
+                      debugPrint("Delete method");provider.deleteGuest(guestID: guest.id);
+                })
               ],
             ),
           )
-          /*  */
           ],
         ),
       ),
@@ -127,17 +123,15 @@ class _HomePageState extends State<HomePage> {
             heightFactor: 0.82,
             child: Padding(
               padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: AddGuestPage(token: token!,),
+              child: AddGuestPage(),
             ),
           );
         });
-   /* showModalBottomSheet(
-        backgroundColor: Colors.white,
-        isScrollControlled: true,
-        context: context, builder: (ctx)=> AddGuestPage());*/
+
   }
 
-  Widget _buildAllVisitorPage({required List<Visitor> visitors}){
+  Widget _buildAllVisitorPage({required List<Visitor> visitors, required Function(Visitor guest) onDeleteTap}){
+
     return Expanded(
       child: ListView.builder(
           itemCount: visitors.length,
@@ -162,9 +156,14 @@ class _HomePageState extends State<HomePage> {
                     position: PopupMenuPosition.under,
                     padding: EdgeInsets.zero,
                     icon: Icon(Icons.more_vert_rounded),
+                    onSelected: (val){
+                      onDeleteTap(visitor);
+                    },
                     itemBuilder: (ctx){
                       return [
-                        PopupMenuItem(child: Text("Menu Item"))
+                        PopupMenuItem(
+                            value: 1,
+                            child: Text("Delete Visitor"))
                       ];
                     }),
               ),
@@ -173,7 +172,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildAllGuestsPage({required List<Guest> guests}){
+  Widget _buildAllGuestsPage({required List<Guest> guests, required Function(Guest guest) onDeleteTap}){
     return Expanded(
       child: ListView.builder(
           itemCount: guests.length,
@@ -198,14 +197,30 @@ class _HomePageState extends State<HomePage> {
                     position: PopupMenuPosition.under,
                     padding: EdgeInsets.zero,
                     icon: Icon(Icons.more_vert_rounded),
+                    onSelected: (val){
+                      onDeleteTap(guest);
+                    },
                     itemBuilder: (ctx){
                       return [
-                        PopupMenuItem(child: Text("Menu Item"))
+                        PopupMenuItem(
+                            value: 1,
+                            child: Text("Delete Guest"))
                       ];
                     }),
               ),
             );
           }),
     );
+  }
+
+  void _initVisitors() async{
+
+    final provider = Provider.of<HomeProvider>(context, listen: false);
+    Map<String, dynamic>? visitors = await provider.getAllVisitors();
+    if(visitors == null){
+      debugPrint("Visitors null found");
+     /* userProvider.reset();
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> LoginPage()), (val)=> false);*/
+    }
   }
 }

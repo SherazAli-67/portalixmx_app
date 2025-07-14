@@ -30,9 +30,9 @@ class AppData {
 
   static List<AccessRequestModel> get getRequestAccessList {
     return [
-      AccessRequestModel(id: 1, icon: AppIcons.icPool, title: "Pool"),
-      AccessRequestModel(id: 2, icon: AppIcons.icGame, title: "Game"),
-      AccessRequestModel(id: 3, icon: AppIcons.icGym, title: "Gym"),
+      AccessRequestModel(id: '6834c003722289293bd0968a', icon: AppIcons.icPool, title: "Pool"),
+      AccessRequestModel(id: '6834c003722289293bd0968b', icon: AppIcons.icGame, title: "Game"),
+      AccessRequestModel(id: '6834c003722289293bd0968c', icon: AppIcons.icGym, title: "Gym"),
     ];
   }
 

@@ -427,6 +427,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Guard Tracking'**
   String get guardTracking;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get phone;
+
+  /// No description provided for @emergencyContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency Contacts'**
+  String get emergencyContacts;
+
+  /// No description provided for @vehicleInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Information'**
+  String get vehicleInformation;
+
+  /// No description provided for @vehicleName.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Name'**
+  String get vehicleName;
+
+  /// No description provided for @licensePlateNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'License Plate Number'**
+  String get licensePlateNumber;
+
+  /// No description provided for @registrationNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration Number'**
+  String get registrationNumber;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
+  /// No description provided for @color.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get color;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editProfile;
+
+  /// No description provided for @updateYour.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your {userInfo}'**
+  String updateYour(Object userInfo);
+
+  /// No description provided for @addGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Guest'**
+  String get addGuest;
+
+  /// No description provided for @deleteComplaint.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Complaint'**
+  String get deleteComplaint;
+
+  /// No description provided for @profileInfoUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile information updated'**
+  String get profileInfoUpdated;
 }
 
 class _AppLocalizationsDelegate

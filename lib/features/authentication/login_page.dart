@@ -8,8 +8,6 @@ import 'package:portalixmx_app/widgets/app_textfield_widget.dart';
 import 'package:portalixmx_app/widgets/bg_logo_screen.dart';
 import 'package:portalixmx_app/widgets/primary_btn.dart';
 import 'package:provider/provider.dart';
-
-import 'package:portalixmx_app/l10n/app_localizations.dart';
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -22,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool _isLogging = false;
   @override
   Widget build(BuildContext context) {
     return ScreenWithBgLogo(
@@ -38,7 +37,9 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 50,
               width: double.infinity,
-              child: PrimaryBtn(onTap: _onLoginTap, btnText: AppLocalizations.of(context)!.login),
+              child: PrimaryBtn(
+
+                  onTap: _onLoginTap, btnText: AppLocalizations.of(context)!.login, isLoading: _isLogging,),
             ),
             TextButton(onPressed: (){
             }, child: Text(AppLocalizations.of(context)!.forgetPassword, style: AppTextStyles.btnTextStyle,))
@@ -57,17 +58,25 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
+    setState(()=> _isLogging = true);
     final authRepo = AuthRepository();
-    Map<String,dynamic>? map =  await authRepo.loginUser(email: email, password: password);
-    if(map !=  null){
-      String token = map['token'];
-      String userID = map['userId'];
-      String name = map['name'];
 
-      final provider = Provider.of<UserViewModel>(context,listen: false);
-      provider.setUserInfo(token: token, name: name, userID: userID, email: email);
+    try{
+      Map<String,dynamic>? map =  await authRepo.loginUser(email: email, password: password);
+      if(map !=  null){
+        String token = map['token'];
+        String userID = map['userId'];
+        String name = map['name'];
+        setState(()=> _isLogging = false);
+        final provider = Provider.of<UserViewModel>(context,listen: false);
+        provider.setUserInfo(token: token, name: name, userID: userID, email: email);
 
-     Navigator.of(context).push(MaterialPageRoute(builder: (_)=> VerifyOTPPage(token: token)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_)=> VerifyOTPPage()));
+      }
+    }catch(e){
+      debugPrint("Error while login user: ${e.toString()}");
+      setState(()=> _isLogging = false);
     }
+
   }
 }

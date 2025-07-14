@@ -8,8 +8,7 @@ import 'package:portalixmx_app/widgets/bg_logo_screen.dart';
 import 'package:portalixmx_app/widgets/primary_btn.dart';
 
 class VerifyOTPPage extends StatefulWidget {
-  const VerifyOTPPage({super.key, required String token}) : _token = token;
-  final String _token;
+  const VerifyOTPPage({super.key,});
   @override
   State<VerifyOTPPage> createState() => _VerifyOTPPageState();
 }
@@ -18,6 +17,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
 
   final TextEditingController _otpController = TextEditingController();
   final _authRepo = AuthRepository();
+  bool _isVerifyingOtp = false;
   @override
   Widget build(BuildContext context) {
     return ScreenWithBgLogo(
@@ -34,7 +34,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
             SizedBox(
               height: 50,
               width: double.infinity,
-              child: PrimaryBtn(onTap: _onVerifyOTPTap, btnText: AppLocalizations.of(context)!.submit),
+              child: PrimaryBtn(onTap: _onVerifyOTPTap, btnText: AppLocalizations.of(context)!.submit, isLoading: _isVerifyingOtp,),
             ),
             TextButton(onPressed: (){}, child: Text(AppLocalizations.of(context)!.needHelp, style: AppTextStyles.btnTextStyle,))
           ],
@@ -45,8 +45,18 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
 
   void _onVerifyOTPTap() async{
     String otp = _otpController.text.trim();
-    debugPrint("OTP Found: $otp");
-    await _authRepo.verifyOTP(otp: otp, token: widget._token);
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MainMenuPage()), (val)=> false);
+    try{
+      if(otp.isEmpty){
+        return;
+      }
+      setState(() =>  _isVerifyingOtp = true);
+      await _authRepo.verifyOTP(otp: otp,);
+      setState(() =>  _isVerifyingOtp = false);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MainMenuPage()), (val)=> false);
+    }catch(e){
+      setState(() =>  _isVerifyingOtp = false);
+      debugPrint("Error while verifying OTP: ${e.toString()}");
+    }
+
   }
 }

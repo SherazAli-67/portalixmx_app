@@ -4,6 +4,8 @@ import 'package:portalixmx_app/features/main_menu/main_menu_page.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/home_provider.dart';
 import 'package:portalixmx_app/providers/maintenance_provider.dart';
+import 'package:portalixmx_app/providers/profile_provider.dart';
+import 'package:portalixmx_app/providers/request_access_provider.dart';
 import 'package:portalixmx_app/providers/tab_change_provider.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
@@ -22,6 +24,8 @@ void main() {
       ChangeNotifierProvider(create: (_)=> HomeProvider()),
       ChangeNotifierProvider(create: (_)=> MaintenanceProvider()),
       ChangeNotifierProvider(create: (_)=> LocaledProvider()),
+      ChangeNotifierProvider(create: (_)=> RequestAccessProvider()),
+      ChangeNotifierProvider(create: (_)=> ProfileProvider()),
 
 
     ], child: const MyApp(),)
@@ -37,7 +41,6 @@ class MyApp extends StatelessWidget {
     final provider = Provider.of<LocaledProvider>(context);
 
     return MaterialApp(
-
         title: AppConstants.appTitle,
         locale: provider.getLocale,
         localizationsDelegates: const [
