@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:portalixmx_app/features/authentication/login_page.dart';
 import 'package:portalixmx_app/features/main_menu/resident_admin_main_menu.dart';
 import 'package:portalixmx_app/features/main_menu/resident_main_menu_page.dart';
@@ -55,9 +56,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     });
     
     // Check token expiry on app start
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkTokenExpiry();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkTokenExpiry());
   }
 
   @override
@@ -91,10 +90,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return MaterialApp(
         title: AppConstants.appTitle,
         locale: provider.getLocale,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-        ],
-        supportedLocales: L10n.all,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
             fontFamily: AppConstants.appFontFamily,
             colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
