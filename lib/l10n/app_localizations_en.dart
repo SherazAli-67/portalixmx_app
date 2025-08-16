@@ -222,4 +222,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileInfoUpdated => 'Profile information updated';
+
+  @override
+  String get profileInfoUpdateFailed =>
+      'Profile updating failed, Please try again';
 }

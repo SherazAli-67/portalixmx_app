@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -5,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:portalixmx_app/app_data/app_data.dart';
-import 'package:portalixmx_app/features/main_menu/vistors/widgets/vistor_info_item_widget.dart';
+import 'package:portalixmx_app/features/main_menu/homepage//widgets/vistor_info_item_widget.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/models/day_time_model.dart';
 import 'package:portalixmx_app/models/guest_api_response.dart';
 import 'package:portalixmx_app/models/visitor_api_response.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
@@ -203,7 +204,7 @@ class _VisitorDetailPageState extends State<VisitorDetailPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(AppLocalizations.of(context)!.from, style: AppTextStyles.visitorDetailTitleTextStyle,),
-                    Text('${DateFormat('EEEE').format(widget._guest!.fromDate)} - ${widget._guest!.fromTime}',
+                    Text('${DateFormat('EEEE').format(widget._guest!.fromDate)} - ${DateTimeFormatHelpers.formattedTimeFromString(widget._guest!.fromTime)}',
                       style: AppTextStyles.visitorDetailSubtitleTextStyle,)
                   ],
                 ),
@@ -224,7 +225,7 @@ class _VisitorDetailPageState extends State<VisitorDetailPage> {
                   children: [
                     Text(AppLocalizations.of(context)!.to,
                       style: AppTextStyles.visitorDetailTitleTextStyle,),
-                    Text('${DateFormat('EEEE').format(widget._guest!.toDate)} - ${widget._guest!.toTime}',
+                    Text('${DateFormat('EEEE').format(widget._guest!.toDate)} - ${DateTimeFormatHelpers.formattedTimeFromString(widget._guest!.toTime)}',
                       style: AppTextStyles.visitorDetailSubtitleTextStyle,)
                   ],
                 ),
@@ -262,7 +263,10 @@ class _VisitorDetailPageState extends State<VisitorDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(AppData.days[index], style: AppTextStyles.visitorDetailTitleTextStyle,),
-                        Text(getVisitorTimeByIndex(index), style: AppTextStyles.visitorDetailSubtitleTextStyle,)
+                        Text(getVisitorTimeByIndex(index) != null
+                            ? DateTimeFormatHelpers.formatGuestTime(getVisitorTimeByIndex(index)!)
+                            : '',
+                          style: AppTextStyles.visitorDetailSubtitleTextStyle,)
                       ],
                     ),
                     Container(
@@ -287,25 +291,26 @@ class _VisitorDetailPageState extends State<VisitorDetailPage> {
     );
   }
 
-  String getVisitorTimeByIndex(int index) {
+  DayTimeModel? getVisitorTimeByIndex(int index) {
+    // return null;
     switch(index){
       case 0:
-        return widget._visitor!.moTime ?? '';
+        return widget._visitor!.moTime != null && widget._visitor!.moTime!.isNotEmpty ? DayTimeModel.fromJson(jsonDecode(widget._visitor!.moTime!))  : null;
       case 1:
-        return widget._visitor!.tueTime ?? '';
+        return widget._visitor!.tueTime != null && widget._visitor!.tueTime!.isNotEmpty ? DayTimeModel.fromJson(jsonDecode(widget._visitor!.tueTime!))  : null;
       case 2:
-        return widget._visitor!.wedTime ?? '';
+        return widget._visitor!.wedTime != null && widget._visitor!.wedTime!.isNotEmpty ? DayTimeModel.fromJson(jsonDecode(widget._visitor!.wedTime!))  : null;
       case 3:
-        return widget._visitor!.thuTime ?? '';
+        return widget._visitor!.thuTime != null && widget._visitor!.thuTime!.isNotEmpty ? DayTimeModel.fromJson(jsonDecode(widget._visitor!.thuTime!))  : null;
       case 4:
-        return widget._visitor!.friTime ?? '';
+        return widget._visitor!.friTime != null && widget._visitor!.friTime!.isNotEmpty ? DayTimeModel.fromJson(jsonDecode(widget._visitor!.friTime!))  : null;
       case 5:
-        return widget._visitor!.satTime ?? '';
+        return widget._visitor!.satTime != null && widget._visitor!.satTime!.isNotEmpty ? DayTimeModel.fromJson(jsonDecode(widget._visitor!.satTime!))  : null;
       case 6:
-        return widget._visitor!.sunTime ?? '';
+        return widget._visitor!.sunTime != null && widget._visitor!.sunTime!.isNotEmpty ? DayTimeModel.fromJson(jsonDecode(widget._visitor!.sunTime!))  : null;
 
       default:
-        return  '';
+        return  null;
     }
   }
 
@@ -321,9 +326,11 @@ class _VisitorDetailPageState extends State<VisitorDetailPage> {
         await imageFile.writeAsBytes(capturedImage!);
 
         // Share the image
-        await Share.shareXFiles(
-          [XFile(imagePath)],
-          text: content,
+        await SharePlus.instance.share(
+          ShareParams(
+            files: [XFile(imagePath)],
+            text: content,
+          )
         );
       }catch(e){
         debugPrint("Failed to share QR Code: ${e.toString()}");
@@ -350,13 +357,19 @@ class _VisitorDetailPageState extends State<VisitorDetailPage> {
     return uint8List;
   }
 
-  _buildQRImage() {
+  Widget _buildQRImage() {
+    final map = {
+      'isGuest' : widget._guest != null,
+      'userID' : widget._guest != null ? widget._guest!.id : widget._visitor!.id
+    };
     return Card(
+      color: Colors.white,
+      elevation: 1,
       child: Padding(
         padding: const EdgeInsets.all(25.0),
         child: SizedBox(
           height: 200,
-          child: QrImageView(data: widget._guest != null ? widget._guest!.id : widget._visitor!.id,),
+          child: QrImageView(data: jsonEncode(map)),
         ),
       ),
     );

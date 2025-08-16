@@ -123,11 +123,8 @@ class _AddComplaintPageState extends State<AddComplaintPage> {
     String complaint = _complaintTextEditingController.text.trim();
     List<File> files = _pickedImages.map((image)=> File(image.path)).toList();
 
-    final data = {
-      'Img' : files,
-      'complainttext': complaint
-    };
-    final userProvider = Provider.of<UserViewModel>(context, listen: false);
+
+    final userProvider = Provider.of<UserInfoProvider>(context, listen: false);
     final maintenanceProvider = Provider.of<MaintenanceProvider>(context, listen: false);
     bool result = await maintenanceProvider.addComplaint(token: userProvider.token!, files: files, complaint: complaint);
     if(result){

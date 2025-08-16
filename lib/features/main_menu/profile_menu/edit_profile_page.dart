@@ -1,9 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:portalixmx_app/helpers/formating_helper.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
-import 'package:portalixmx_app/providers/home_provider.dart';
 import 'package:portalixmx_app/providers/profile_provider.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
@@ -13,6 +17,8 @@ import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 import 'package:portalixmx_app/widgets/primary_btn.dart';
 import 'package:provider/provider.dart';
 
+import '../../../helpers/image_url_helper.dart';
+import '../../../models/user_api_response_model.dart';
 import '../../../res/app_icons.dart';
 
 class EditProfilePage extends StatefulWidget{
@@ -24,17 +30,18 @@ class EditProfilePage extends StatefulWidget{
 
 class _EditProfilePageState extends State<EditProfilePage> {
 
-  late String _userName;
-  late String _emailAddress;
+  String _userName = '';
+  String _emailAddress = '';
 
-  late String _userPhone;
-  late String _vehicleName;
-  late String _vehicleColor;
-  late String _vehicleLicensePlate;
-  late String _vehicleRegistrationNum;
+  String _userPhone = '';
+  String _vehicleName = '';
+  String _vehicleColor = '';
+  String _vehicleLicensePlate = '';
+  String _vehicleRegistrationNum = '';
 
-  late List<String> _emergencyContacts;
+   List<String> _emergencyContacts = [];
 
+  XFile? _imagePicked;
 
   @override
   void initState() {
@@ -107,8 +114,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               EditProfileItemWidget(
                                 title: AppLocalizations.of(context)!.phone,
                                 value: _userPhone,
+                                isPhone: true,
                                 onTap: (){
-                                  _onEditTap(title: AppLocalizations.of(context)!.phone,  value: _userPhone, onUpdated: (val) {
+                                  _onEditTap(title: AppLocalizations.of(context)!.phone, isNumber: true,  value: _userPhone, onUpdated: (val) {
                                     if(val.isNotEmpty){
                                       _userPhone = val;
                                       setState(() {});
@@ -187,7 +195,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   });
                                 },),
                               Padding(
-                                padding: EdgeInsets.only(top: 40,bottom: size.height*0.05),
+                                padding: EdgeInsets.only(top: 40,bottom: size.height*0.07),
                                 child: Consumer<ProfileProvider>(
                                   builder: (context, provider,  _) {
                                     return SizedBox(
@@ -206,15 +214,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 Column(
                   spacing: 5,
                   children: [
-                    CircleAvatar(
-                      radius: 65,
-                      backgroundColor: Colors.white,
+
+                    GestureDetector(
+                      onTap: _onPickImageTap,
                       child: CircleAvatar(
+                        radius: 65,
+                        backgroundColor: Colors.white,
+                        child: CircleAvatar(
                         radius: 60,
-                        backgroundImage: CachedNetworkImageProvider(AppIcons.icUserImageUrl),
+                        backgroundImage: _imagePicked != null
+                            ? FileImage(File(_imagePicked!.path))
+                            : CachedNetworkImageProvider(ImageUrlHelper.getImageUrl(provider.user!.image)),
+                      ),
                       ),
                     ),
-                    Text(_userName ?? provider.user!.name, style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.black),),
+                    Text(_userName, style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.black),),
                   /*  InkWell(
                         onTap: (){
                           Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> EditProfilePage()));
@@ -230,8 +244,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
     ));
   }
 
-  void _onEditTap({required String title, required String value, required Function(String updatedVal) onUpdated}){
+  void _onEditTap({required String title, required String value, bool isNumber = false,  required Function(String updatedVal) onUpdated}){
     TextEditingController editingController = TextEditingController(text: value);
+    String updatedValue = value;
+    
     showModalBottomSheet(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
@@ -251,25 +267,36 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(AppLocalizations.of(context)!.editProfile, style: AppTextStyles.tileTitleTextStyle,),
-                  IconButton(onPressed: ()=> Navigator.of(context).pop(), icon: Icon(Icons.close_rounded))
+                  IconButton(onPressed: (){
+                    // Store the current value before closing
+                    updatedValue = editingController.text.trim();
+                    // Unfocus before closing to prevent TextEditingController disposal issues
+                    FocusScope.of(context).unfocus();
+                    Navigator.of(context).pop();
+                  }, icon: Icon(Icons.close_rounded))
                 ],
               ),
               Text(AppLocalizations.of(context)!.updateYour(title), style: AppTextStyles.btnTextStyle.copyWith(color: Colors.black),),
-              AppTextField(textController: editingController, hintText: title)
+              AppTextField(textController: editingController, hintText: title, textInputType: isNumber ? TextInputType.number : null,)
             ],
           ),
         ),
       );
     }).then((_){
-      onUpdated(editingController.text.trim());
-      editingController.dispose();
+      // Call the callback with the updated value
+      onUpdated(updatedValue);
+      // Dispose the controller after the callback is complete
+     /* WidgetsBinding.instance.addPostFrameCallback((_) {
+        editingController.dispose();
+      });*/
     });
   }
 
   Future<void> _onUpdateTap() async {
-
+    final provider = Provider.of<ProfileProvider>(context, listen: false);
     final map = {
       'name' : _userName,
+      'img' : _imagePicked != null ? _imagePicked!.path : "",
       'mobile' : _userPhone,
       "additionalDetails": {
         "vehicleName": _vehicleName,
@@ -277,20 +304,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
         "licensePlate": _vehicleLicensePlate,
         "registrationNumber": _vehicleRegistrationNum
       },
-      "emergencyContacts": [
-        {
-          "name": "Shahbaz Ali",
-          "mobile": "3441036561"
-        }
-      ]
+      "emergencyContacts": provider.user!.emergencyContacts
     };
 
-    final userViewModel = Provider.of<UserViewModel>(context, listen: false);
-    bool result = await context.read<ProfileProvider>().updateUserProfile(data: map);
+    bool result = await provider.updateUserProfile(data: map, onProfileUpdated: _onProfileUpdated);
     if(result){
-      userViewModel.setUserName(_userName);
       Fluttertoast.showToast(msg: AppLocalizations.of(context)!.profileInfoUpdated);
       Navigator.of(context).pop();
+    }
+  }
+
+  void _onProfileUpdated(UserModel user){
+    final homeProvider = Provider.of<UserInfoProvider>(context, listen: false);
+    homeProvider.setUserName(user.name);
+  }
+
+  void _onPickImageTap()async{
+    ImagePicker imagePicker = ImagePicker();
+    XFile? selectedImage = await imagePicker.pickImage(source: ImageSource.gallery);
+    if(selectedImage != null){
+      _imagePicked = selectedImage;
+      setState(() {});
     }
   }
 }
@@ -298,12 +332,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
 class EditProfileItemWidget extends StatelessWidget {
   const EditProfileItemWidget({
     super.key,
-    required String title, required String value, required VoidCallback onTap, List<String>? emergencyContacts
-  }): _title = title, _value = value, _onTap = onTap, _emergencyContacts = emergencyContacts;
+    required String title, required String value, required VoidCallback onTap, List<String>? emergencyContacts, bool isPhone = false
+  }): _title = title, _value = value, _onTap = onTap, _emergencyContacts = emergencyContacts, _isPhoneNum = isPhone;
   final String _title;
   final String _value;
   final VoidCallback _onTap;
   final List<String>? _emergencyContacts;
+  final bool _isPhoneNum;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -322,12 +357,35 @@ class EditProfileItemWidget extends StatelessWidget {
           _emergencyContacts == null ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(_value, style: AppTextStyles.editProfileSubHeadingTextStyle,),
+              Text(_isPhoneNum ? FormatingHelper.formatPhoneNumber(_value) : _value, style: AppTextStyles.editProfileSubHeadingTextStyle,),
               Divider()
             ],
           ) : Column(
             spacing: 10,
             children: _emergencyContacts!.map((contact){
+              debugPrint("Contact: $contact");
+              final decoded = jsonDecode(contact);
+              if(decoded != null && decoded is List<dynamic>){
+                debugPrint("Decoded: $decoded");
+                List<dynamic> contactList = decoded;
+                return Column(
+                  children: contactList.map((contact){
+                    final decodedContact = jsonDecode(contact);
+                    String contactName = decodedContact['name'];
+                    String contactNumber = decodedContact['mobile'];
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 2,
+                      children: [
+                        Text(contactName, style: AppTextStyles.emergencyContactTitleTextStyle,),
+                        Text(FormatingHelper.formatPhoneNumber(contactNumber), style: AppTextStyles.editProfileSubHeadingTextStyle,),
+
+                      ],
+                    );
+                  }).toList(),
+                );
+              }
               return Text(contact, style: AppTextStyles.editProfileSubHeadingTextStyle,);
               /*return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

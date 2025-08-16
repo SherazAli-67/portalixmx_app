@@ -53,7 +53,7 @@ class _PaymentsMenuState extends State<PaymentsMenu> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
-                          backgroundColor: AppColors.primaryColor.withOpacity(0.1),
+                          backgroundColor: AppColors.primaryColor.withValues(alpha: 0.1),
                           child: Center(child: Text("SN", style: AppTextStyles.tileTitleTextStyle.copyWith(color: AppColors.primaryColor),),),
                         ),
                         Expanded(

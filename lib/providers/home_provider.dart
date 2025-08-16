@@ -60,7 +60,11 @@ class HomeProvider extends ChangeNotifier {
     try{
        final response = await _apiService.postRequestWithToken(endpoint: comingForUpdate ? ApiConstants.updateGuest : ApiConstants.addGuest, data: data);
        if(response != null){
-         result = response.statusCode == 200;
+         result = response.statusCode == 200 || jsonDecode(response.body)['success'];
+         debugPrint("Result found: $result");
+         if(!result){
+           Fluttertoast.showToast(msg: jsonDecode(response.body)['errors'][0]);
+         }
        }
     }catch(e){
       debugPrint("Error while logging in: ${e.toString()}");
@@ -77,7 +81,11 @@ class HomeProvider extends ChangeNotifier {
     try{
        final response = await _apiService.postRequestWithToken(endpoint: comingForUpdate ? ApiConstants.updateVisitor : ApiConstants.addVisitor, data: data);
        if(response != null){
-         result = response.statusCode == 200;
+         result = response.statusCode == 200 || jsonDecode(response.body)['success'];
+         debugPrint("Result found: $result");
+         if(!result){
+           Fluttertoast.showToast(msg: jsonDecode(response.body)['errors'][0]);
+         }
        }
     }catch(e){
       debugPrint("Error while adding user in: ${e.toString()}");
@@ -113,10 +121,12 @@ class HomeProvider extends ChangeNotifier {
       }
 
     } catch (e) {
-      print('Error occurred: $e');
+      debugPrint('Error occurred: $e');
     }
     return result;
   }
+
+
 
 
 }

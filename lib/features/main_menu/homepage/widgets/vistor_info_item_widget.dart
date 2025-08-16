@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../res/app_colors.dart';
-import '../../../../res/app_textstyles.dart';
+
+import 'package:portalixmx_app/res/app_colors.dart';
+import 'package:portalixmx_app/res/app_textstyles.dart';
 
 class VisitorInfoItemWidget extends StatelessWidget{
   final String _title;

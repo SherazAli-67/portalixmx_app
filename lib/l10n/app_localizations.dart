@@ -517,6 +517,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile information updated'**
   String get profileInfoUpdated;
+
+  /// No description provided for @profileInfoUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updating failed, Please try again'**
+  String get profileInfoUpdateFailed;
 }
 
 class _AppLocalizationsDelegate

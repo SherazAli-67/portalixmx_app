@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:portalixmx_app/features/main_menu/main_menu_page.dart';
+import 'package:portalixmx_app/features/main_menu/resident_admin_main_menu.dart';
+import 'package:portalixmx_app/features/main_menu/resident_main_menu_page.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/repositories/auth_repo.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 import 'package:portalixmx_app/widgets/app_textfield_widget.dart';
 import 'package:portalixmx_app/widgets/bg_logo_screen.dart';
 import 'package:portalixmx_app/widgets/primary_btn.dart';
+import 'package:provider/provider.dart';
 
 class VerifyOTPPage extends StatefulWidget {
   const VerifyOTPPage({super.key,});
@@ -49,10 +52,18 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
       if(otp.isEmpty){
         return;
       }
+      final provider = Provider.of<UserInfoProvider>(context,listen: false);
+
       setState(() =>  _isVerifyingOtp = true);
       await _authRepo.verifyOTP(otp: otp,);
       setState(() =>  _isVerifyingOtp = false);
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MainMenuPage()), (val)=> false);
+      provider.setLogin(true);
+      if(provider.isResidentAdmin){
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> ResidentAdminMainMenuPage()), (val)=> false);
+      }else{
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> ResidentMainMenuPage()), (val)=> false);
+      }
+
     }catch(e){
       setState(() =>  _isVerifyingOtp = false);
       debugPrint("Error while verifying OTP: ${e.toString()}");

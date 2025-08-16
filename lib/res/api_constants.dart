@@ -18,5 +18,4 @@ class ApiConstants {
   static const deleteGuest = '/delete-guest';
   static const deleteVisitor = '/delete-visitor';
   static const deleteComplaint = '/delete-complain';
-
 }

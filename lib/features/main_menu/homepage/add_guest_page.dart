@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import 'package:portalixmx_app/app_data/app_data.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/models/day_time_model.dart';
@@ -251,11 +252,11 @@ class _AddGuestPageState extends State<AddGuestPage> {
       String color = _colorController.text.trim();
 
       //guest
-      String fromDate = DateFormat('yyyy-MM-dd').format(_selectedFromDateTime!);
+   /*   String fromDate = DateFormat('yyyy-MM-dd').format(_selectedFromDateTime!);
       String fromTime = DateTimeFormatHelpers.formatTime(_selectedFromTime!);
 
       String toDate = DateFormat('yyyy-MM-dd').format(_selectedToDateTime!);
-      String toTime = DateTimeFormatHelpers.formatTime(_selectedToTime!);
+      String toTime = DateTimeFormatHelpers.formatTime(_selectedToTime!);*/
 
        map = {
         'name' : name,
@@ -264,10 +265,14 @@ class _AddGuestPageState extends State<AddGuestPage> {
         'carPlateNumber' : carPlateNum,
         'vehicleModel' : vehicleModel,
         'color' : color,
-        'fromDate' : fromDate,
-        'fromTime' : fromTime,
-        'toDate' : toDate,
-        'toTime' : toTime,
+         'fromDate' : _selectedFromDateTime!.toIso8601String(),
+         'fromTime' : DateTimeFormatHelpers.timeOfDayToString(_selectedFromTime!),
+         'toDate' : _selectedToDateTime!.toIso8601String(),
+         'toTime' : DateTimeFormatHelpers.timeOfDayToString(_selectedToTime!),
+         // 'fromDate' : fromDate,
+        // 'fromTime' : fromTime,
+        // 'toDate' : toDate,
+        // 'toTime' : toTime,
 
       };
     }
@@ -279,21 +284,26 @@ class _AddGuestPageState extends State<AddGuestPage> {
       map['id'] = widget.visitor != null ? widget.visitor!.id : widget.guest!.id;
     }
     if(selectedGuestTypeIndex == 0){
-
       result =  await homeProvider.addVisitor(data: map, comingForUpdate: comingForEdit);
-      await homeProvider.getAllVisitors();
     }else{
       result = await homeProvider.addGuest( data: map, comingForUpdate: comingForEdit);
-      await homeProvider.getAllGuests();
+
     }
     if(result){
-      Fluttertoast.showToast(msg: comingForEdit ? '$name has been updated' : '$name has been added as a $selectedGuestTypeIndex');
+      if(selectedGuestTypeIndex == 0){
+        await homeProvider.getAllVisitors();
+      }else{
+        await homeProvider.getAllGuests();
+      }
+      Fluttertoast.showToast(msg: comingForEdit ? '$name has been updated' : '$name has been added as a ${_guestTypes[selectedGuestTypeIndex]}');
       Navigator.of(context).pop();
     }
   }
 
   String getFormattedTime(DayTimeModel time){
-    return '${time.time!.hour}:${time.time!.minute} - ${time.endTime!.hour}:${time.endTime!.minute}';
+    debugPrint("Time: ${time.toJson()}");
+    return jsonEncode(time.toJson());
+    // return '${time.time!.hour}:${time.time!.minute} - ${time.endTime!.hour}:${time.endTime!.minute}';
   }
 }
 

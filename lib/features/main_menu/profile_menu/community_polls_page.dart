@@ -7,7 +7,6 @@ import 'package:portalixmx_app/res/app_constants.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 import '../../../res/app_textstyles.dart';
-import '../vistors/widgets/vistor_info_item_widget.dart';
 
 class CommunityPollsPage extends StatelessWidget{
   const CommunityPollsPage({super.key});

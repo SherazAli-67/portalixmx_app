@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:portalixmx_app/features/main_menu/payments_menu.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/profile_page.dart';
-import 'package:portalixmx_app/features/main_menu/vistors/home_page.dart';
+import 'package:portalixmx_app/features/main_menu/homepage//home_page.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,8 +10,8 @@ import '../../res/app_colors.dart';
 import '../../res/app_icons.dart';
 import 'access/access_page.dart';
 import 'maintenance/maintenance_page.dart';
-class MainMenuPage extends StatelessWidget{
-  const MainMenuPage({super.key});
+class ResidentMainMenuPage extends StatelessWidget{
+  const ResidentMainMenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +32,9 @@ class MainMenuPage extends StatelessWidget{
 
               items: [
                 _buildBottomNavigationItemWidget(icon: AppIcons.icHomeMenu, label: AppLocalizations.of(context)!.home, isSelected: provider.currentIndex == 0),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icPaymentsMenu, label: AppLocalizations.of(context)!.payments, isSelected: provider.currentIndex == 1),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icMaintenance, label: AppLocalizations.of(context)!.maintenance, isSelected: provider.currentIndex == 2),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icAccess, label: AppLocalizations.of(context)!.access, isSelected: provider.currentIndex == 3),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icMenu, label: AppLocalizations.of(context)!.menu, isSelected: provider.currentIndex == 4),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icMaintenance, label: AppLocalizations.of(context)!.maintenance, isSelected: provider.currentIndex == 1),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icAccess, label: AppLocalizations.of(context)!.access, isSelected: provider.currentIndex == 2),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icMenu, label: AppLocalizations.of(context)!.menu, isSelected: provider.currentIndex == 3),
 
               ]),
         ),
@@ -54,7 +52,7 @@ class MainMenuPage extends StatelessWidget{
                       end: Alignment.topCenter,
                       colors: [
                     AppColors.btnColor,
-                    AppColors.btnColor.withOpacity(0.0)
+                    AppColors.btnColor.withValues(alpha: 0.0)
 
                   ])
                 ),
@@ -65,7 +63,7 @@ class MainMenuPage extends StatelessWidget{
               top: 50,
               child: Image.asset(AppIcons.icScreenBg, height: 150,),
             ),
-            SafeArea(child: _buildPage(provider.currentIndex)),
+            SafeArea(child: _buildResidentMenuItem(provider.currentIndex)),
           ],
         ),
       );
@@ -85,26 +83,24 @@ class MainMenuPage extends StatelessWidget{
           child: SvgPicture.asset(icon, height: 25, ),
         ) : SvgPicture.asset(icon, height: 25, ), label: isSelected ? '': label,);
 
-  Widget _buildPage(int currentIndex) {
+
+
+  Widget _buildResidentMenuItem(int currentIndex) {
     switch(currentIndex){
       case 0:
         return HomePage();
 
       case 1:
-        return PaymentsMenu();
-
-      case 2:
         return MaintenanceMenu();
 
-      case 3:
+      case 2:
         return AccessMenu();
 
-      case 4:
+      case 3:
         return ProfileMenu();
 
       default:
         return HomePage();
     }
   }
-
 }

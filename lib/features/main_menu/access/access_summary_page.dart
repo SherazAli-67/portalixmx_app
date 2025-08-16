@@ -5,7 +5,7 @@ import '../../../res/app_colors.dart';
 import '../../../res/app_icons.dart';
 import '../../../res/app_textstyles.dart';
 import '../../../widgets/primary_btn.dart';
-import '../vistors/widgets/vistor_info_item_widget.dart';
+import '../homepage//widgets/vistor_info_item_widget.dart';
 
 class AccessSummaryPage extends StatelessWidget{
   const AccessSummaryPage({super.key});

@@ -1,6 +1,6 @@
-import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'package:portalixmx_app/res/api_constants.dart';
 
 import '../services/api_service.dart';
@@ -9,21 +9,27 @@ class AuthRepository {
   final ApiService _apiService = ApiService();
 
 
-  Future<Map<String, dynamic>?> loginUser({required String email, required String password}) async{
+  Future<Response> loginUser({required String email, required String password}) async{
     final data = {
       'username' : email,
       'password' : password
     };
-    try{
-     final response =  await _apiService.postRequest(endpoint: ApiConstants.loginEndPoint, data: data);
-     final Map<String,dynamic> map = jsonDecode(response.body)['data']['token']!;
+    final response =  await _apiService.postRequest(endpoint: ApiConstants.loginEndPoint, data: data);
+    return response;
+/*    try{
+     debugPrint("Api response: ${response.body}");
+     final responseMap = jsonDecode(response.body);
+     if(responseMap['status']){
+       final Map<String,dynamic> map = jsonDecode(response.body)['data']['token']!;
+       return map;
+     }else{
 
-     return map;
+     }
     }catch(e){
       debugPrint("Error while logging in: ${e.toString()}");
     }
 
-    return null;
+    return null;*/
   }
 
   Future<void> verifyOTP({required String otp,}) async{

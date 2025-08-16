@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:portalixmx_app/features/main_menu/vistors/add_guest_page.dart';
-import 'package:portalixmx_app/features/main_menu/vistors/visitor_detail_page.dart';
+import 'package:portalixmx_app/features/main_menu/homepage/add_guest_page.dart';
+import 'package:portalixmx_app/features/main_menu/homepage//visitor_detail_page.dart';
 import 'package:portalixmx_app/models/guest_api_response.dart';
 import 'package:portalixmx_app/models/visitor_api_response.dart';
 import 'package:portalixmx_app/providers/home_provider.dart';
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
           spacing: 20,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Consumer<UserViewModel>(builder: (ctx, provider, _){
+            Consumer<UserInfoProvider>(builder: (ctx, provider, _){
               return Column(
                 children: [
                   Align(
@@ -99,10 +99,12 @@ class _HomePageState extends State<HomePage> {
                 ),
                 _selectedTab == 0
                     ? _buildAllVisitorPage(visitors: provider.visitors,  onDeleteTap: (Visitor visitor){
-                  debugPrint("Delete method");provider.deleteGuest(guestID: visitor.id, isVisitor: true);
+                  debugPrint("Delete method");
+                  provider.deleteGuest(guestID: visitor.id, isVisitor: true);
                 })
                     : _buildAllGuestsPage(guests: provider.guests, onDeleteTap: (Guest guest){
-                      debugPrint("Delete method");provider.deleteGuest(guestID: guest.id);
+                      debugPrint("Delete method");
+                      provider.deleteGuest(guestID: guest.id);
                 })
               ],
             ),

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:portalixmx_app/features/authentication/otp_page.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
@@ -61,22 +64,49 @@ class _LoginPageState extends State<LoginPage> {
     setState(()=> _isLogging = true);
     final authRepo = AuthRepository();
 
-    try{
-      Map<String,dynamic>? map =  await authRepo.loginUser(email: email, password: password);
-      if(map !=  null){
-        String token = map['token'];
-        String userID = map['userId'];
-        String name = map['name'];
-        setState(()=> _isLogging = false);
-        final provider = Provider.of<UserViewModel>(context,listen: false);
-        provider.setUserInfo(token: token, name: name, userID: userID, email: email);
+    try {
+      final response = await authRepo.loginUser(email: email, password: password);
+      final responseMap = jsonDecode(response.body);
+      
+      if(responseMap['status']){
+        String token = responseMap['data']['token']!['token'];
+        String userID = responseMap['data']['token']!['userId'];
+        String name = responseMap['data']['token']!['name'];
+        bool isResidentAdmin = responseMap['data']['token']!['role'] == 'admin';
 
-        Navigator.of(context).push(MaterialPageRoute(builder: (_)=> VerifyOTPPage()));
+        // Calculate token expiry (24 hours from now)
+        final tokenExpiry = DateTime.now().add(Duration(hours: 24));
+
+        if (mounted) {
+          setState(()=> _isLogging = false);
+          final provider = Provider.of<UserInfoProvider>(context,listen: false);
+          await provider.setUserInfo(
+              token: token,
+              name: name,
+              userID: userID,
+              email: email,
+              isResidentAdmin: isResidentAdmin,
+              expiry: tokenExpiry
+          );
+
+          if (mounted) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> VerifyOTPPage()));
+          }
+        }
+      } else {
+        if (mounted) {
+          Fluttertoast.showToast(msg: responseMap['message']);
+        }
       }
-    }catch(e){
+    } catch(e) {
       debugPrint("Error while login user: ${e.toString()}");
+      if (mounted) {
+        Fluttertoast.showToast(msg: "Login failed. Please try again.");
+      }
+    }
+    
+    if (mounted) {
       setState(()=> _isLogging = false);
     }
-
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 import '../../../res/app_textstyles.dart';
-import '../vistors/widgets/vistor_info_item_widget.dart';
+import '../homepage//widgets/vistor_info_item_widget.dart';
 
 class DirectoryDetailPage extends StatelessWidget{
   const DirectoryDetailPage({super.key});

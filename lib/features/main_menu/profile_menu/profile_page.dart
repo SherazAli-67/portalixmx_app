@@ -1,18 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:portalixmx_app/features/authentication/login_page.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/community_calendar.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/community_polls_page.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/directory_page.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/edit_profile_page.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/emergency_calls_page.dart';
 import 'package:portalixmx_app/features/main_menu/profile_menu/profile_guards_page.dart';
+import 'package:portalixmx_app/helpers/image_url_helper.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/profile_provider.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 import 'package:portalixmx_app/widgets/loading_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileMenu extends StatelessWidget{
   const ProfileMenu({super.key});
@@ -38,7 +41,7 @@ class ProfileMenu extends StatelessWidget{
                     backgroundColor: Colors.white,
                     child: CircleAvatar(
                       radius: 60,
-                      backgroundImage: CachedNetworkImageProvider(provider.user!.image),
+                      backgroundImage: CachedNetworkImageProvider(ImageUrlHelper.getImageUrl(provider.user!.image)),
                     ),
                   ),
                   Text(provider.user!.name, style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.white),),
@@ -61,7 +64,7 @@ class ProfileMenu extends StatelessWidget{
                 ProfileItemWidget(title: AppLocalizations.of(context)!.carPooling, icon: AppIcons.icCarPooling, onTap: () {}),
                 ProfileItemWidget(title: AppLocalizations.of(context)!.emergencyCalls, icon: AppIcons.icEmergencyCalls, onTap: ()=> _onEmergencyTap(context)),
                 TextButton(onPressed: (){}, child: Text(AppLocalizations.of(context)!.privacyPolicy, style: AppTextStyles.tileTitleTextStyle2,)),
-                TextButton(onPressed: (){}, child: Text(AppLocalizations.of(context)!.logout, style: AppTextStyles.tileTitleTextStyle2,)),
+                TextButton(onPressed: ()=> _onLogoutTap(context), child: Text(AppLocalizations.of(context)!.logout, style: AppTextStyles.tileTitleTextStyle2,)),
         
               ],
             )
@@ -89,6 +92,12 @@ class ProfileMenu extends StatelessWidget{
 
   void _onEmergencyTap(BuildContext context){
     Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EmergencyCallsPage()));
+  }
+
+  void _onLogoutTap(BuildContext context)async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> LoginPage()), (val)=> false);
   }
 }
 

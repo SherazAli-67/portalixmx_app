@@ -38,7 +38,7 @@ class FromDateAndTimeWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(_selectedDate != null ? DateTimeFormatHelpers.formatDateTime(_selectedDate) : "Date", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.greyColor2),),
+                    Expanded(child: Text(_selectedDate != null ? DateTimeFormatHelpers.formatDateTime(_selectedDate) : "Date", style: AppTextStyles.tileTitleTextStyle.copyWith(color: AppColors.greyColor2),)),
                     IconButton(onPressed: _onDateTap, icon: Icon(Icons.calendar_month_outlined, color: AppColors.darkGreyColor2,))
                   ],
                 )
@@ -53,7 +53,7 @@ class FromDateAndTimeWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(_selectedTime != null ? DateTimeFormatHelpers.formatTime(_selectedTime) :"Time", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.greyColor2),),
+                    Text(_selectedTime != null ? DateTimeFormatHelpers.formatTime(_selectedTime) :"Time", style: AppTextStyles.tileTitleTextStyle.copyWith(color: AppColors.greyColor2),),
                     IconButton(onPressed: _onTimeTap, icon: Icon(Icons.access_time, color: AppColors.darkGreyColor2,))
                   ],
                 )

@@ -94,7 +94,7 @@ class ApiService {
     }
     // Send request
     final response = await request.send();
-    final responseBody = await response.stream.bytesToString();
+    // final responseBody = await response.stream.bytesToString();
 
     if(response.statusCode == 200){
       result = true;
@@ -255,25 +255,51 @@ class ApiService {
     return response;
   }
 
+  Future<bool> updateProfile({required Map<String, dynamic> map}) async {
+    bool result = false;
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String? token = sharedPreferences.getString("token");
+    if(token != null){
 
+      final url = Uri.parse("https://admin.portalixmx.com/api/app-api/update-profile");
+      var request = http.MultipartRequest('POST', url);
 
+      request.headers.addAll({
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      });
 
+      // Add complaint text
+      request.fields['name'] = map['name'];
+      request.fields['mobile'] = map['mobile'];
+      request.fields['additionalDetails'] = jsonEncode(map['additionalDetails']);
+      // request.fields['emergencyContacts'] = jsonEncode(map['emergencyContacts']);
 
+      if(map['img'] != null && map['img'].isNotEmpty){
+        final mimeType = lookupMimeType(map['img']) ?? 'image/jpeg';
+        final mimeSplit = mimeType.split('/');
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'img',
+            map['img'],
+            contentType: MediaType(mimeSplit[0], mimeSplit[1]),
+            filename: basename(map['img']),
+          ),
+        );
+      }
 
-/*
-  Future<http.Response> getRequestWithToken({required String endpoint,}) async {
-    var url = Uri.parse(ApiConstants.baseUrl + endpoint);
-    debugPrint("Get Url: $url");
-    // String cookieHeader = '\$_ga=GA1.1.2128101670.1715344907; _clck=u620ls%7C2%7Cfmd%7C0%7C1597; access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImFjY2Vzc1Rva2VuSWQiOiI2OTgyZTdhZS1iMjRhLTRmYTctOGVhNC1jYWYxNzIyOTY2M2IiLCJpYXQiOjE3MTgyOTM3NzYsImV4cCI6MjMyMzA5Mzc3Nn0.aKIGLMxr5qJ3QouDgmTstrNbJ1XWQS-LFHi1lpg3vZM; _ga_VBJFPH8935=GS1.1.1718702542.39.1.1718702544.0.0.0';
-    // String cookies = (await Utils.getFromCache(key: cookiesKey))!;
-    // cookies = '$cookieHeader$cookies';
+      // Send request
+      final response = await request.send();
+      final responseBody = await response.stream.bytesToString();
 
-    final headers = await _getApiHeaderWithCookies();
-    final response = await http.get(url, headers: headers,);
-    debugPrint("$endpoint Api response: ${response.statusCode}");
-    return response;
+      debugPrint("update profile api response: $responseBody");
+      if(response.statusCode == 200){
+        result = true;
+      }
+    }
+
+    return result;
   }
-*/
 
 
   Future<Map<String, String>> _getApiHeader() async {

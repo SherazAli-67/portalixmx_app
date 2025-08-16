@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:portalixmx_app/features/main_menu/vistors/widgets/vistor_info_item_widget.dart';
+import 'package:portalixmx_app/features/main_menu/homepage//widgets/vistor_info_item_widget.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 import '../../../app_data/app_data.dart';
@@ -50,7 +50,7 @@ class VisitorAddedSummaryPage extends StatelessWidget{
       ),);
   }
 
-  Widget _buildGuestWidget() {
+/*  Widget _buildGuestWidget() {
     return Column(
       children: [
         Row(
@@ -94,7 +94,7 @@ class VisitorAddedSummaryPage extends StatelessWidget{
         )
       ],
     );
-  }
+  }*/
 
   Widget _buildRegularVisitorWidget() {
     return SingleChildScrollView(

@@ -1,13 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
-import 'package:portalixmx_app/res/app_constants.dart';
-import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 import '../../../res/app_textstyles.dart';
-import '../vistors/widgets/vistor_info_item_widget.dart';
 
 class CommunityPollsDetailPage extends StatelessWidget{
   const CommunityPollsDetailPage({super.key});
