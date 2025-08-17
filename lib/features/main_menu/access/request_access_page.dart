@@ -90,7 +90,20 @@ class _RequestAccessPageState extends State<RequestAccessPage> {
               height: 50,
               width: double.infinity,
               child: PrimaryBtn(
-                onTap: ()=> provider.addRequestAccessControl(id: _selectedAccessRequestID),
+                onTap: (){
+                  if(_selectedAccessRequestID.isEmpty || _selectedTime == null || _selectedDate == null){
+                    return;
+                  }
+                  String accessTitle = provider.allAccessItems.where((accessItem)=> accessItem.id == _selectedAccessRequestID).toList().first.name ?? '';
+                  final data = {
+                    "id": _selectedAccessRequestID,
+                    "requestTime": '${_selectedTime!.hour}:${_selectedTime!.minute}:00',
+                    "requestDate": _selectedDate!.toIso8601String()
+                  };
+
+
+                  provider.addRequestAccessControl(data: data, accessTitle: accessTitle, context: context);
+                },
                 btnText: AppLocalizations.of(context)!.submit,
                 isLoading: provider.addingRequestAccess,),
             );

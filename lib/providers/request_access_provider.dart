@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/models/access_control_api_response.dart';
 import 'package:portalixmx_app/models/access_control_model.dart';
+import 'package:portalixmx_app/res/app_constants.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/services/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,20 +25,23 @@ class RequestAccessProvider extends ChangeNotifier {
   List<AccessRequestModel> get allAccessRequests => _allAccessRequests;
   List<AccessModel> get allAccessItems => _allAccessItems;
 
-  Future<bool> addRequestAccessControl({required String id,}) async{
+  Future<bool> addRequestAccessControl({required Map<String, dynamic> data, required String accessTitle, required BuildContext context}) async{
     bool result = false;
     addingRequestAccess = true;
     notifyListeners();
     try{
 
-      final data = {
-        "id": id,
-        "requestTime": '${TimeOfDay.now().hour}:${TimeOfDay.now().minute}',
-        "requestDate": DateTime.now().toIso8601String()
-      };
       final response = await _apiService.postRequestWithToken(endpoint: ApiConstants.saveAccessControl, data: data, );
       if(response != null){
-        result = response.statusCode == 200;
+        result = response.statusCode == 200 || jsonDecode(response.body)['status'];
+        String message = jsonDecode(response.body)['data'];
+        if(message == AppConstants.accessRequestPending){
+          Fluttertoast.showToast(msg: AppLocalizations.of(context)!.accessRequestPending(accessTitle));
+        }else{
+          Fluttertoast.showToast(msg: AppLocalizations.of(context)!.accessRequestSubmitted(accessTitle));
+          _loadAccessControlList();
+        }
+        Navigator.of(context).pop();
         addingRequestAccess = false;
         notifyListeners();
       }
@@ -79,7 +85,6 @@ class RequestAccessProvider extends ChangeNotifier {
   }
 
   void _loadAccessControlList() async{
-    debugPrint("Loading access from network");
     // bool result = false;
     final response = await  _apiService.getRequest(endpoint: ApiConstants.allAccessControlList);
     if(response != null){

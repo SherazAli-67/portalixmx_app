@@ -631,6 +631,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} has been added as a {guestType}'**
   String hasBeenAddedMessage(Object guestType, Object name);
+
+  /// No description provided for @accessRequestPending.
+  ///
+  /// In en, this message translates to:
+  /// **'The request for {accessTitle} is already in pending state'**
+  String accessRequestPending(Object accessTitle);
+
+  /// No description provided for @accessRequestSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'The request for {accessTitle} is submitted to Portalix Admin'**
+  String accessRequestSubmitted(Object accessTitle);
 }
 
 class _AppLocalizationsDelegate

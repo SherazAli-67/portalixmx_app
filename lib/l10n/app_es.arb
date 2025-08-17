@@ -93,5 +93,7 @@
   "time" : "Hora",
   "date" : "Fecha",
   "hasBeenEditedMessage": "{name} ha sido actualizado",
-  "hasBeenAddedMessage": "{name} ha sido agregado como {guestType}"
+  "hasBeenAddedMessage": "{name} ha sido agregado como {guestType}",
+  "accessRequestPending" : "La solicitud de {accessTitle} ya está en estado pendiente",
+  "accessRequestSubmitted" : "La solicitud de {accessTitle} ha sido enviada al administrador de Portalix"
 }

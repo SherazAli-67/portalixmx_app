@@ -284,4 +284,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String hasBeenAddedMessage(Object guestType, Object name) {
     return '$name ha sido agregado como $guestType';
   }
+
+  @override
+  String accessRequestPending(Object accessTitle) {
+    return 'La solicitud de $accessTitle ya está en estado pendiente';
+  }
+
+  @override
+  String accessRequestSubmitted(Object accessTitle) {
+    return 'La solicitud de $accessTitle ha sido enviada al administrador de Portalix';
+  }
 }
