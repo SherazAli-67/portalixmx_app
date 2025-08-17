@@ -54,7 +54,7 @@ class _AddComplaintPageState extends State<AddComplaintPage> {
               children: [
                 Row(
                   children: [
-                    Expanded(child: Text("Image ${index+1}", style: AppTextStyles.tileTitleTextStyle.copyWith(color: AppColors.primaryColor),)),
+                    Expanded(child: Text(image.path.split('/').last, style: AppTextStyles.tileTitleTextStyle.copyWith(color: AppColors.primaryColor),)),
                     IconButton(onPressed: (){
                       _pickedImages.remove(image);
                       setState(() {});
@@ -129,6 +129,7 @@ class _AddComplaintPageState extends State<AddComplaintPage> {
     bool result = await maintenanceProvider.addComplaint(token: userProvider.token!, files: files, complaint: complaint);
     if(result){
       Navigator.of(context).pop();
+      maintenanceProvider.getAllComplaints();
     }
   }
 }

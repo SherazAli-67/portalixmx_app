@@ -40,12 +40,12 @@ class _MaintenanceMenuState extends State<MaintenanceMenu> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   BackButton(color: Colors.white,),
-                  Text("Maintenance", style: AppTextStyles.regularTextStyle,),
+                  Text(AppLocalizations.of(context)!.maintenance, style: AppTextStyles.regularTextStyle,),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.btnColor
                       ),
-                      onPressed: ()=> _onAddComplaintTap(context), child: Text("Add", style: AppTextStyles.subHeadingTextStyle.copyWith(color: Colors.white),))
+                      onPressed: ()=> _onAddComplaintTap(context), child: Text(AppLocalizations.of(context)!.add, style: AppTextStyles.subHeadingTextStyle.copyWith(color: Colors.white),))
                 ],
               ),
               const SizedBox(height: 40,),

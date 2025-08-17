@@ -32,7 +32,6 @@ class MaintenanceProvider extends ChangeNotifier {
   }
 
   Future<Map<String, dynamic>?> getAllComplaints() async{
-
     try{
       final response =  await _apiService.getRequest(endpoint: ApiConstants.allComplaints,);
       if(response != null){
