@@ -33,9 +33,7 @@ class _AddGuestPageState extends State<AddGuestPage> {
   final TextEditingController _vehicleModelController = TextEditingController();
   final TextEditingController _colorController = TextEditingController();
 
-  final List<String> _guestTypes = [
-    'Regular Visitor', 'Guest'
-  ];
+  List<String> _guestTypes = [];
   int selectedGuestTypeIndex = 1;
   DateTime? _selectedFromDateTime;
   DateTime? _selectedToDateTime;
@@ -62,9 +60,15 @@ class _AddGuestPageState extends State<AddGuestPage> {
       }else{
         _nameController.text = widget.visitor!.name;
         _contactNumberController.text = widget.visitor!.contactNumber;
-
       }
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      _guestTypes =  [
+        AppLocalizations.of(context)!.regularVisitor, AppLocalizations.of(context)!.guest
+      ];
+      setState(() {});
+    });
     super.initState();
   }
   @override
@@ -86,9 +90,10 @@ class _AddGuestPageState extends State<AddGuestPage> {
         children: [
           Align(
               alignment: Alignment.center,
-              child: Text(comingForEdit ?  "Edit Guest" : "Add Guest", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.primaryColor),)),
+              child: Text(comingForEdit ?  AppLocalizations.of(context)!.editGuest : AppLocalizations.of(context)!.addGuest, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.primaryColor),)),
           AppTextField(textController: _nameController, hintText: AppLocalizations.of(context)!.name, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor, borderColor: AppColors.borderColor,),
-          DropdownTextfieldWidget(isEmpty: selectedGuestTypeIndex == -1, selectedValue: _guestTypes[selectedGuestTypeIndex], onChanged: (val)=> setState(()=> selectedGuestTypeIndex = _guestTypes.indexOf(val!)), guestTypes: _guestTypes, width: double.infinity, hintText: AppLocalizations.of(context)!.guest),
+          if(_guestTypes.isNotEmpty)
+            DropdownTextfieldWidget(isEmpty: selectedGuestTypeIndex == -1, selectedValue: _guestTypes[selectedGuestTypeIndex], onChanged: (val)=> setState(()=> selectedGuestTypeIndex = _guestTypes.indexOf(val!)), guestTypes: _guestTypes, width: double.infinity, hintText: AppLocalizations.of(context)!.guest),
           AppTextField(textController: _contactNumberController, hintText: AppLocalizations.of(context)!.contactNum,fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor, borderColor: AppColors.borderColor, textInputType: TextInputType.numberWithOptions(),),
           
           selectedGuestTypeIndex == 0 ? _buildRegularVisitorWidget() : _buildGuestWidget() ,
@@ -98,7 +103,7 @@ class _AddGuestPageState extends State<AddGuestPage> {
             return SizedBox(
               height: 50,
               width: double.infinity,
-              child: PrimaryBtn(onTap: _onSubmitTap, btnText: "Submit", isLoading: provider.addingGuestVisitor,),
+              child: PrimaryBtn(onTap: _onSubmitTap, btnText: AppLocalizations.of(context)!.submit, isLoading: provider.addingGuestVisitor,),
             );
           })
         ],
@@ -148,11 +153,11 @@ class _AddGuestPageState extends State<AddGuestPage> {
     return Column(
       spacing: 15,
       children: [
-        AppTextField(textController: _carPlatNumberController, hintText: "Car Plate Number", fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
-        AppTextField(textController: _vehicleModelController, hintText: "Vehicle Model", fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
-        AppTextField(textController: _colorController, hintText: "Color", fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
-        FromDateAndTimeWidget(title: 'From',onDateTap: _onFromDateTap, onTimeTap: _onFromTimeTap, selectedDate: _selectedFromDateTime, selectedTime: _selectedFromTime),
-        FromDateAndTimeWidget(title: 'To',onDateTap: _onToDateTap, onTimeTap: _onToTimeTap, selectedDate: _selectedToDateTime, selectedTime: _selectedToTime),
+        AppTextField(textController: _carPlatNumberController, hintText: AppLocalizations.of(context)!.carPlateNumber, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
+        AppTextField(textController: _vehicleModelController, hintText: AppLocalizations.of(context)!.vehicleModel, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
+        AppTextField(textController: _colorController, hintText: AppLocalizations.of(context)!.color, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
+        FromDateAndTimeWidget(title: AppLocalizations.of(context)!.from,onDateTap: _onFromDateTap, onTimeTap: _onFromTimeTap, selectedDate: _selectedFromDateTime, selectedTime: _selectedFromTime),
+        FromDateAndTimeWidget(title: AppLocalizations.of(context)!.to,onDateTap: _onToDateTap, onTimeTap: _onToTimeTap, selectedDate: _selectedToDateTime, selectedTime: _selectedToTime),
       ],
     );
   }
@@ -168,7 +173,7 @@ class _AddGuestPageState extends State<AddGuestPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 5,
           children: [
-            Text(AppData.getDayByID(dayID), style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.btnColor),),
+            Text(AppData.getDayByID(context, dayID), style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.btnColor),),
             Row(
               spacing: 20,
               children: [
@@ -182,7 +187,7 @@ class _AddGuestPageState extends State<AddGuestPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(time != null ? DateTimeFormatHelpers.formatTime(time) :"Time", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.greyColor2),),
+                        Text(time != null ? DateTimeFormatHelpers.formatTime(time) : AppLocalizations.of(context)!.time, style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.greyColor2),),
                         IconButton(onPressed: ()=> onTimeTap(index), icon: Icon(Icons.access_time, color: AppColors.darkGreyColor2,))
                       ],
                     )
@@ -197,7 +202,7 @@ class _AddGuestPageState extends State<AddGuestPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(endTime != null ? DateTimeFormatHelpers.formatTime(endTime) :"Time", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.greyColor2),),
+                        Text(endTime != null ? DateTimeFormatHelpers.formatTime(endTime) : AppLocalizations.of(context)!.time, style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.greyColor2),),
                         IconButton(onPressed: ()=> onEndTimeTap(index), icon: Icon(Icons.access_time, color: AppColors.darkGreyColor2,))
                       ],
                     )
@@ -251,13 +256,6 @@ class _AddGuestPageState extends State<AddGuestPage> {
       String vehicleModel = _vehicleModelController.text.trim();
       String color = _colorController.text.trim();
 
-      //guest
-   /*   String fromDate = DateFormat('yyyy-MM-dd').format(_selectedFromDateTime!);
-      String fromTime = DateTimeFormatHelpers.formatTime(_selectedFromTime!);
-
-      String toDate = DateFormat('yyyy-MM-dd').format(_selectedToDateTime!);
-      String toTime = DateTimeFormatHelpers.formatTime(_selectedToTime!);*/
-
        map = {
         'name' : name,
         'type' : 'guest',
@@ -268,11 +266,7 @@ class _AddGuestPageState extends State<AddGuestPage> {
          'fromDate' : _selectedFromDateTime!.toIso8601String(),
          'fromTime' : DateTimeFormatHelpers.timeOfDayToString(_selectedFromTime!),
          'toDate' : _selectedToDateTime!.toIso8601String(),
-         'toTime' : DateTimeFormatHelpers.timeOfDayToString(_selectedToTime!),
-         // 'fromDate' : fromDate,
-        // 'fromTime' : fromTime,
-        // 'toDate' : toDate,
-        // 'toTime' : toTime,
+         'toTime' : DateTimeFormatHelpers.timeOfDayToString(_selectedToTime!)
 
       };
     }
@@ -295,13 +289,12 @@ class _AddGuestPageState extends State<AddGuestPage> {
       }else{
         await homeProvider.getAllGuests();
       }
-      Fluttertoast.showToast(msg: comingForEdit ? '$name has been updated' : '$name has been added as a ${_guestTypes[selectedGuestTypeIndex]}');
+      Fluttertoast.showToast(msg: comingForEdit ? AppLocalizations.of(context)!.hasBeenEditedMessage(name) : AppLocalizations.of(context)!.hasBeenAddedMessage(_guestTypes[selectedGuestTypeIndex], name));
       Navigator.of(context).pop();
     }
   }
 
   String getFormattedTime(DayTimeModel time){
-    debugPrint("Time: ${time.toJson()}");
     return jsonEncode(time.toJson());
     // return '${time.time!.hour}:${time.time!.minute} - ${time.endTime!.hour}:${time.endTime!.minute}';
   }

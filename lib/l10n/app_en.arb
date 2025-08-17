@@ -75,5 +75,22 @@
   "addGuest" : "Add Guest",
   "deleteComplaint" : "Delete Complaint",
   "profileInfoUpdated" : "Profile information updated",
-  "profileInfoUpdateFailed" : "Profile updating failed, Please try again"
+  "profileInfoUpdateFailed" : "Profile updating failed, Please try again",
+  "show" : "Show",
+  "hide" : "Hide",
+  "deleteVisitor" : "Delete Visitor",
+  "deleteGuest" : "Delete Guest",
+  "monday" : "Monday",
+  "tuesday" : "Tuesday",
+  "wednesday" : "Wednesday",
+  "thursday" : "Thursday",
+  "friday" : "Friday",
+  "saturday" : "Saturday",
+  "sunday" : "Sunday",
+  "editGuest" : "Edit Guest",
+  "carPlateNumber" : "Car Plate Number",
+  "vehicleModel" : "Vehicle Model",
+  "time" : "Time",
+   "hasBeenEditedMessage": "{name} has been updated",
+   "hasBeenAddedMessage": "{name} has been added as a {guestType}"
 }

@@ -226,4 +226,59 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get profileInfoUpdateFailed =>
       'Profile updating failed, Please try again';
+
+  @override
+  String get show => 'Show';
+
+  @override
+  String get hide => 'Hide';
+
+  @override
+  String get deleteVisitor => 'Delete Visitor';
+
+  @override
+  String get deleteGuest => 'Delete Guest';
+
+  @override
+  String get monday => 'Monday';
+
+  @override
+  String get tuesday => 'Tuesday';
+
+  @override
+  String get wednesday => 'Wednesday';
+
+  @override
+  String get thursday => 'Thursday';
+
+  @override
+  String get friday => 'Friday';
+
+  @override
+  String get saturday => 'Saturday';
+
+  @override
+  String get sunday => 'Sunday';
+
+  @override
+  String get editGuest => 'Edit Guest';
+
+  @override
+  String get carPlateNumber => 'Car Plate Number';
+
+  @override
+  String get vehicleModel => 'Vehicle Model';
+
+  @override
+  String get time => 'Time';
+
+  @override
+  String hasBeenEditedMessage(Object name) {
+    return '$name has been updated';
+  }
+
+  @override
+  String hasBeenAddedMessage(Object guestType, Object name) {
+    return '$name has been added as a $guestType';
+  }
 }

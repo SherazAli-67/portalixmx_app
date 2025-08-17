@@ -262,7 +262,7 @@ class _VisitorDetailPageState extends State<VisitorDetailPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(AppData.days[index], style: AppTextStyles.visitorDetailTitleTextStyle,),
+                        Text(AppData.getDays(context)[index], style: AppTextStyles.visitorDetailTitleTextStyle,),
                         Text(getVisitorTimeByIndex(index) != null
                             ? DateTimeFormatHelpers.formatGuestTime(getVisitorTimeByIndex(index)!)
                             : '',

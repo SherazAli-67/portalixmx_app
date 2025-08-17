@@ -42,7 +42,7 @@ class VisitorAddedSummaryPage extends StatelessWidget{
               ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 36.0, left: 18, right: 18),
-                child: _buildRegularVisitorWidget(),
+                child: _buildRegularVisitorWidget(context),
               ),
             ),
           )
@@ -96,7 +96,7 @@ class VisitorAddedSummaryPage extends StatelessWidget{
     );
   }*/
 
-  Widget _buildRegularVisitorWidget() {
+  Widget _buildRegularVisitorWidget(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -138,7 +138,7 @@ class VisitorAddedSummaryPage extends StatelessWidget{
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(AppData.days[index], style: AppTextStyles.visitorDetailTitleTextStyle,),
+                          Text(AppData.getDays(context)[index], style: AppTextStyles.visitorDetailTitleTextStyle,),
                           Text("10:00AM - 06:00PM", style: AppTextStyles.visitorDetailSubtitleTextStyle,)
                         ],
                       ),

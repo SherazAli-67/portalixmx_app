@@ -523,6 +523,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile updating failed, Please try again'**
   String get profileInfoUpdateFailed;
+
+  /// No description provided for @show.
+  ///
+  /// In en, this message translates to:
+  /// **'Show'**
+  String get show;
+
+  /// No description provided for @hide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide'**
+  String get hide;
+
+  /// No description provided for @deleteVisitor.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Visitor'**
+  String get deleteVisitor;
+
+  /// No description provided for @deleteGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Guest'**
+  String get deleteGuest;
+
+  /// No description provided for @monday.
+  ///
+  /// In en, this message translates to:
+  /// **'Monday'**
+  String get monday;
+
+  /// No description provided for @tuesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Tuesday'**
+  String get tuesday;
+
+  /// No description provided for @wednesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Wednesday'**
+  String get wednesday;
+
+  /// No description provided for @thursday.
+  ///
+  /// In en, this message translates to:
+  /// **'Thursday'**
+  String get thursday;
+
+  /// No description provided for @friday.
+  ///
+  /// In en, this message translates to:
+  /// **'Friday'**
+  String get friday;
+
+  /// No description provided for @saturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturday'**
+  String get saturday;
+
+  /// No description provided for @sunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get sunday;
+
+  /// No description provided for @editGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Guest'**
+  String get editGuest;
+
+  /// No description provided for @carPlateNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Car Plate Number'**
+  String get carPlateNumber;
+
+  /// No description provided for @vehicleModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Model'**
+  String get vehicleModel;
+
+  /// No description provided for @time.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get time;
+
+  /// No description provided for @hasBeenEditedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} has been updated'**
+  String hasBeenEditedMessage(Object name);
+
+  /// No description provided for @hasBeenAddedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} has been added as a {guestType}'**
+  String hasBeenAddedMessage(Object guestType, Object name);
 }
 
 class _AppLocalizationsDelegate

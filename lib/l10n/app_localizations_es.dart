@@ -226,4 +226,59 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get profileInfoUpdateFailed =>
       'Error al actualizar el perfil, por favor intenta de nuevo';
+
+  @override
+  String get show => 'Mostrar';
+
+  @override
+  String get hide => 'Ocultar';
+
+  @override
+  String get deleteVisitor => 'Eliminar Visitante';
+
+  @override
+  String get deleteGuest => 'Eliminar invitado';
+
+  @override
+  String get monday => 'Lunes';
+
+  @override
+  String get tuesday => 'Martes';
+
+  @override
+  String get wednesday => 'Miércoles';
+
+  @override
+  String get thursday => 'Jueves';
+
+  @override
+  String get friday => 'Viernes';
+
+  @override
+  String get saturday => 'Sábado';
+
+  @override
+  String get sunday => 'Domingo';
+
+  @override
+  String get editGuest => 'Editar Invitado';
+
+  @override
+  String get carPlateNumber => 'Número de Placa del Auto';
+
+  @override
+  String get vehicleModel => 'Modelo del Vehículo';
+
+  @override
+  String get time => 'Hora';
+
+  @override
+  String hasBeenEditedMessage(Object name) {
+    return '$name ha sido actualizado';
+  }
+
+  @override
+  String hasBeenAddedMessage(Object guestType, Object name) {
+    return '$name ha sido agregado como $guestType';
+  }
 }

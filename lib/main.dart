@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:portalixmx_app/features/authentication/login_page.dart';
 import 'package:portalixmx_app/features/main_menu/resident_admin_main_menu.dart';
 import 'package:portalixmx_app/features/main_menu/resident_main_menu_page.dart';
@@ -14,8 +13,6 @@ import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_constants.dart';
 import 'package:provider/provider.dart';
-
-import 'l10n/l10n.dart';
 import 'providers/language_provider.dart';
 
 void main() {
@@ -49,12 +46,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    
+
     // Start periodic token check (every 5 minutes)
     _tokenCheckTimer = Timer.periodic(Duration(minutes: 5), (timer) {
       _checkTokenExpiry();
     });
-    
+
     // Check token expiry on app start
     WidgetsBinding.instance.addPostFrameCallback((_) => _checkTokenExpiry());
   }

@@ -146,26 +146,22 @@ class _HomePageState extends State<HomePage> {
                 contentPadding: EdgeInsets.only(left: 10),
                 leading: CircleAvatar(
                   backgroundColor: AppColors.btnColor,
-                  child: Center(
-                    child:  Icon(Icons.person, color: Colors.white,),
-                  ),
+                  child: Center(child: Icon(Icons.person, color: Colors.white,),),
                 ),
                 title: Text(visitor.name, style: AppTextStyles.tileTitleTextStyle,),
-                subtitle: Text(visitor.type, style: AppTextStyles.tileSubtitleTextStyle,),
+                subtitle: Text(AppLocalizations.of(context)!.regularVisitor, style: AppTextStyles.tileSubtitleTextStyle,),
                 trailing: PopupMenuButton(
                     elevation: 0,
                     color: Colors.white,
                     position: PopupMenuPosition.under,
                     padding: EdgeInsets.zero,
                     icon: Icon(Icons.more_vert_rounded),
-                    onSelected: (val){
-                      onDeleteTap(visitor);
-                    },
+                    onSelected: (_)=> onDeleteTap(visitor),
                     itemBuilder: (ctx){
                       return [
                         PopupMenuItem(
                             value: 1,
-                            child: Text("Delete Visitor"))
+                            child: Text(AppLocalizations.of(context)!.deleteVisitor))
                       ];
                     }),
               ),
@@ -192,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 title: Text(guest.name, style: AppTextStyles.tileTitleTextStyle,),
-                subtitle: Text(guest.type, style: AppTextStyles.tileSubtitleTextStyle,),
+                subtitle: Text(AppLocalizations.of(context)!.guest, style: AppTextStyles.tileSubtitleTextStyle,),
                 trailing: PopupMenuButton(
                     elevation: 0,
                     color: Colors.white,
@@ -206,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                       return [
                         PopupMenuItem(
                             value: 1,
-                            child: Text("Delete Guest"))
+                            child: Text(AppLocalizations.of(context)!.deleteGuest))
                       ];
                     }),
               ),

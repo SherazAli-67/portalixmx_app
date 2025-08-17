@@ -75,5 +75,22 @@
   "addGuest" : "Agregar Invitado",
   "deleteComplaint" : "Eliminar Queja",
   "profileInfoUpdated" : "Información de perfil actualizada",
-  "profileInfoUpdateFailed" : "Error al actualizar el perfil, por favor intenta de nuevo"
+  "profileInfoUpdateFailed" : "Error al actualizar el perfil, por favor intenta de nuevo",
+  "show" : "Mostrar",
+  "hide" : "Ocultar",
+  "deleteVisitor" : "Eliminar Visitante",
+  "deleteGuest"  :"Eliminar invitado",
+  "monday" : "Lunes",
+  "tuesday" : "Martes",
+  "wednesday" : "Miércoles",
+  "thursday" : "Jueves",
+  "friday" : "Viernes",
+  "saturday" : "Sábado",
+  "sunday" : "Domingo",
+  "editGuest" : "Editar Invitado",
+  "carPlateNumber" : "Número de Placa del Auto",
+  "vehicleModel" : "Modelo del Vehículo",
+  "time" : "Hora",
+  "hasBeenEditedMessage": "{name} ha sido actualizado",
+  "hasBeenAddedMessage": "{name} ha sido agregado como {guestType}"
 }
