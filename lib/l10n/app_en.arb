@@ -91,6 +91,7 @@
   "carPlateNumber" : "Car Plate Number",
   "vehicleModel" : "Vehicle Model",
   "time" : "Time",
-   "hasBeenEditedMessage": "{name} has been updated",
-   "hasBeenAddedMessage": "{name} has been added as a {guestType}"
+  "date" : "Date",
+  "hasBeenEditedMessage": "{name} has been updated",
+  "hasBeenAddedMessage": "{name} has been added as a {guestType}"
 }

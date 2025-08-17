@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:portalixmx_app/app_data/app_data.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
-import 'package:portalixmx_app/models/access_request_model.dart';
+import 'package:portalixmx_app/models/access_control_model.dart';
 import 'package:portalixmx_app/providers/request_access_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/widgets/from_date_and_time_widget.dart';
@@ -24,6 +23,7 @@ class _RequestAccessPageState extends State<RequestAccessPage> {
   String _selectedAccessRequestID = '';
   @override
   Widget build(BuildContext context) {
+    final accessProvider = Provider.of<RequestAccessProvider>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 25),
       child: Column(
@@ -37,15 +37,15 @@ class _RequestAccessPageState extends State<RequestAccessPage> {
           FromDateAndTimeWidget(title: AppLocalizations.of(context)!.from, onDateTap: _onDateTap, onTimeTap: _onTimeTap, selectedDate: _selectedDate, selectedTime: _selectedTime, showTitle: false,),
           Text(AppLocalizations.of(context)!.accessFor, style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: Color(0xff666666)),),
           Expanded(child: GridView.builder(
-              itemCount: AppData.getRequestAccessList.length,
+              itemCount: accessProvider.allAccessItems.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4, mainAxisSpacing: 10,
                 childAspectRatio: 2/3
               ),
               itemBuilder: (ctx, index) {
-                AccessRequestModel request = AppData.getRequestAccessList[index];
+                AccessModel request = accessProvider.allAccessItems[index];
                 bool isSelected = _selectedAccessRequestID == request.id;
-                debugPrint("isSelected: $isSelected");
+                // debugPrint("isSelected: $isSelected");
             return  Column(
               spacing: 6,
               children: [
@@ -63,7 +63,7 @@ class _RequestAccessPageState extends State<RequestAccessPage> {
                     ),
                     child:Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child:  SvgPicture.asset(request.icon, colorFilter: isSelected ? ColorFilter.mode(Colors.white, BlendMode.srcIn) : null,),
+                      child:  SvgPicture.asset(accessProvider.getImageByTitle(request.name ?? ''), colorFilter: isSelected ? ColorFilter.mode(Colors.white, BlendMode.srcIn) : null,),
                     ),),
                /* Card(
                   margin: EdgeInsets.zero,
@@ -77,7 +77,7 @@ class _RequestAccessPageState extends State<RequestAccessPage> {
                   ),
                 ),*/
                 Text(
-                    request.title,
+                    request.name ?? '',
                     textAlign: TextAlign.center,
                     style: AppTextStyles.tileSubtitleTextStyle
                 ),
@@ -90,7 +90,7 @@ class _RequestAccessPageState extends State<RequestAccessPage> {
               height: 50,
               width: double.infinity,
               child: PrimaryBtn(
-                onTap: ()=> provider.addRequestAccessControl(id: '6834c003722289293bd0968a'),
+                onTap: ()=> provider.addRequestAccessControl(id: _selectedAccessRequestID),
                 btnText: AppLocalizations.of(context)!.submit,
                 isLoading: provider.addingRequestAccess,),
             );

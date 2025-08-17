@@ -273,6 +273,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get time => 'Hora';
 
   @override
+  String get date => 'Fecha';
+
+  @override
   String hasBeenEditedMessage(Object name) {
     return '$name ha sido actualizado';
   }

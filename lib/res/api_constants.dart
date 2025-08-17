@@ -11,6 +11,7 @@ class ApiConstants {
   static const updateVisitor = '/update-visitor';
   static const addComplaint = '/save-complain';
   static const allComplaints = '/get-complain-list';
+  static const allAccessControlList = '/access-control';
   static const saveAccessControl = '/request-control';
   static const userAccessControlList = '/user-access-control-list';
   static const userProfile = '/user-porfile';

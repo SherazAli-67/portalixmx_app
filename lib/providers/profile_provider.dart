@@ -31,8 +31,6 @@ class ProfileProvider extends ChangeNotifier{
     final response = await _apiService.getRequest(endpoint: ApiConstants.userProfile, );
     if(response != null){
       if(response.statusCode == 200){
-
-        debugPrint("Api response: ${response.body}");
         UserApiResponse userApiResponse = UserApiResponse.fromJson(jsonDecode(response.body));
         _user = userApiResponse.data;
       }

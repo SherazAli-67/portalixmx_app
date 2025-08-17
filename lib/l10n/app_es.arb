@@ -91,6 +91,7 @@
   "carPlateNumber" : "Número de Placa del Auto",
   "vehicleModel" : "Modelo del Vehículo",
   "time" : "Hora",
+  "date" : "Fecha",
   "hasBeenEditedMessage": "{name} ha sido actualizado",
   "hasBeenAddedMessage": "{name} ha sido agregado como {guestType}"
 }

@@ -1,31 +1,31 @@
-class AccessControlApiResponse {
+class AccessRequestControlApiResponse {
   final String message;
   final bool status;
-  final List<AccessModel> data;
+  final List<AccessRequestModel> data;
 
-  AccessControlApiResponse({
+  AccessRequestControlApiResponse({
     required this.message,
     required this.status,
     required this.data,
   });
 
-  factory AccessControlApiResponse.fromJson(Map<String, dynamic> json) {
-    return AccessControlApiResponse(
+  factory AccessRequestControlApiResponse.fromJson(Map<String, dynamic> json) {
+    return AccessRequestControlApiResponse(
       message: json['message'],
       status: json['status'],
-      data: List<AccessModel>.from(json['data'].map((x) => AccessModel.fromJson(x))),
+      data: List<AccessRequestModel>.from(json['data'].map((x) => AccessRequestModel.fromJson(x))),
     );
   }
 }
 
-class AccessModel {
+class AccessRequestModel {
   final String id;
   final String name;
   final String image;
   final String createdBy;
   final List<Access> access;
 
-  AccessModel({
+  AccessRequestModel({
     required this.id,
     required this.name,
     required this.image,
@@ -33,8 +33,8 @@ class AccessModel {
     required this.access,
   });
 
-  factory AccessModel.fromJson(Map<String, dynamic> json) {
-    return AccessModel(
+  factory AccessRequestModel.fromJson(Map<String, dynamic> json) {
+    return AccessRequestModel(
       id: json['_id'],
       name: json['name'],
       image: json['image'],

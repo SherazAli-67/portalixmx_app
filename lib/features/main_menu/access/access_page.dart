@@ -57,7 +57,7 @@ class _AccessMenuState extends State<AccessMenu> {
                   child: ListView.builder(
                       itemCount: provider.allAccessRequests.length,
                       itemBuilder: (ctx, index){
-                        AccessModel access = provider.allAccessRequests[index];
+                        AccessRequestModel access = provider.allAccessRequests[index];
                         return Card(
                           margin: EdgeInsets.only(bottom: 10),
                           child: ListTile(
