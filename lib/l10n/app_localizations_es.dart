@@ -24,7 +24,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get login => 'Iniciar sesión';
 
   @override
-  String get forgetPassword => '¿Olvidaste tu contraseña?';
+  String get forgetPassword => 'Olvida tu contraseña';
 
   @override
   String welcomeMessage(Object name) {

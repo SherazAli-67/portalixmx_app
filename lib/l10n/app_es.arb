@@ -5,7 +5,7 @@
   "email" : "Correo electrónico",
   "password" : "Contraseña",
   "login" : "Iniciar sesión",
-  "forgetPassword" : "¿Olvidaste tu contraseña?",
+  "forgetPassword" : "Olvida tu contraseña",
   "welcomeMessage": "Bienvenido {name}",
   "regularVisitors": "Visitantes Frecuentes",
   "guest": "Invitado",
