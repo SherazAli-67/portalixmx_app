@@ -294,4 +294,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String accessRequestSubmitted(Object accessTitle) {
     return 'The request for $accessTitle is submitted to Portalix Admin';
   }
+
+  @override
+  String get createAccount => 'Create Account';
+
+  @override
+  String get createAccountDescription =>
+      'Create account with Portalixmx and get started with the society management';
+
+  @override
+  String get alreadyHaveAnAccount => 'Already have an account? ';
+
+  @override
+  String get dontHaveAnAccount => 'Don\'t have an account? ';
 }

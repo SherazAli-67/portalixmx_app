@@ -58,8 +58,6 @@ class RequestAccessProvider extends ChangeNotifier {
     try{
       final response =  await _apiService.getRequest(endpoint: ApiConstants.userAccessControlList,);
       if(response != null){
-        // debugPrint("Body: ${response.body}");
-
         AccessRequestControlApiResponse apiResponse = AccessRequestControlApiResponse.fromJson(jsonDecode(response.body));
         _allAccessRequests = apiResponse.data;
         _allAccessRequests.sort((a, b)=> b.access.first.timeStamp.compareTo(a.access.first.timeStamp));

@@ -1,0 +1,176 @@
+import 'dart:convert';
+
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
+import 'package:portalixmx_app/features/authentication/otp_page.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/providers/user_info_provider.dart';
+import 'package:portalixmx_app/repositories/auth_repo.dart';
+import 'package:portalixmx_app/res/app_colors.dart';
+import 'package:portalixmx_app/res/app_icons.dart';
+import 'package:portalixmx_app/res/app_textstyles.dart';
+import 'package:portalixmx_app/router/app_router.dart';
+import 'package:portalixmx_app/widgets/app_textfield_widget.dart';
+import 'package:portalixmx_app/widgets/bg_logo_screen.dart';
+import 'package:portalixmx_app/widgets/primary_btn.dart';
+import 'package:provider/provider.dart';
+
+import '../../res/app_constants.dart';
+class CreateAccountPage extends StatefulWidget {
+  const CreateAccountPage({super.key});
+
+  @override
+  State<CreateAccountPage> createState() => _CreateAccountPageState();
+}
+
+class _CreateAccountPageState extends State<CreateAccountPage> {
+
+  final TextEditingController _emailController = .new();
+  final TextEditingController _nameController = .new();
+
+  final TextEditingController _passwordController = .new();
+
+
+  bool _isLogging = false;
+  @override
+  Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
+    return ScreenWithBgLogo(
+      child: Padding(
+        padding: const .symmetric(horizontal: 16, vertical: 10.0),
+        child: Column(
+          spacing: 16,
+          children: [
+            Text(localization.createAccount, style: AppTextStyles.headingTextStyle),
+            Text(localization.createAccountDescription, style: AppTextStyles.subHeadingTextStyle, textAlign: .center,),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: .only(top: 16),
+                child: Column(
+                  crossAxisAlignment: .start,
+                  spacing: 16,
+                  children: [
+                    Align(
+                      alignment: .center,
+                      child: Stack(
+                        children: [
+                          GestureDetector(
+                            onTap: (){},
+                            child: CircleAvatar(
+                              radius: 41,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                radius: 40,
+                           /*     backgroundImage: _imagePicked != null
+                                    ? FileImage(File(_imagePicked!.path))
+                                    : CachedNetworkImageProvider(ImageUrlHelper.getImageUrl(provider.user!.image)),*/
+                                backgroundImage: AssetImage(AppIcons.icSplashLogo),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 2,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  shape: .circle,
+                                  color: AppColors.btnColor
+                              ),
+                              padding: .all(5),
+                              child: Icon(Icons.edit, color: Colors.white, size: 18,),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    AppTextField(title: localization.name, controller: _nameController, hintText: localization.name,),
+                    AppTextField(title: localization.email, controller: _emailController, hintText: localization.email,textInputType: TextInputType.emailAddress,),
+                    AppTextField(title: localization.password, controller: _passwordController, hintText: localization.password, isPassword: true,),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 50,
+              width: double.infinity,
+              child: PrimaryBtn(
+                  onTap: _onLoginTap, btnText: localization.createAccount, isLoading: _isLogging,),
+            ),
+            RichText(text: TextSpan(
+                text: localization.alreadyHaveAnAccount,
+                style: AppTextStyles.subHeadingTextStyle.copyWith(fontFamily: AppConstants.appFontFamily),
+                children: [
+                  TextSpan(
+                      text: localization.login,
+                      recognizer: TapGestureRecognizer()..onTap = ()=> context.go(NamedRoutes.login.routeName),
+                      style: AppTextStyles.subHeadingTextStyle.copyWith(fontFamily: AppConstants.appFontFamily, fontWeight: .w600)
+                  )
+                ]
+            ))
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _onLoginTap()async{
+    FocusManager.instance.primaryFocus?.unfocus();
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if(email.isEmpty || password.isEmpty){
+      return;
+    }
+
+    setState(()=> _isLogging = true);
+    final authRepo = AuthRepository();
+
+    try {
+      final response = await authRepo.loginUser(email: email, password: password);
+      final responseMap = jsonDecode(response.body);
+      
+      if(responseMap['status']){
+        String token = responseMap['data']['token']!['token'];
+        String userID = responseMap['data']['token']!['userId'];
+        String name = responseMap['data']['token']!['name'];
+        // bool isResidentAdmin = responseMap['data']['token']!['role'] == 'admin';
+        bool isResidentAdmin = true;
+        // Calculate token expiry (24 hours from now)
+        final tokenExpiry = DateTime.now().add(Duration(hours: 24));
+
+        if (mounted) {
+          setState(()=> _isLogging = false);
+          final provider = Provider.of<UserInfoProvider>(context,listen: false);
+          await provider.setUserInfo(
+              token: token,
+              name: name,
+              userID: userID,
+              email: email,
+              isResidentAdmin: isResidentAdmin,
+              expiry: tokenExpiry
+          );
+
+          if (mounted) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> VerifyOTPPage()));
+          }
+        }
+      } else {
+        if (mounted) {
+          Fluttertoast.showToast(msg: responseMap['message']);
+        }
+      }
+    } catch(e) {
+      debugPrint("Error while login user: ${e.toString()}");
+      if (mounted) {
+        Fluttertoast.showToast(msg: "Login failed. Please try again.");
+      }
+    }
+    
+    if (mounted) {
+      setState(()=> _isLogging = false);
+    }
+  }
+}

@@ -95,6 +95,11 @@
   "hasBeenEditedMessage": "{name} has been updated",
   "hasBeenAddedMessage": "{name} has been added as a {guestType}",
   "accessRequestPending" : "The request for {accessTitle} is already in pending state",
-  "accessRequestSubmitted" : "The request for {accessTitle} is submitted to Portalix Admin"
+  "accessRequestSubmitted" : "The request for {accessTitle} is submitted to Portalix Admin",
+
+  "createAccount" : "Create Account",
+  "createAccountDescription" : "Create account with Portalixmx and get started with the society management",
+  "alreadyHaveAnAccount" : "Already have an account? ",
+  "dontHaveAnAccount" : "Don't have an account? "
 
 }

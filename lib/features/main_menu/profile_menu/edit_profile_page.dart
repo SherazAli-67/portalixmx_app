@@ -107,10 +107,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     }
                                   });
                                 },),
-                              EditProfileItemWidget(
+                            /*  EditProfileItemWidget(
                                 title: AppLocalizations.of(context)!.email,
                                 value: _emailAddress,
-                                onTap: (){},),
+                                onTap: (){},),*/
                               EditProfileItemWidget(
                                 title: AppLocalizations.of(context)!.phone,
                                 value: _userPhone,
@@ -181,7 +181,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     }
                                   });
                                 },),
-                              EditProfileItemWidget(
+                             /* EditProfileItemWidget(
                                 title: AppLocalizations.of(context)!.registrationNumber,
                                 value: _vehicleRegistrationNum,
                                 onTap: (){
@@ -193,7 +193,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                       setState(() {});
                                     }
                                   });
-                                },),
+                                },),*/
                               Padding(
                                 padding: EdgeInsets.only(top: 40,bottom: size.height*0.07),
                                 child: Consumer<ProfileProvider>(
@@ -277,7 +277,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ],
               ),
               Text(AppLocalizations.of(context)!.updateYour(title), style: AppTextStyles.btnTextStyle.copyWith(color: Colors.black),),
-              AppTextField(textController: editingController, hintText: title, textInputType: isNumber ? TextInputType.number : null,)
+              AppTextField(controller: editingController, hintText: title, textInputType: isNumber ? TextInputType.number : null,)
             ],
           ),
         ),

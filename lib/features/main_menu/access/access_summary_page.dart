@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:portalixmx_app/models/access_control_api_response.dart';
+import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 
 import '../../../res/app_colors.dart';
@@ -8,8 +10,8 @@ import '../../../widgets/primary_btn.dart';
 import '../homepage//widgets/vistor_info_item_widget.dart';
 
 class AccessSummaryPage extends StatelessWidget{
-  const AccessSummaryPage({super.key});
-
+  const AccessSummaryPage({super.key, required this.access});
+  final AccessRequestModel access;
   @override
   Widget build(BuildContext context) {
     return BgGradientScreen(child: Column(
@@ -20,7 +22,7 @@ class AccessSummaryPage extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               BackButton(color: Colors.white,),
-              Text("Game Access", style: AppTextStyles.regularTextStyle,),
+              Text('${access.name} Access', style: AppTextStyles.regularTextStyle,),
               const SizedBox(width: 20)
             ],
           ),
@@ -44,11 +46,11 @@ class AccessSummaryPage extends StatelessWidget{
                       children: [
                         Expanded(
                           child: VisitorInfoItemWidget(
-                            title: 'Date', subTitle: 'Sep 20, 2024',showDivider: true,),
+                            title: 'Date', subTitle: DateTimeFormatHelpers.formatDateTime(access.access.first.timeStamp),showDivider: true,),
                         ),
                         Expanded(
                             child: VisitorInfoItemWidget(
-                              title: 'Time', subTitle: '10:00AM - 06:00PM',showDivider: true,)
+                              title: 'Time', subTitle: DateTimeFormatHelpers.formatDateTime(access.access.first.timeStamp),showDivider: true,)
                         ),
                       ],
                     ),

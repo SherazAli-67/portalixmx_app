@@ -95,6 +95,7 @@ class ApiService {
     // Send request
     final response = await request.send();
     // final responseBody = await response.stream.bytesToString();
+    // debugPrint("Add complaint response: $responseBody");
 
     if(response.statusCode == 200){
       result = true;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:portalixmx_app/features/main_menu/access/access_summary_page.dart';
 import 'package:portalixmx_app/features/main_menu/access/request_access_page.dart';
 import 'package:portalixmx_app/models/access_control_api_response.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
@@ -61,6 +62,7 @@ class _AccessMenuState extends State<AccessMenu> {
                         return Card(
                           margin: EdgeInsets.only(bottom: 10),
                           child: ListTile(
+                            onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (_)=> AccessSummaryPage(access: access))),
                             contentPadding: EdgeInsets.only(left: 15),
                             leading: SvgPicture.asset(AppIcons.icGame, colorFilter: ColorFilter.mode(AppColors.primaryColor, BlendMode.srcIn),),
                             title: Text(access.name, style: AppTextStyles.tileTitleTextStyle),

@@ -37,7 +37,7 @@ class _AddComplaintPageState extends State<AddComplaintPage> {
         children: [
           Text(AppLocalizations.of(context)!.complaint, style: AppTextStyles.bottomSheetHeadingTextStyle,),
           const SizedBox(height: 10,),
-          AppTextField(textController: _complaintTextEditingController, hintText: AppLocalizations.of(context)!.complaint, fillColor: AppColors.fillColorGrey, maxLines: 5,),
+          AppTextField(controller: _complaintTextEditingController, hintText: AppLocalizations.of(context)!.complaint, fillColor: AppColors.fillColorGrey, maxLines: 5,),
           Row(
             spacing: 20,
             children: [

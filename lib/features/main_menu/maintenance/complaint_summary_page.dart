@@ -1,14 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:portalixmx_app/res/app_icons.dart';
+import 'package:portalixmx_app/helpers/image_url_helper.dart';
+import 'package:portalixmx_app/models/complaints_api_response.dart';
+import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 
 import '../../../res/app_textstyles.dart';
 import '../homepage//widgets/vistor_info_item_widget.dart';
 
 class ComplaintSummaryPage extends StatelessWidget{
-  const ComplaintSummaryPage({super.key});
-
+  const ComplaintSummaryPage({super.key, required this.complaint});
+  final Complaint complaint;
   @override
   Widget build(BuildContext context) {
     return BgGradientScreen(child: Column(
@@ -19,7 +21,7 @@ class ComplaintSummaryPage extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               BackButton(color: Colors.white,),
-              Text("Complaint ABC", style: AppTextStyles.regularTextStyle,),
+              Text(complaint.complaint, style: AppTextStyles.regularTextStyle,),
               const SizedBox(width: 20)
             ],
           ),
@@ -43,23 +45,23 @@ class ComplaintSummaryPage extends StatelessWidget{
                     children: [
                       Expanded(
                         child: VisitorInfoItemWidget(
-                          title: 'Date', subTitle: 'Sep 20, 2024', ),
+                          title: 'Date', subTitle: DateTimeFormatHelpers.formatDateTime(complaint.createdAt), ),
                       ),
                       Expanded(
                           child: VisitorInfoItemWidget(
-                            title: 'Status', subTitle: 'Approved',)
+                            title: 'Status', subTitle: complaint.status,)
                       ),
                     ],
                   ),
                   Divider(),
-                  VisitorInfoItemWidget(title: 'Complaint', subTitle: 'Enter the 2-step verification code sent on the given number', showDivider: true),
+                  VisitorInfoItemWidget(title: 'Complaint', subTitle: complaint.complaint, showDivider: true),
                   Text("Photos", style: AppTextStyles.visitorDetailTitleTextStyle,),
                   Expanded(child: GridView.builder(
-                      itemCount: 5,
+                      itemCount: complaint.images.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,   mainAxisSpacing: 10, crossAxisSpacing: 10), itemBuilder: (ctx, index){
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      child: CachedNetworkImage(imageUrl: AppIcons.icComplaintImageUrl, height: 75, fit: BoxFit.cover,),
+                      child: CachedNetworkImage(imageUrl: ImageUrlHelper.getImageUrl(complaint.images[index]), height: 75, fit: BoxFit.cover,),
                     );
                   }))
                 ],

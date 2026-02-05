@@ -1,12 +1,15 @@
 import 'dart:convert';
-
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/features/authentication/otp_page.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/repositories/auth_repo.dart';
+import 'package:portalixmx_app/res/app_constants.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
+import 'package:portalixmx_app/router/app_router.dart';
 import 'package:portalixmx_app/widgets/app_textfield_widget.dart';
 import 'package:portalixmx_app/widgets/bg_logo_screen.dart';
 import 'package:portalixmx_app/widgets/primary_btn.dart';
@@ -26,26 +29,50 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLogging = false;
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return ScreenWithBgLogo(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10.0),
+        padding: .symmetric(horizontal: 16, vertical: 10.0),
         child: Column(
           spacing: 16,
           children: [
-            Text(AppLocalizations.of(context)!.residentLogin, style: AppTextStyles.headingTextStyle),
-            const SizedBox(height: 16,),
-            AppTextField(textController: _emailController, hintText: AppLocalizations.of(context)!.email,textInputType: TextInputType.emailAddress,),
-            AppTextField(textController: _passwordController, hintText: AppLocalizations.of(context)!.password, isPassword: true,),
-            const Spacer(),
+            Text(localization.residentLogin, style: AppTextStyles.headingTextStyle),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: .only(top: 16),
+                child: Column(
+                  crossAxisAlignment: .start,
+                  spacing: 16,
+                  children: [
+                    AppTextField(
+                      title: localization.email,
+                      controller: _emailController, hintText: localization.email,textInputType: TextInputType.emailAddress,),
+                    AppTextField(title: localization.password,controller: _passwordController, hintText: localization.password, isPassword: true,),
+                    Align(
+                      alignment: .topRight,
+                      child: TextButton(onPressed: (){
+                      }, child: Text(localization.forgetPassword, style: AppTextStyles.btnTextStyle,)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
             SizedBox(
               height: 50,
-              width: double.infinity,
-              child: PrimaryBtn(
-
-                  onTap: _onLoginTap, btnText: AppLocalizations.of(context)!.login, isLoading: _isLogging,),
-            ),
-            TextButton(onPressed: (){
-            }, child: Text(AppLocalizations.of(context)!.forgetPassword, style: AppTextStyles.btnTextStyle,))
+              width: .infinity,
+              child: PrimaryBtn(onTap: _onLoginTap, btnText: localization.login, isLoading: _isLogging,),),
+            RichText(text: TextSpan(
+              text: localization.dontHaveAnAccount,
+              style: AppTextStyles.subHeadingTextStyle.copyWith(fontFamily: AppConstants.appFontFamily),
+              children: [
+                TextSpan(
+                  text: localization.createAccount,
+                  recognizer: TapGestureRecognizer()..onTap = ()=> context.go(NamedRoutes.createAccount.routeName),
+                  style: AppTextStyles.subHeadingTextStyle.copyWith(fontFamily: AppConstants.appFontFamily, fontWeight: .w600)
+                )
+              ]
+            ))
           ],
         ),
       ),
@@ -72,8 +99,8 @@ class _LoginPageState extends State<LoginPage> {
         String token = responseMap['data']['token']!['token'];
         String userID = responseMap['data']['token']!['userId'];
         String name = responseMap['data']['token']!['name'];
-        bool isResidentAdmin = responseMap['data']['token']!['role'] == 'admin';
-
+        // bool isResidentAdmin = responseMap['data']['token']!['role'] == 'admin';
+        bool isResidentAdmin = true;
         // Calculate token expiry (24 hours from now)
         final tokenExpiry = DateTime.now().add(Duration(hours: 24));
 

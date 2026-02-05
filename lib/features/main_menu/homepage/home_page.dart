@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
             return Card(
               margin: EdgeInsets.only(bottom: 10),
               child: ListTile(
-                onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> VisitorDetailPage(visitor: visitor,))),
+                onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> GuestDetailPage(visitor: visitor,))),
                 contentPadding: EdgeInsets.only(left: 10),
                 leading: CircleAvatar(
                   backgroundColor: AppColors.btnColor,
@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
             return Card(
               margin: EdgeInsets.only(bottom: 10),
               child: ListTile(
-                onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> VisitorDetailPage(guest: guest,))),
+                onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> GuestDetailPage(guest: guest,))),
                 contentPadding: EdgeInsets.only(left: 10),
                 leading: CircleAvatar(
                   backgroundColor: AppColors.btnColor,

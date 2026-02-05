@@ -1,73 +1,64 @@
 import 'package:flutter/material.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/profile_page.dart';
-import 'package:portalixmx_app/features/main_menu/homepage//home_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../providers/tab_change_provider.dart';
 import '../../res/app_colors.dart';
 import '../../res/app_icons.dart';
-import 'access/access_page.dart';
-import 'maintenance/maintenance_page.dart';
 class ResidentMainMenuPage extends StatelessWidget{
-  const ResidentMainMenuPage({super.key});
-
+  const ResidentMainMenuPage({super.key, required this.navigationShell});
+  final StatefulNavigationShell navigationShell;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Consumer<TabChangeProvider>(builder: (ctx, provider, _){
-      return Scaffold(
-        bottomNavigationBar: SizedBox(
-          height: 110,
-          child: BottomNavigationBar(
+    return Scaffold(
+      bottomNavigationBar: SizedBox(
+        height: 110,
+        child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
-              onTap: (index)=> provider.onTabChange(index),
-              backgroundColor: AppColors.primaryColor,
-              showSelectedLabels: false,
-              unselectedItemColor: Colors.white,
-              currentIndex: provider.currentIndex,
-              selectedLabelStyle: TextStyle(fontSize: 11),
-              unselectedLabelStyle: TextStyle(fontSize: 12, color: Colors.white),
+            onTap: (index)=> navigationShell.goBranch(index),
+            backgroundColor: AppColors.primaryColor,
+            showSelectedLabels: false,
+            unselectedItemColor: Colors.white,
+            currentIndex: navigationShell.currentIndex,
+            selectedLabelStyle: TextStyle(fontSize: 11),
+            unselectedLabelStyle: TextStyle(fontSize: 12, color: Colors.white),
 
-              items: [
-                _buildBottomNavigationItemWidget(icon: AppIcons.icHomeMenu, label: AppLocalizations.of(context)!.home, isSelected: provider.currentIndex == 0),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icMaintenance, label: AppLocalizations.of(context)!.maintenance, isSelected: provider.currentIndex == 1),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icAccess, label: AppLocalizations.of(context)!.access, isSelected: provider.currentIndex == 2),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icMenu, label: AppLocalizations.of(context)!.menu, isSelected: provider.currentIndex == 3),
+            items: [
+              _buildBottomNavigationItemWidget(icon: AppIcons.icHomeMenu, label: AppLocalizations.of(context)!.home, isSelected: navigationShell.currentIndex == 0),
+              _buildBottomNavigationItemWidget(icon: AppIcons.icMaintenance, label: AppLocalizations.of(context)!.maintenance, isSelected: navigationShell.currentIndex == 1),
+              _buildBottomNavigationItemWidget(icon: AppIcons.icAccess, label: AppLocalizations.of(context)!.access, isSelected: navigationShell.currentIndex == 2),
+              _buildBottomNavigationItemWidget(icon: AppIcons.icMenu, label: AppLocalizations.of(context)!.menu, isSelected: navigationShell.currentIndex == 3),
 
-              ]),
-        ),
-        body: Stack(
-          children: [
-            Align(
+            ]),
+      ),
+      body: Stack(
+        children: [
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: size.height*0.7,
+              width: double.infinity,
               alignment: Alignment.bottomCenter,
-              child: Container(
-                height: size.height*0.7,
-                width: double.infinity,
-                alignment: Alignment.bottomCenter,
-                decoration: BoxDecoration(
+              decoration: BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
                       colors: [
-                    AppColors.btnColor,
-                    AppColors.btnColor.withValues(alpha: 0.0)
+                        AppColors.btnColor,
+                        AppColors.btnColor.withValues(alpha: 0.0)
 
-                  ])
-                ),
+                      ])
               ),
             ),
-            Positioned(
-              right: 10,
-              top: 50,
-              child: Image.asset(AppIcons.icScreenBg, height: 150,),
-            ),
-            SafeArea(child: _buildResidentMenuItem(provider.currentIndex)),
-          ],
-        ),
-      );
-    },
+          ),
+          Positioned(
+            right: 10,
+            top: 50,
+            child: Image.asset(AppIcons.icScreenBg, height: 150,),
+          ),
+          SafeArea(child: navigationShell),
+        ],
+      ),
     );
   }
 
@@ -85,7 +76,7 @@ class ResidentMainMenuPage extends StatelessWidget{
 
 
 
-  Widget _buildResidentMenuItem(int currentIndex) {
+ /* Widget _buildResidentMenuItem(int currentIndex) {
     switch(currentIndex){
       case 0:
         return HomePage();
@@ -102,5 +93,5 @@ class ResidentMainMenuPage extends StatelessWidget{
       default:
         return HomePage();
     }
-  }
+  }*/
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/guard_tracking_map_page.dart';
+import 'package:portalixmx_app/helpers/url_launcher_helper.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
-
 import '../../../res/app_colors.dart';
 import '../../../res/app_textstyles.dart';
 
@@ -12,6 +11,8 @@ class EmergencyCallsPage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    // final provider = Provider.of<ProfileProvider>(context);
+
     return BgGradientScreen(
       child: Column(
         spacing: 20,
@@ -57,20 +58,49 @@ class EmergencyCallsPage extends StatelessWidget{
                           ),
                         ),
                       ),
-                      Expanded(
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0, top: 20),
+                        child: Material(
+                          color: AppColors.lightGreyBackgroundColor,
+                          child: ListTile(
+                            onTap: ()=> UrlLauncherHelper.makePhoneCall('112'),
+                            contentPadding: EdgeInsets.only(top: 8, bottom: 8, left: 15, right: 10),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                            leading: CircleAvatar(
+                              backgroundColor: AppColors.btnColor,
+                              child: Center(child: Icon(Icons.person, color: Colors.white,),),
+                            ),
+                            tileColor: Colors.white,
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Emergency Contact", style: AppTextStyles.tileTitleTextStyle,),
+                                Text('112', style: AppTextStyles.tileSubtitleTextStyle,)
+                              ],
+                            ),
+                            trailing: CircleAvatar(
+                              radius: 25,
+                              backgroundColor: AppColors.primaryColor,
+                              child: Center(
+                                child: Icon(Icons.call, color: Colors.white,),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                     /* Expanded(
                         child: ListView.builder(
-                            itemCount: 10,
+                            itemCount: provider.user!.emergencyContacts.length,
                             itemBuilder: (ctx, index){
+                              String contact = provider.user!.emergencyContacts[index];
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 10.0),
                                 child: Material(
                                   color: AppColors.lightGreyBackgroundColor,
                                   child: ListTile(
-                                    onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (_)=> GuardTrackingMapPage())),
+                                    onTap: (){},
                                     contentPadding: EdgeInsets.only(top: 8, bottom: 8, left: 15, right: 10),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15)
-                                    ),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                                     leading: CircleAvatar(
                                       backgroundColor: AppColors.btnColor,
                                       child: Center(child: Icon(Icons.person, color: Colors.white,),),
@@ -79,8 +109,8 @@ class EmergencyCallsPage extends StatelessWidget{
                                     title: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text("Police", style: AppTextStyles.tileTitleTextStyle,),
-                                        Text("+111", style: AppTextStyles.tileSubtitleTextStyle,)
+                                        Text("Emergency Contact", style: AppTextStyles.tileTitleTextStyle,),
+                                        Text(contact, style: AppTextStyles.tileSubtitleTextStyle,)
                                       ],
                                     ),
                                     trailing: CircleAvatar(
@@ -94,7 +124,7 @@ class EmergencyCallsPage extends StatelessWidget{
                                 ),
                               );
                             }),
-                      ),
+                      ),*/
                     ],
                   )
               ),

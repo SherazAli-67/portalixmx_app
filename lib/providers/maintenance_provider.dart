@@ -21,6 +21,7 @@ class MaintenanceProvider extends ChangeNotifier {
     try{
 
       result = await _apiService.uploadComplaintWithImages(token: token, complaintText: complaint, images: files);
+      debugPrint("Add complaint response: $result");
       addingComplaint = false;
       notifyListeners();
     }catch(e){

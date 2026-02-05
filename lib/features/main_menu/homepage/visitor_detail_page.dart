@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:portalixmx_app/app_data/app_data.dart';
 import 'package:portalixmx_app/features/main_menu/homepage//widgets/vistor_info_item_widget.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
@@ -25,18 +23,19 @@ import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'add_guest_page.dart';
 
-class VisitorDetailPage extends StatefulWidget{
-  const VisitorDetailPage({super.key, Guest? guest, Visitor? visitor}): _guest = guest, _visitor = visitor;
+class GuestDetailPage extends StatefulWidget{
+  const GuestDetailPage({super.key, Guest? guest, Visitor? visitor}): _guest = guest, _visitor = visitor;
   final Guest? _guest;
   final Visitor? _visitor;
 
   @override
-  State<VisitorDetailPage> createState() => _VisitorDetailPageState();
+  State<GuestDetailPage> createState() => _GuestDetailPageState();
 }
 
-class _VisitorDetailPageState extends State<VisitorDetailPage> {
+class _GuestDetailPageState extends State<GuestDetailPage> {
 
   bool _loadingSave = false;
 
@@ -85,8 +84,7 @@ class _VisitorDetailPageState extends State<VisitorDetailPage> {
                                         : DateTimeFormatHelpers.formatDateTime(widget._visitor!.createdAt),
                                     showDivider: true),
                               ),
-                              Expanded(
-                                  child: VisitorInfoItemWidget(title: AppLocalizations.of(context)!.accessFor, subTitle: '',  showDivider: true)
+                              Expanded(child: VisitorInfoItemWidget(title: AppLocalizations.of(context)!.accessFor, subTitle: '',  showDivider: true)
                               ),
                             ],
                           ),

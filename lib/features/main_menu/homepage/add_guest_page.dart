@@ -91,10 +91,10 @@ class _AddGuestPageState extends State<AddGuestPage> {
           Align(
               alignment: Alignment.center,
               child: Text(comingForEdit ?  AppLocalizations.of(context)!.editGuest : AppLocalizations.of(context)!.addGuest, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.primaryColor),)),
-          AppTextField(textController: _nameController, hintText: AppLocalizations.of(context)!.name, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor, borderColor: AppColors.borderColor,),
+          AppTextField(controller: _nameController, hintText: AppLocalizations.of(context)!.name, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor, borderColor: AppColors.borderColor,),
           if(_guestTypes.isNotEmpty)
             DropdownTextfieldWidget(isEmpty: selectedGuestTypeIndex == -1, selectedValue: _guestTypes[selectedGuestTypeIndex], onChanged: (val)=> setState(()=> selectedGuestTypeIndex = _guestTypes.indexOf(val!)), guestTypes: _guestTypes, width: double.infinity, hintText: AppLocalizations.of(context)!.guest),
-          AppTextField(textController: _contactNumberController, hintText: AppLocalizations.of(context)!.contactNum,fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor, borderColor: AppColors.borderColor, textInputType: TextInputType.numberWithOptions(),),
+          AppTextField(controller: _contactNumberController, hintText: AppLocalizations.of(context)!.contactNum,fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor, borderColor: AppColors.borderColor, textInputType: TextInputType.numberWithOptions(),),
           
           selectedGuestTypeIndex == 0 ? _buildRegularVisitorWidget() : _buildGuestWidget() ,
           
@@ -153,9 +153,9 @@ class _AddGuestPageState extends State<AddGuestPage> {
     return Column(
       spacing: 15,
       children: [
-        AppTextField(textController: _carPlatNumberController, hintText: AppLocalizations.of(context)!.carPlateNumber, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
-        AppTextField(textController: _vehicleModelController, hintText: AppLocalizations.of(context)!.vehicleModel, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
-        AppTextField(textController: _colorController, hintText: AppLocalizations.of(context)!.color, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
+        AppTextField(controller: _carPlatNumberController, hintText: AppLocalizations.of(context)!.carPlateNumber, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
+        AppTextField(controller: _vehicleModelController, hintText: AppLocalizations.of(context)!.vehicleModel, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
+        AppTextField(controller: _colorController, hintText: AppLocalizations.of(context)!.color, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
         FromDateAndTimeWidget(title: AppLocalizations.of(context)!.from,onDateTap: _onFromDateTap, onTimeTap: _onFromTimeTap, selectedDate: _selectedFromDateTime, selectedTime: _selectedFromTime),
         FromDateAndTimeWidget(title: AppLocalizations.of(context)!.to,onDateTap: _onToDateTap, onTimeTap: _onToTimeTap, selectedDate: _selectedToDateTime, selectedTime: _selectedToTime),
       ],

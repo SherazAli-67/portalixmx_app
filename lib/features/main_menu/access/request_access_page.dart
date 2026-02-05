@@ -37,7 +37,7 @@ class _RequestAccessPageState extends State<RequestAccessPage> {
           FromDateAndTimeWidget(title: AppLocalizations.of(context)!.from, onDateTap: _onDateTap, onTimeTap: _onTimeTap, selectedDate: _selectedDate, selectedTime: _selectedTime, showTitle: false,),
           Text(AppLocalizations.of(context)!.accessFor, style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: Color(0xff666666)),),
           Expanded(child: GridView.builder(
-              itemCount: accessProvider.allAccessItems.length,
+              itemCount: 2,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4, mainAxisSpacing: 10,
                 childAspectRatio: 2/3

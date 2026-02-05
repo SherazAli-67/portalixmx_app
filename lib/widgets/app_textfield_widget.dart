@@ -7,7 +7,7 @@ import '../res/app_textstyles.dart' show AppTextStyles;
 class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
-    required TextEditingController textController,
+    required TextEditingController controller,
     required String hintText,
     this.isPassword = false,
     this.readOnly = false,
@@ -16,7 +16,9 @@ class AppTextField extends StatefulWidget {
     Color hintTextColor = AppColors.greyColor,
     Color borderColor = Colors.transparent,
     int? maxLines,
-  }) : _textController = textController,_hintText = hintText, _textInputType = textInputType, _fillColor = fillColor, _hintTextColor = hintTextColor, _borderColor = borderColor;
+    String? title,
+    TextCapitalization? capitalization
+  }) : _textController = controller,_hintText = hintText, _textInputType = textInputType, _fillColor = fillColor, _hintTextColor = hintTextColor, _borderColor = borderColor, _title = title, _capitalization = capitalization;
 
   final TextEditingController _textController;
   final String _hintText;
@@ -28,6 +30,8 @@ class AppTextField extends StatefulWidget {
   final Color _hintTextColor;
   final Color _borderColor;
   // final int? _maxLines;
+  final String? _title;
+  final TextCapitalization? _capitalization;
   @override
   State<AppTextField> createState() => _AppTextFieldState();
 }
@@ -36,27 +40,36 @@ class _AppTextFieldState extends State<AppTextField> {
   bool hidePassword = true;
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: widget._textController,
-      readOnly: widget.readOnly,
-      obscureText: widget.isPassword && hidePassword,
-      keyboardType: widget._textInputType,
-      onTapOutside: (_)=>  FocusManager.instance.primaryFocus?.unfocus(),
-      decoration: InputDecoration(
-          hintText: widget._hintText,
-          hintStyle: AppTextStyles.hintTextStyle.copyWith(color: widget._hintTextColor),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: widget._borderColor)
+    return Column(
+      crossAxisAlignment: .start,
+      spacing: 8,
+      children: [
+        if(widget._title != null)
+          Text(widget._title!, style: AppTextStyles.tileTitleTextStyle.copyWith(color: Colors.white),),
+        TextField(
+          controller: widget._textController,
+          readOnly: widget.readOnly,
+          obscureText: widget.isPassword && hidePassword,
+          keyboardType: widget._textInputType,
+          textCapitalization: widget._capitalization ?? .sentences,
+          onTapOutside: (_)=>  FocusManager.instance.primaryFocus?.unfocus(),
+          decoration: InputDecoration(
+              hintText: widget._hintText,
+              hintStyle: AppTextStyles.hintTextStyle.copyWith(color: widget._hintTextColor),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: widget._borderColor)
+              ),
+              suffixIcon: widget.isPassword ? TextButton(
+                  onPressed: () => setState(() => hidePassword = !hidePassword),
+                  child: Text(hidePassword ? AppLocalizations.of(context)!.show : AppLocalizations.of(context)!.hide, style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.primaryColor),)) : null,
+              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: widget._borderColor)),
+              fillColor: widget._fillColor,
+              filled: true
           ),
-          suffixIcon: widget.isPassword ? TextButton(
-              onPressed: () => setState(() => hidePassword = !hidePassword),
-              child: Text(hidePassword ? AppLocalizations.of(context)!.show : AppLocalizations.of(context)!.hide, style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.primaryColor),)) : null,
-          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: widget._borderColor)),
-          fillColor: widget._fillColor,
-          filled: true
-      ),
+        ),
+      ],
     );
   }
 }

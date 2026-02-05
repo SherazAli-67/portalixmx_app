@@ -643,6 +643,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The request for {accessTitle} is submitted to Portalix Admin'**
   String accessRequestSubmitted(Object accessTitle);
+
+  /// No description provided for @createAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get createAccount;
+
+  /// No description provided for @createAccountDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account with Portalixmx and get started with the society management'**
+  String get createAccountDescription;
+
+  /// No description provided for @alreadyHaveAnAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? '**
+  String get alreadyHaveAnAccount;
+
+  /// No description provided for @dontHaveAnAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? '**
+  String get dontHaveAnAccount;
 }
 
 class _AppLocalizationsDelegate
