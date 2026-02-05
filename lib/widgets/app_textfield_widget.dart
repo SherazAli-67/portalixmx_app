@@ -7,7 +7,7 @@ import '../res/app_textstyles.dart' show AppTextStyles;
 class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
-    required TextEditingController controller,
+    TextEditingController? controller,
     required String hintText,
     this.isPassword = false,
     this.readOnly = false,
@@ -20,7 +20,7 @@ class AppTextField extends StatefulWidget {
     TextCapitalization? capitalization
   }) : _textController = controller,_hintText = hintText, _textInputType = textInputType, _fillColor = fillColor, _hintTextColor = hintTextColor, _borderColor = borderColor, _title = title, _capitalization = capitalization;
 
-  final TextEditingController _textController;
+  final TextEditingController? _textController;
   final String _hintText;
 
   final bool isPassword;

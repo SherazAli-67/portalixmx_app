@@ -667,6 +667,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Don\'t have an account? '**
   String get dontHaveAnAccount;
+
+  /// No description provided for @completeProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Profile'**
+  String get completeProfile;
+
+  /// No description provided for @completeProfileDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide the rest information to complete your profile'**
+  String get completeProfileDescription;
+
+  /// No description provided for @additionalDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Details'**
+  String get additionalDetails;
 }
 
 class _AppLocalizationsDelegate

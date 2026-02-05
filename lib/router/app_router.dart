@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/features/authentication/create_account_page.dart';
 import 'package:portalixmx_app/features/authentication/forget_password_page.dart';
 import 'package:portalixmx_app/features/authentication/login_page.dart';
+import 'package:portalixmx_app/features/complete_profile_screen/complete_profile_screen.dart';
 import 'package:portalixmx_app/features/main_menu/access/access_page.dart';
 import 'package:portalixmx_app/features/main_menu/access/access_summary_page.dart';
 import 'package:portalixmx_app/features/main_menu/homepage/home_page.dart';
@@ -55,18 +56,21 @@ GoRouter appRouter = GoRouter(
       GoRoute(path: NamedRoutes.carPooling.routeName, builder: (ctx, state)=> Center(child: Text("Car Pooling Page"),)),
       GoRoute(path: NamedRoutes.emergencyCalls.routeName, builder: (ctx, state)=> EmergencyCallsPage()),
       GoRoute(path: NamedRoutes.privacyPolicy.routeName, builder: (ctx, state)=> Center(child: Text("Privacy Policy Page"),)),
+    GoRoute(path: NamedRoutes.completeProfile.routeName, builder: (ctx, state)=> CompleteProfileScreen()),
 
-    ],
+  ],
   redirect: (BuildContext context, GoRouterState state) {
     final isAuthenticated = FirebaseAuth.instance.currentUser != null;
     final isOnLoginPage = state.matchedLocation == NamedRoutes.login.routeName;
     final isOnSignupPage = state.matchedLocation == NamedRoutes.createAccount.routeName;
+    final isOnForgetPasswordPage = state.matchedLocation == NamedRoutes.forgetPassword.routeName;
+    final isOnCompleteProfilePage = state.matchedLocation == NamedRoutes.completeProfile.routeName;
 
     if (isAuthenticated && (isOnLoginPage || isOnSignupPage)) {
       return NamedRoutes.home.routeName;
     }
 
-    if (!isAuthenticated && !isOnLoginPage && !isOnSignupPage) {
+    if (!isAuthenticated && !isOnSignupPage && !isOnLoginPage && !isOnForgetPasswordPage && !isOnCompleteProfilePage) {
       return NamedRoutes.createAccount.routeName;
     }
 
@@ -91,7 +95,8 @@ enum NamedRoutes {
   communityPolls('/community-polls'),
   carPooling('/car-pooling'),
   emergencyCalls('/emergency-calls'),
-  privacyPolicy('/privacy-policy')
+  privacyPolicy('/privacy-policy'),
+  completeProfile('/complete-profile')
   ;
   final String routeName;
   const NamedRoutes(this.routeName);

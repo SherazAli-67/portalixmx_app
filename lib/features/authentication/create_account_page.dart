@@ -1,15 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
-import 'package:portalixmx_app/features/authentication/otp_page.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/authentication_provider/authentication_provider.dart';
-import 'package:portalixmx_app/providers/user_info_provider.dart';
-import 'package:portalixmx_app/repositories/auth_repo.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 import 'package:portalixmx_app/router/app_router.dart';
@@ -17,8 +11,8 @@ import 'package:portalixmx_app/widgets/app_textfield_widget.dart';
 import 'package:portalixmx_app/widgets/bg_logo_screen.dart';
 import 'package:portalixmx_app/widgets/primary_btn.dart';
 import 'package:provider/provider.dart';
-
 import '../../res/app_constants.dart';
+
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
 
@@ -98,7 +92,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               height: 50,
               width: double.infinity,
               child: PrimaryBtn(
-                  onTap: _onLoginTap, btnText: localization.createAccount, isLoading: _isLogging,),
+                  onTap: (){
+                    context.push(NamedRoutes.completeProfile.routeName);
+                  }, btnText: localization.createAccount, isLoading: _isLogging,),
             ),
             RichText(text: TextSpan(
                 text: localization.alreadyHaveAnAccount,
@@ -115,63 +111,5 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         ),
       ),
     );
-  }
-
-  void _onLoginTap()async{
-    FocusManager.instance.primaryFocus?.unfocus();
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-
-    if(email.isEmpty || password.isEmpty){
-      return;
-    }
-
-    setState(()=> _isLogging = true);
-    final authRepo = AuthRepository();
-
-    try {
-      final response = await authRepo.loginUser(email: email, password: password);
-      final responseMap = jsonDecode(response.body);
-      
-      if(responseMap['status']){
-        String token = responseMap['data']['token']!['token'];
-        String userID = responseMap['data']['token']!['userId'];
-        String name = responseMap['data']['token']!['name'];
-        // bool isResidentAdmin = responseMap['data']['token']!['role'] == 'admin';
-        bool isResidentAdmin = true;
-        // Calculate token expiry (24 hours from now)
-        final tokenExpiry = DateTime.now().add(Duration(hours: 24));
-
-        if (mounted) {
-          setState(()=> _isLogging = false);
-          final provider = Provider.of<UserInfoProvider>(context,listen: false);
-          await provider.setUserInfo(
-              token: token,
-              name: name,
-              userID: userID,
-              email: email,
-              isResidentAdmin: isResidentAdmin,
-              expiry: tokenExpiry
-          );
-
-          if (mounted) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> VerifyOTPPage()));
-          }
-        }
-      } else {
-        if (mounted) {
-          Fluttertoast.showToast(msg: responseMap['message']);
-        }
-      }
-    } catch(e) {
-      debugPrint("Error while login user: ${e.toString()}");
-      if (mounted) {
-        Fluttertoast.showToast(msg: "Login failed. Please try again.");
-      }
-    }
-    
-    if (mounted) {
-      setState(()=> _isLogging = false);
-    }
   }
 }

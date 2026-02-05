@@ -100,6 +100,8 @@
   "createAccount" : "Create Account",
   "createAccountDescription" : "Create account with Portalixmx and get started with the society management",
   "alreadyHaveAnAccount" : "Already have an account? ",
-  "dontHaveAnAccount" : "Don't have an account? "
-
+  "dontHaveAnAccount" : "Don't have an account? ",
+  "completeProfile" : "Complete Profile",
+  "completeProfileDescription" : "Please provide the rest information to complete your profile",
+  "additionalDetails" : "Additional Details"
 }

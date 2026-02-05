@@ -307,4 +307,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dontHaveAnAccount => 'Don\'t have an account? ';
+
+  @override
+  String get completeProfile => 'Complete Profile';
+
+  @override
+  String get completeProfileDescription =>
+      'Please provide the rest information to complete your profile';
+
+  @override
+  String get additionalDetails => 'Additional Details';
 }
