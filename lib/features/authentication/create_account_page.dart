@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -6,10 +7,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/features/authentication/otp_page.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/providers/authentication_provider/authentication_provider.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/repositories/auth_repo.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
-import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
 import 'package:portalixmx_app/router/app_router.dart';
 import 'package:portalixmx_app/widgets/app_textfield_widget.dart';
@@ -37,7 +38,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-
+    final provider = Provider.of<AuthenticationProvider>(context);
     return ScreenWithBgLogo(
       child: Padding(
         padding: const .symmetric(horizontal: 16, vertical: 10.0),
@@ -55,35 +56,35 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   children: [
                     Align(
                       alignment: .center,
-                      child: Stack(
-                        children: [
-                          GestureDetector(
-                            onTap: (){},
-                            child: CircleAvatar(
-                              radius: 41,
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                radius: 40,
-                           /*     backgroundImage: _imagePicked != null
-                                    ? FileImage(File(_imagePicked!.path))
-                                    : CachedNetworkImageProvider(ImageUrlHelper.getImageUrl(provider.user!.image)),*/
-                                backgroundImage: AssetImage(AppIcons.icSplashLogo),
+                      child: GestureDetector(
+                        onTap: provider.onPickImageTap,
+                        child: Stack(
+                          children: [
+                            CircleAvatar(
+                                radius: 41,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  radius: 40,
+                                  backgroundImage: provider.pickedImage != null
+                                      ? FileImage(File(provider.pickedImage!.path))
+                                      : null,
+                                  // backgroundImage: AssetImage(AppIcons.icSplashLogo),
+                                ),
                               ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 2,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  shape: .circle,
-                                  color: AppColors.btnColor
+                            Positioned(
+                              bottom: 0,
+                              right: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    shape: .circle,
+                                    color: AppColors.btnColor
+                                ),
+                                padding: .all(5),
+                                child: Icon(Icons.edit, color: Colors.white, size: 18,),
                               ),
-                              padding: .all(5),
-                              child: Icon(Icons.edit, color: Colors.white, size: 18,),
-                            ),
-                          )
-                        ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     AppTextField(title: localization.name, controller: _nameController, hintText: localization.name,),

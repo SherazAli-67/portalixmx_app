@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/firebase_options.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/providers/authentication_provider/authentication_provider.dart';
 import 'package:portalixmx_app/providers/home_provider.dart';
 import 'package:portalixmx_app/providers/maintenance_provider.dart';
 import 'package:portalixmx_app/providers/profile_provider.dart';
@@ -18,6 +19,7 @@ void main()async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_)=> AuthenticationProvider()),
       ChangeNotifierProvider(create: (_)=> UserInfoProvider()),
       ChangeNotifierProvider(create: (_)=> HomeProvider()),
       ChangeNotifierProvider(create: (_)=> MaintenanceProvider()),

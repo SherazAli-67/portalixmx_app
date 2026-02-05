@@ -277,7 +277,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ],
               ),
               Text(AppLocalizations.of(context)!.updateYour(title), style: AppTextStyles.btnTextStyle.copyWith(color: Colors.black),),
-              AppTextField(controller: editingController, hintText: title, textInputType: isNumber ? TextInputType.number : null,)
+              AppTextField(controller: editingController, hintText: title, textInputType: isNumber ? .number : .none,)
             ],
           ),
         ),

@@ -51,7 +51,8 @@ class _AppTextFieldState extends State<AppTextField> {
           readOnly: widget.readOnly,
           obscureText: widget.isPassword && hidePassword,
           keyboardType: widget._textInputType,
-          textCapitalization: widget._capitalization ?? .sentences,
+          // textCapitalization: widget._capitalization ?? .sentences,
+          textCapitalization: widget._capitalization ?? (widget._textInputType != null && widget._textInputType == .emailAddress ? .none : .sentences),
           onTapOutside: (_)=>  FocusManager.instance.primaryFocus?.unfocus(),
           decoration: InputDecoration(
               hintText: widget._hintText,
