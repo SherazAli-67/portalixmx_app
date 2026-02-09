@@ -3,7 +3,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
-import 'package:portalixmx_app/features/authentication/otp_page.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/repositories/auth_repo.dart';
@@ -127,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
           );
 
           if (mounted) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> VerifyOTPPage()));
+            context.push(NamedRoutes.verifyOtp.routeName);
           }
         }
       } else {

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/features/main_menu/maintenance/add_complaint_page.dart';
-import 'package:portalixmx_app/features/main_menu/maintenance/complaint_summary_page.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/models/complaints_api_response.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
 import 'package:portalixmx_app/providers/maintenance_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
+import 'package:portalixmx_app/router/app_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../res/app_textstyles.dart';
@@ -58,7 +59,7 @@ class _MaintenanceMenuState extends State<MaintenanceMenu> {
                         return Card(
                           margin: EdgeInsets.only(bottom: 10),
                           child: ListTile(
-                            onTap: ()=> Navigator.push(ctx, MaterialPageRoute(builder: (_)=> ComplaintSummaryPage(complaint: complaint,))),
+                            onTap: ()=> context.push(NamedRoutes.complaintSummary.routeName, extra: complaint),
                             contentPadding: EdgeInsets.only(left: 15),
                             title: Text(complaint.complaint, style: AppTextStyles.tileTitleTextStyle),
                             subtitle: Text(DateTimeFormatHelpers.formatDateTime(complaint.createdAt), style: AppTextStyles.tileSubtitleTextStyle,),

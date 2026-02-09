@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/directory_detail_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
+import 'package:portalixmx_app/router/app_router.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 
 import '../../../res/app_textstyles.dart';
@@ -79,7 +80,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                             child: Material(
                               color: AppColors.lightGreyBackgroundColor,
                               child: ListTile(
-                                onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (_)=> DirectoryDetailPage())),
+                                onTap: ()=> context.push(NamedRoutes.directoryDetail.routeName),
                                 contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15)

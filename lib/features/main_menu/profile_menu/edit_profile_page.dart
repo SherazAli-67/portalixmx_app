@@ -229,11 +229,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ),
                     ),
                     Text(_userName, style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.black),),
-                  /*  InkWell(
-                        onTap: (){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> EditProfilePage()));
-                        },
-                        child: Text("View Profile", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black),))*/
                   ],
                 ),
               ],

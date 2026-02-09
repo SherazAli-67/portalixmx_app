@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:portalixmx_app/features/main_menu/access/access_summary_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/features/main_menu/access/request_access_page.dart';
 import 'package:portalixmx_app/models/access_control_api_response.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
@@ -8,8 +8,8 @@ import 'package:portalixmx_app/providers/request_access_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
+import 'package:portalixmx_app/router/app_router.dart';
 import 'package:provider/provider.dart';
-
 import '../../../res/app_textstyles.dart';
 import '../../../widgets/bg_gradient_screen.dart';
 
@@ -62,7 +62,7 @@ class _AccessMenuState extends State<AccessMenu> {
                         return Card(
                           margin: EdgeInsets.only(bottom: 10),
                           child: ListTile(
-                            onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (_)=> AccessSummaryPage(access: access))),
+                            onTap: ()=> context.push(NamedRoutes.accessRequestDetail.routeName, extra: access),
                             contentPadding: EdgeInsets.only(left: 15),
                             leading: SvgPicture.asset(AppIcons.icGame, colorFilter: ColorFilter.mode(AppColors.primaryColor, BlendMode.srcIn),),
                             title: Text(access.name, style: AppTextStyles.tileTitleTextStyle),

@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/community_polls_detail_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_constants.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
+import 'package:portalixmx_app/router/app_router.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 import '../../../res/app_textstyles.dart';
 
@@ -41,7 +42,7 @@ class CommunityPollsPage extends StatelessWidget{
                     itemCount: 10,
                     itemBuilder: (ctx, index){
                   return GestureDetector(
-                    onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> CommunityPollsDetailPage())),
+                    onTap: ()=> context.push(NamedRoutes.communityPollsDetail.routeName),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       spacing: 15,

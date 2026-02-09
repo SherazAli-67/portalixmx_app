@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/community_detail_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
+import 'package:portalixmx_app/router/app_router.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 
 import '../../../res/app_textstyles.dart';
@@ -59,7 +60,7 @@ class _CommunityCalendarPageState extends State<CommunityCalendarPage> {
                         child: Material(
                           color: AppColors.lightGreyBackgroundColor,
                           child: ListTile(
-                            onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (_)=> CommunityDetailPage())),
+                            onTap: ()=> context.push(NamedRoutes.communityCalendarDetail.routeName),
                             contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)

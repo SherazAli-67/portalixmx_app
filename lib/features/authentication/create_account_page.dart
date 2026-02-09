@@ -24,15 +24,21 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   final TextEditingController _emailController = .new();
   final TextEditingController _nameController = .new();
-
   final TextEditingController _passwordController = .new();
+  late AuthenticationProvider _provider;
 
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _nameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
-  bool _isLogging = false;
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-    final provider = Provider.of<AuthenticationProvider>(context);
+    _provider = Provider.of<AuthenticationProvider>(context);
     return ScreenWithBgLogo(
       child: Padding(
         padding: const .symmetric(horizontal: 16, vertical: 10.0),
@@ -51,7 +57,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     Align(
                       alignment: .center,
                       child: GestureDetector(
-                        onTap: provider.onPickImageTap,
+                        onTap: _provider.onPickImageTap,
                         child: Stack(
                           children: [
                             CircleAvatar(
@@ -59,8 +65,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 backgroundColor: Colors.white,
                                 child: CircleAvatar(
                                   radius: 40,
-                                  backgroundImage: provider.pickedImage != null
-                                      ? FileImage(File(provider.pickedImage!.path))
+                                  backgroundImage: _provider.pickedImage != null
+                                      ? FileImage(File(_provider.pickedImage!.path))
                                       : null,
                                   // backgroundImage: AssetImage(AppIcons.icSplashLogo),
                                 ),
@@ -92,9 +98,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               height: 50,
               width: double.infinity,
               child: PrimaryBtn(
-                  onTap: (){
-                    context.push(NamedRoutes.completeProfile.routeName);
-                  }, btnText: localization.createAccount, isLoading: _isLogging,),
+                  onTap: _onSignupTap, btnText: localization.createAccount,),
             ),
             RichText(text: TextSpan(
                 text: localization.alreadyHaveAnAccount,
@@ -111,5 +115,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         ),
       ),
     );
+  }
+
+  void _onSignupTap() {
+    String name = _nameController.text.trim();
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    _provider.onCreateAccountTap(name: name, email: email, password: password);
   }
 }

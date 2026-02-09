@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/features/main_menu/homepage/add_guest_page.dart';
-import 'package:portalixmx_app/features/main_menu/homepage//visitor_detail_page.dart';
 import 'package:portalixmx_app/models/guest_api_response.dart';
 import 'package:portalixmx_app/models/visitor_api_response.dart';
 import 'package:portalixmx_app/providers/home_provider.dart';
@@ -8,6 +8,7 @@ import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/res/app_colors.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
+import 'package:portalixmx_app/router/app_router.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget{
@@ -142,7 +143,7 @@ class _HomePageState extends State<HomePage> {
             return Card(
               margin: EdgeInsets.only(bottom: 10),
               child: ListTile(
-                onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> GuestDetailPage(visitor: visitor,))),
+                onTap: ()=> context.push(NamedRoutes.guestDetail.routeName, extra: visitor),
                 contentPadding: EdgeInsets.only(left: 10),
                 leading: CircleAvatar(
                   backgroundColor: AppColors.btnColor,
@@ -179,7 +180,7 @@ class _HomePageState extends State<HomePage> {
             return Card(
               margin: EdgeInsets.only(bottom: 10),
               child: ListTile(
-                onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> GuestDetailPage(guest: guest,))),
+                onTap: ()=> context.push(NamedRoutes.guestDetail.routeName, extra: guest),
                 contentPadding: EdgeInsets.only(left: 10),
                 leading: CircleAvatar(
                   backgroundColor: AppColors.btnColor,
@@ -212,13 +213,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _initVisitors() async{
-
     final provider = Provider.of<HomeProvider>(context, listen: false);
     Map<String, dynamic>? visitors = await provider.getAllVisitors();
     if(visitors == null){
       debugPrint("Visitors null found");
-     /* userProvider.reset();
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> LoginPage()), (val)=> false);*/
     }
   }
 }

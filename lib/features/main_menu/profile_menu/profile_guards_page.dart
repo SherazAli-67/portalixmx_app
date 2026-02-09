@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/guard_tracking_map_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/router/app_router.dart';
 import 'package:portalixmx_app/widgets/bg_gradient_screen.dart';
 
 import '../../../res/app_colors.dart';
@@ -42,7 +43,7 @@ class ProfileGuardsPage extends StatelessWidget{
                           child: Material(
                             color: AppColors.lightGreyBackgroundColor,
                             child: ListTile(
-                              onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (_)=> GuardTrackingMapPage())),
+                              onTap: ()=> context.push(NamedRoutes.guardTracking.routeName),
                               contentPadding: EdgeInsets.only(top: 8, bottom: 8, left: 15),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15)
@@ -59,9 +60,7 @@ class ProfileGuardsPage extends StatelessWidget{
                                   Text("+92 307 2215500", style: AppTextStyles.tileSubtitleTextStyle,)
                                 ],
                               ),
-                              trailing: IconButton(onPressed: (){
-                                Navigator.of(context).push(MaterialPageRoute(builder: (_)=> GuardTrackingMapPage()));
-                              }, icon: Icon(Icons.my_location, color: AppColors.primaryColor,)),
+                              trailing: IconButton(onPressed: ()=> context.push(NamedRoutes.guardTracking.routeName), icon: Icon(Icons.my_location, color: AppColors.primaryColor,)),
                             ),
                           ),
                         );

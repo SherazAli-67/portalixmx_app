@@ -1,18 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:portalixmx_app/features/authentication/login_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/community_calendar.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/community_polls_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/directory_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/edit_profile_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/emergency_calls_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/profile_guards_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/helpers/image_url_helper.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/profile_provider.dart';
 import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/res/app_textstyles.dart';
+import 'package:portalixmx_app/router/app_router.dart';
 import 'package:portalixmx_app/widgets/loading_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,9 +41,7 @@ class ProfileMenu extends StatelessWidget{
                   ),
                   Text(provider.user!.name, style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.white),),
                   InkWell(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> EditProfilePage()));
-                      },
+                      onTap: ()=> context.push(NamedRoutes.editProfile.routeName),
                       child: Text(AppLocalizations.of(context)!.viewProfile, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.white),))
                 ],
               ),
@@ -75,29 +68,29 @@ class ProfileMenu extends StatelessWidget{
   }
 
   void _onDirectoryTap(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> DirectoryPage()));
+    context.push(NamedRoutes.userDirectory.routeName);
   }
 
   void _onCommunityCalendarTap(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> CommunityCalendarPage()));
+    context.push(NamedRoutes.communityCalendar.routeName);
   }
 
   void _onCommunityPollsTap(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> CommunityPollsPage()));
+    context.push(NamedRoutes.communityPolls.routeName);
   }
 
   void _onGuardsTap(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ProfileGuardsPage()));
+    context.push(NamedRoutes.profileGuard.routeName);
   }
 
   void _onEmergencyTap(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> EmergencyCallsPage()));
+    context.push(NamedRoutes.emergencyCalls.routeName);
   }
 
   void _onLogoutTap(BuildContext context)async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> LoginPage()), (val)=> false);
+    context.go(NamedRoutes.login.routeName);
   }
 }
 

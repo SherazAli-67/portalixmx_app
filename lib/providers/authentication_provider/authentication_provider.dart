@@ -4,7 +4,6 @@ import 'package:image_picker/image_picker.dart';
 class AuthenticationProvider extends ChangeNotifier{
   XFile? pickedImage;
 
-
   void onPickImageTap()async{
     ImagePicker imagPicked = ImagePicker();
     pickedImage = await imagPicked.pickImage(source: .gallery);
@@ -13,5 +12,7 @@ class AuthenticationProvider extends ChangeNotifier{
     }
   }
 
+  void onCreateAccountTap({required String name, required String email, required String password}){
 
+  }
 }
