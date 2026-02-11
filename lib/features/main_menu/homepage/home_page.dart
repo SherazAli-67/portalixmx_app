@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
         child: Column(
           spacing: 20,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             Consumer<UserInfoProvider>(builder: (ctx, provider, _){
               return Column(
@@ -44,10 +44,7 @@ class _HomePageState extends State<HomePage> {
                   Align(
                     alignment: Alignment.topRight,
                     child: IconButton(
-
-                        style: IconButton.styleFrom(
-                            backgroundColor: AppColors.btnColor
-                        ),
+                        style: IconButton.styleFrom(backgroundColor: AppColors.btnColor),
                         onPressed: _onAddGuestTap, icon: Icon(Icons.add_rounded, color: Colors.white,)),
                   ),
                   Row(
@@ -55,9 +52,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       CircleAvatar(
                         backgroundColor: AppColors.btnColor,
-                        child: Center(
-                          child:  Icon(Icons.person, color: Colors.white,),
-                        ),
+                        child: Center(child:  Icon(Icons.person, color: Colors.white,),),
                       ),
                       Text(AppLocalizations.of(context)!.welcomeMessage(provider.userName!), style: AppTextStyles.regularTextStyle,)
                     ],
@@ -134,7 +129,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildAllVisitorPage({required List<Visitor> visitors, required Function(Visitor guest) onDeleteTap}){
-
     return Expanded(
       child: ListView.builder(
           itemCount: visitors.length,

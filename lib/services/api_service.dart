@@ -11,15 +11,10 @@ import '../res/api_constants.dart';
 
 class ApiService {
 
-  // Singleton instance
   static final ApiService _instance = ApiService._internal();
-
-  // Factory constructor
   factory ApiService() {
     return _instance;
   }
-
-  // Private constructor
   ApiService._internal();
   final String _baseUrl = ApiConstants.baseUrl;
 

@@ -31,7 +31,7 @@ import 'package:portalixmx_app/models/guest_api_response.dart';
 import 'package:portalixmx_app/models/visitor_api_response.dart';
 
 GoRouter appRouter = GoRouter(
-  initialLocation: NamedRoutes.createAccount.routeName,
+  initialLocation: NamedRoutes.home.routeName,
   routes: [
       GoRoute(path: NamedRoutes.createAccount.routeName, builder: (ctx, state)=> CreateAccountPage()),
       GoRoute(path: NamedRoutes.login.routeName, builder: (ctx, state)=> LoginPage()),
@@ -58,9 +58,14 @@ GoRouter appRouter = GoRouter(
             ]),
           ]),
       GoRoute(path: NamedRoutes.guestDetail.routeName, builder: (ctx, state){
+        if(state.extra is Guest){
+          return GuestDetailPage(guest: state.extra as Guest,);
+        }else{
+          return GuestDetailPage(visitor: state.extra as Visitor,);
+        }
         Guest? guest = state.extra as Guest?;
         Visitor? visitor = state.extra as Visitor?;
-        return GuestDetailPage(guest: guest, visitor: visitor,);
+
       }),
     GoRoute(path: NamedRoutes.accessRequestDetail.routeName, builder: (ctx, state)=> AccessSummaryPage(access: state.extra as AccessRequestModel)),
     GoRoute(path: NamedRoutes.complaintSummary.routeName, builder: (ctx, state)=> ComplaintSummaryPage(complaint: state.extra as Complaint,)),
@@ -86,7 +91,7 @@ GoRouter appRouter = GoRouter(
     GoRoute(path: NamedRoutes.verifyOtp.routeName, builder: (ctx, state)=> VerifyOTPPage()),
 
   ],
-  redirect: (BuildContext context, GoRouterState state) {
+/*  redirect: (BuildContext context, GoRouterState state) {
     final isAuthenticated = FirebaseAuth.instance.currentUser != null;
     final isOnLoginPage = state.matchedLocation == NamedRoutes.login.routeName;
     final isOnSignupPage = state.matchedLocation == NamedRoutes.createAccount.routeName;
@@ -103,7 +108,7 @@ GoRouter appRouter = GoRouter(
     }
 
     return null;
-  },
+  },*/
 );
 
 enum NamedRoutes {
