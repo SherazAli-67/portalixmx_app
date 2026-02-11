@@ -7,7 +7,8 @@ import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../res/api_constants.dart';
+
+import '../core/res/api_constants.dart';
 
 class ApiService {
 

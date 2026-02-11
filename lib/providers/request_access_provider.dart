@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
-import 'package:portalixmx_app/models/access_control_api_response.dart';
-import 'package:portalixmx_app/models/access_control_model.dart';
-import 'package:portalixmx_app/res/app_constants.dart';
-import 'package:portalixmx_app/res/app_icons.dart';
 import 'package:portalixmx_app/services/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../res/api_constants.dart';
+import '../core/models/access_control_api_response.dart';
+import '../core/models/access_control_model.dart' show AccessModel, AccessControlApiResponse;
+import '../core/res/api_constants.dart';
+import '../core/res/app_constants.dart';
+import '../core/res/app_icons.dart';
 
 class RequestAccessProvider extends ChangeNotifier {
   bool addingRequestAccess =  false;

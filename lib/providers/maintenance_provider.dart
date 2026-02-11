@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:portalixmx_app/models/complaints_api_response.dart';
 import 'package:portalixmx_app/services/api_service.dart';
-import '../res/api_constants.dart';
+import '../core/models/complaints_api_response.dart';
+import '../core/res/api_constants.dart';
 
 class MaintenanceProvider extends ChangeNotifier {
   bool addingComplaint =  false;

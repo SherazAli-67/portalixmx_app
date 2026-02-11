@@ -8,10 +8,10 @@ import 'package:portalixmx_app/providers/maintenance_provider.dart';
 import 'package:portalixmx_app/providers/profile_provider.dart';
 import 'package:portalixmx_app/providers/request_access_provider.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
-import 'package:portalixmx_app/res/app_colors.dart';
-import 'package:portalixmx_app/res/app_constants.dart';
 import 'package:portalixmx_app/router/app_router.dart';
 import 'package:provider/provider.dart';
+import 'core/res/app_colors.dart';
+import 'core/res/app_constants.dart';
 import 'providers/language_provider.dart';
 
 void main()async {

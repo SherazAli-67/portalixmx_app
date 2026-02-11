@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:portalixmx_app/models/guest_api_response.dart';
-import 'package:portalixmx_app/services/api_service.dart';
-import '../models/visitor_api_response.dart';
-import '../res/api_constants.dart';
+
+import '../core/models/guest_api_response.dart';
+import '../core/models/visitor_api_response.dart';
+import '../core/res/api_constants.dart';
+import '../services/api_service.dart';
 
 class HomeProvider extends ChangeNotifier {
   bool addingGuestVisitor =  false;

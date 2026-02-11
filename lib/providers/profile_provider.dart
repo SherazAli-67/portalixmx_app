@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:portalixmx_app/models/user_api_response_model.dart';
-import 'package:portalixmx_app/res/api_constants.dart';
 import 'package:portalixmx_app/services/api_service.dart';
-
-import '../res/app_constants.dart';
+import '../core/models/user_api_response_model.dart';
+import '../core/res/api_constants.dart';
+import '../core/res/app_constants.dart';
 
 class ProfileProvider extends ChangeNotifier{
   final _apiService = ApiService();

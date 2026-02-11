@@ -1,34 +1,35 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:portalixmx_app/features/authentication/create_account_page.dart';
-import 'package:portalixmx_app/features/authentication/forget_password_page.dart';
-import 'package:portalixmx_app/features/authentication/login_page.dart';
-import 'package:portalixmx_app/features/authentication/otp_page.dart';
-import 'package:portalixmx_app/features/complete_profile_screen/complete_profile_screen.dart';
-import 'package:portalixmx_app/features/main_menu/access/access_page.dart';
-import 'package:portalixmx_app/features/main_menu/access/access_summary_page.dart';
-import 'package:portalixmx_app/features/main_menu/homepage/home_page.dart';
-import 'package:portalixmx_app/features/main_menu/homepage/visitor_detail_page.dart';
-import 'package:portalixmx_app/features/main_menu/maintenance/complaint_summary_page.dart';
-import 'package:portalixmx_app/features/main_menu/maintenance/maintenance_page.dart';
-import 'package:portalixmx_app/features/main_menu/payments_menu.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/community_calendar.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/community_detail_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/community_polls_detail_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/community_polls_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/directory_detail_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/directory_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/edit_profile_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/emergency_calls_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/guard_tracking_map_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/profile_guards_page.dart';
-import 'package:portalixmx_app/features/main_menu/profile_menu/profile_page.dart';
-import 'package:portalixmx_app/features/main_menu/resident_main_menu_page.dart';
-import 'package:portalixmx_app/models/access_control_api_response.dart';
-import 'package:portalixmx_app/models/complaints_api_response.dart';
-import 'package:portalixmx_app/models/guest_api_response.dart';
-import 'package:portalixmx_app/models/visitor_api_response.dart';
+import '../core/models/access_control_api_response.dart';
+import '../core/models/complaints_api_response.dart';
+import '../core/models/guest_api_response.dart';
+import '../core/models/visitor_api_response.dart';
+import '../presentation/screens/authentication/create_account_page.dart';
+import '../presentation/screens/authentication/forget_password_page.dart';
+import '../presentation/screens/authentication/login_page.dart';
+import '../presentation/screens/authentication/otp_page.dart';
+import '../presentation/screens/complete_profile_screen/complete_profile_screen.dart';
+import '../presentation/screens/main_menu/access/access_page.dart';
+import '../presentation/screens/main_menu/access/access_summary_page.dart';
+import '../presentation/screens/main_menu/homepage/home_page.dart';
+import '../presentation/screens/main_menu/homepage/visitor_detail_page.dart';
+import '../presentation/screens/main_menu/maintenance/complaint_summary_page.dart';
+import '../presentation/screens/main_menu/maintenance/maintenance_page.dart';
+import '../presentation/screens/main_menu/payments_menu.dart';
+import '../presentation/screens/main_menu/profile_menu/community_calendar.dart';
+import '../presentation/screens/main_menu/profile_menu/community_detail_page.dart';
+import '../presentation/screens/main_menu/profile_menu/community_polls_detail_page.dart';
+import '../presentation/screens/main_menu/profile_menu/community_polls_page.dart';
+import '../presentation/screens/main_menu/profile_menu/directory_detail_page.dart';
+import '../presentation/screens/main_menu/profile_menu/directory_page.dart';
+import '../presentation/screens/main_menu/profile_menu/edit_profile_page.dart';
+import '../presentation/screens/main_menu/profile_menu/emergency_calls_page.dart';
+import '../presentation/screens/main_menu/profile_menu/guard_tracking_map_page.dart';
+import '../presentation/screens/main_menu/profile_menu/profile_guards_page.dart';
+import '../presentation/screens/main_menu/profile_menu/profile_page.dart';
+import '../presentation/screens/main_menu/main_menu.dart';
+
 
 GoRouter appRouter = GoRouter(
   initialLocation: NamedRoutes.home.routeName,
@@ -38,7 +39,7 @@ GoRouter appRouter = GoRouter(
       GoRoute(path: NamedRoutes.forgetPassword.routeName, builder: (ctx, state)=> ForgetPasswordPage()),
       StatefulShellRoute.indexedStack(
           builder: (ctx, state, navigationShell){
-            return ResidentMainMenuPage(navigationShell: navigationShell,);
+            return MainMenuPage(navigationShell: navigationShell,);
           },
           branches: [
             StatefulShellBranch(routes: [
@@ -63,8 +64,6 @@ GoRouter appRouter = GoRouter(
         }else{
           return GuestDetailPage(visitor: state.extra as Visitor,);
         }
-        Guest? guest = state.extra as Guest?;
-        Visitor? visitor = state.extra as Visitor?;
 
       }),
     GoRoute(path: NamedRoutes.accessRequestDetail.routeName, builder: (ctx, state)=> AccessSummaryPage(access: state.extra as AccessRequestModel)),
@@ -73,7 +72,6 @@ GoRouter appRouter = GoRouter(
       GoRoute(path: NamedRoutes.userDirectory.routeName, builder: (ctx, state)=> DirectoryPage()),
     GoRoute(path: NamedRoutes.directoryDetail.routeName, builder: (ctx, state)=> DirectoryDetailPage()),
 
-    GoRoute(path: NamedRoutes.communityCalendar.routeName, builder: (ctx, state)=> CommunityCalendarPage()),
     GoRoute(path: NamedRoutes.communityCalendar.routeName, builder: (ctx, state)=> CommunityCalendarPage()),
     GoRoute(path: NamedRoutes.communityCalendarDetail.routeName, builder: (ctx, state)=> CommunityDetailPage()),
 
@@ -91,24 +89,24 @@ GoRouter appRouter = GoRouter(
     GoRoute(path: NamedRoutes.verifyOtp.routeName, builder: (ctx, state)=> VerifyOTPPage()),
 
   ],
-/*  redirect: (BuildContext context, GoRouterState state) {
+  redirect: (BuildContext context, GoRouterState state) {
     final isAuthenticated = FirebaseAuth.instance.currentUser != null;
     final isOnLoginPage = state.matchedLocation == NamedRoutes.login.routeName;
     final isOnSignupPage = state.matchedLocation == NamedRoutes.createAccount.routeName;
     final isOnForgetPasswordPage = state.matchedLocation == NamedRoutes.forgetPassword.routeName;
     final isOnCompleteProfilePage = state.matchedLocation == NamedRoutes.completeProfile.routeName;
-    final isOnVerifyOtpProfilePage = state.matchedLocation == NamedRoutes.verifyOtp.routeName;
+    // final isOnVerifyOtpProfilePage = state.matchedLocation == NamedRoutes.verifyOtp.routeName;
 
     if (isAuthenticated && (isOnLoginPage || isOnSignupPage)) {
       return NamedRoutes.home.routeName;
     }
 
-    if (!isAuthenticated && !isOnSignupPage && !isOnLoginPage && !isOnForgetPasswordPage && !isOnCompleteProfilePage && !isOnVerifyOtpProfilePage) {
+    if (!isAuthenticated && !isOnSignupPage && !isOnLoginPage && !isOnForgetPasswordPage && !isOnCompleteProfilePage) {
       return NamedRoutes.createAccount.routeName;
     }
 
     return null;
-  },*/
+  },
 );
 
 enum NamedRoutes {

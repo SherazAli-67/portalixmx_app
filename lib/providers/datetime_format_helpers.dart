@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:portalixmx_app/models/day_time_model.dart';
+import '../core/models/day_time_model.dart';
 
 class DateTimeFormatHelpers{
   static String formatDateTime(DateTime dateTime){
