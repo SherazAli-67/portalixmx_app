@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/common_ui.dart';
 import '../../../core/res/app_colors.dart';
 import '../../../core/res/app_constants.dart';
 import '../../../core/res/app_textstyles.dart';
@@ -99,7 +100,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               height: 50,
               width: double.infinity,
               child: PrimaryBtn(
-                  onTap: _onSignupTap, btnText: localization.createAccount,),
+                  onTap: _onSignupTap, btnText: localization.createAccount, isLoading: _provider.isSigningUp,),
             ),
             RichText(text: TextSpan(
                 text: localization.alreadyHaveAnAccount,
@@ -118,11 +119,16 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     );
   }
 
-  void _onSignupTap() {
+  void _onSignupTap() async {
     String name = _nameController.text.trim();
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
 
-    _provider.onCreateAccountTap(name: name, email: email, password: password);
+    String? isError = await _provider.onCreateAccountTap(name: name, email: email, password: password);
+    if(isError != null){
+      CommonUI.showSnackBarMessage(context, isError: true, message: isError, title: "Signup failed");
+    }else{
+      context.push(NamedRoutes.completeProfile.routeName);
+    }
   }
 }

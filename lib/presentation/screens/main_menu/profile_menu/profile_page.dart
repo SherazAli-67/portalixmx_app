@@ -36,10 +36,10 @@ class ProfileMenu extends StatelessWidget{
                     backgroundColor: Colors.white,
                     child: CircleAvatar(
                       radius: 60,
-                      backgroundImage: CachedNetworkImageProvider(ImageUrlHelper.getImageUrl(provider.user!.image)),
+                      backgroundImage: CachedNetworkImageProvider(ImageUrlHelper.getImageUrl(provider.user!.profileImg!)),
                     ),
                   ),
-                  Text(provider.user!.name, style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.white),),
+                  Text(provider.user!.userName, style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.white),),
                   InkWell(
                       onTap: ()=> context.push(NamedRoutes.editProfile.routeName),
                       child: Text(AppLocalizations.of(context)!.viewProfile, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.white),))

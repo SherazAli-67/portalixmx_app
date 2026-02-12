@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portalixmx_app/core/models/visitor_model.dart';
 import '../core/models/access_control_api_response.dart';
 import '../core/models/complaints_api_response.dart';
-import '../core/models/guest_api_response.dart';
-import '../core/models/visitor_api_response.dart';
 import '../presentation/screens/authentication/create_account_page.dart';
 import '../presentation/screens/authentication/forget_password_page.dart';
 import '../presentation/screens/authentication/login_page.dart';
@@ -32,10 +31,11 @@ import '../presentation/screens/main_menu/main_menu.dart';
 
 
 GoRouter appRouter = GoRouter(
-  initialLocation: NamedRoutes.home.routeName,
+  initialLocation: NamedRoutes.createAccount.routeName,
   routes: [
       GoRoute(path: NamedRoutes.createAccount.routeName, builder: (ctx, state)=> CreateAccountPage()),
-      GoRoute(path: NamedRoutes.login.routeName, builder: (ctx, state)=> LoginPage()),
+    GoRoute(path: NamedRoutes.completeProfile.routeName, builder: (ctx, state)=> CompleteProfileScreen()),
+    GoRoute(path: NamedRoutes.login.routeName, builder: (ctx, state)=> LoginPage()),
       GoRoute(path: NamedRoutes.forgetPassword.routeName, builder: (ctx, state)=> ForgetPasswordPage()),
       StatefulShellRoute.indexedStack(
           builder: (ctx, state, navigationShell){
@@ -59,12 +59,7 @@ GoRouter appRouter = GoRouter(
             ]),
           ]),
       GoRoute(path: NamedRoutes.guestDetail.routeName, builder: (ctx, state){
-        if(state.extra is Guest){
-          return GuestDetailPage(guest: state.extra as Guest,);
-        }else{
-          return GuestDetailPage(visitor: state.extra as Visitor,);
-        }
-
+        return GuestDetailPage(visitor: state.extra as BaseVisitor);
       }),
     GoRoute(path: NamedRoutes.accessRequestDetail.routeName, builder: (ctx, state)=> AccessSummaryPage(access: state.extra as AccessRequestModel)),
     GoRoute(path: NamedRoutes.complaintSummary.routeName, builder: (ctx, state)=> ComplaintSummaryPage(complaint: state.extra as Complaint,)),
@@ -85,7 +80,6 @@ GoRouter appRouter = GoRouter(
     GoRoute(path: NamedRoutes.guardTracking.routeName, builder: (ctx, state)=> GuardTrackingMapPage()),
 
     GoRoute(path: NamedRoutes.privacyPolicy.routeName, builder: (ctx, state)=> Center(child: Text("Privacy Policy Page"),)),
-    GoRoute(path: NamedRoutes.completeProfile.routeName, builder: (ctx, state)=> CompleteProfileScreen()),
     GoRoute(path: NamedRoutes.verifyOtp.routeName, builder: (ctx, state)=> VerifyOTPPage()),
 
   ],

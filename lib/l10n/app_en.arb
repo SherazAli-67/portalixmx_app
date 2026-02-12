@@ -103,5 +103,19 @@
   "dontHaveAnAccount" : "Don't have an account? ",
   "completeProfile" : "Complete Profile",
   "completeProfileDescription" : "Please provide the rest information to complete your profile",
-  "additionalDetails" : "Additional Details"
+  "additionalDetails" : "Additional Details",
+  
+  "pleaseEnterName" : "Please enter name",
+  "pleaseEnterContactNumber" : "Please enter contact number",
+  "pleaseEnterCarPlateNumber" : "Please enter car plate number",
+  "pleaseEnterVehicleModel" : "Please enter vehicle model",
+  "pleaseEnterColor" : "Please enter color",
+  "pleaseSelectFromDateTime" : "Please select from date and time",
+  "pleaseSelectToDateTime" : "Please select to date and time",
+  "toDateTimeMustBeAfterFromDateTime" : "To date/time must be after from date/time",
+  "pleaseSelectAtLeastOneDay" : "Please select at least one day with time",
+  "visitorAddedSuccessfully" : "Visitor added successfully",
+  "visitorUpdatedSuccessfully" : "Visitor updated successfully",
+  "somethingWentWrong" : "Something went wrong",
+  "error" : "Error"
 }

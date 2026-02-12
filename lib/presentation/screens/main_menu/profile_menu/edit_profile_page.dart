@@ -3,15 +3,13 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/profile_provider.dart';
-import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/helpers/formating_helper.dart';
 import '../../../../core/helpers/image_url_helper.dart';
-import '../../../../core/models/user_api_response_model.dart';
+import '../../../../core/models/user_model.dart';
 import '../../../../core/res/app_colors.dart';
 import '../../../../core/res/app_icons.dart';
 import '../../../../core/res/app_textstyles.dart';
@@ -43,7 +41,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_){
+/*    WidgetsBinding.instance.addPostFrameCallback((_){
       final provider = Provider.of<ProfileProvider>(context, listen: false);
       _userName = provider.user!.name;
       _emailAddress = provider.user!.email;
@@ -54,7 +52,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       _vehicleLicensePlate = provider.user!.additionalDetails.licensePlate;
       _vehicleRegistrationNum = provider.user!.additionalDetails.registrationNumber;
       setState(() {});
-    });
+    });*/
     super.initState();
   }
   @override
@@ -222,7 +220,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         radius: 60,
                         backgroundImage: _imagePicked != null
                             ? FileImage(File(_imagePicked!.path))
-                            : CachedNetworkImageProvider(ImageUrlHelper.getImageUrl(provider.user!.image)),
+                            : CachedNetworkImageProvider(ImageUrlHelper.getImageUrl(provider.user!.profileImg!)),
                       ),
                       ),
                     ),
@@ -286,7 +284,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _onUpdateTap() async {
-    final provider = Provider.of<ProfileProvider>(context, listen: false);
+   /* final provider = Provider.of<ProfileProvider>(context, listen: false);
     final map = {
       'name' : _userName,
       'img' : _imagePicked != null ? _imagePicked!.path : "",
@@ -304,12 +302,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if(result){
       Fluttertoast.showToast(msg: AppLocalizations.of(context)!.profileInfoUpdated);
       Navigator.of(context).pop();
-    }
+    }*/
   }
 
   void _onProfileUpdated(UserModel user){
-    final homeProvider = Provider.of<UserInfoProvider>(context, listen: false);
-    homeProvider.setUserName(user.name);
+   /* final homeProvider = Provider.of<UserInfoProvider>(context, listen: false);
+    homeProvider.setUserName(user.name);*/
   }
 
   void _onPickImageTap()async{

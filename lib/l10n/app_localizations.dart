@@ -685,6 +685,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Additional Details'**
   String get additionalDetails;
+
+  /// No description provided for @pleaseEnterName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter name'**
+  String get pleaseEnterName;
+
+  /// No description provided for @pleaseEnterContactNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter contact number'**
+  String get pleaseEnterContactNumber;
+
+  /// No description provided for @pleaseEnterCarPlateNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter car plate number'**
+  String get pleaseEnterCarPlateNumber;
+
+  /// No description provided for @pleaseEnterVehicleModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter vehicle model'**
+  String get pleaseEnterVehicleModel;
+
+  /// No description provided for @pleaseEnterColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter color'**
+  String get pleaseEnterColor;
+
+  /// No description provided for @pleaseSelectFromDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select from date and time'**
+  String get pleaseSelectFromDateTime;
+
+  /// No description provided for @pleaseSelectToDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select to date and time'**
+  String get pleaseSelectToDateTime;
+
+  /// No description provided for @toDateTimeMustBeAfterFromDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'To date/time must be after from date/time'**
+  String get toDateTimeMustBeAfterFromDateTime;
+
+  /// No description provided for @pleaseSelectAtLeastOneDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select at least one day with time'**
+  String get pleaseSelectAtLeastOneDay;
+
+  /// No description provided for @visitorAddedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Visitor added successfully'**
+  String get visitorAddedSuccessfully;
+
+  /// No description provided for @visitorUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Visitor updated successfully'**
+  String get visitorUpdatedSuccessfully;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get somethingWentWrong;
+
+  /// No description provided for @error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get error;
 }
 
 class _AppLocalizationsDelegate

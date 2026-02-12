@@ -317,4 +317,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get additionalDetails => 'Additional Details';
+
+  @override
+  String get pleaseEnterName => 'Please enter name';
+
+  @override
+  String get pleaseEnterContactNumber => 'Please enter contact number';
+
+  @override
+  String get pleaseEnterCarPlateNumber => 'Please enter car plate number';
+
+  @override
+  String get pleaseEnterVehicleModel => 'Please enter vehicle model';
+
+  @override
+  String get pleaseEnterColor => 'Please enter color';
+
+  @override
+  String get pleaseSelectFromDateTime => 'Please select from date and time';
+
+  @override
+  String get pleaseSelectToDateTime => 'Please select to date and time';
+
+  @override
+  String get toDateTimeMustBeAfterFromDateTime =>
+      'To date/time must be after from date/time';
+
+  @override
+  String get pleaseSelectAtLeastOneDay =>
+      'Please select at least one day with time';
+
+  @override
+  String get visitorAddedSuccessfully => 'Visitor added successfully';
+
+  @override
+  String get visitorUpdatedSuccessfully => 'Visitor updated successfully';
+
+  @override
+  String get somethingWentWrong => 'Something went wrong';
+
+  @override
+  String get error => 'Error';
 }

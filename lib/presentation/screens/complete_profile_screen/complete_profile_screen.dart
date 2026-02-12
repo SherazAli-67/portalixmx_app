@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/providers/authentication_provider/authentication_provider.dart';
+import 'package:portalixmx_app/router/app_router.dart';
+import 'package:provider/provider.dart';
+import '../../../core/common_ui.dart';
 import '../../../core/res/app_colors.dart';
 import '../../../core/res/app_icons.dart';
 import '../../../core/res/app_textstyles.dart';
@@ -16,7 +21,22 @@ class CompleteProfileScreen extends StatefulWidget {
 
 class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   final TextEditingController _phoneNumController = .new();
+  final TextEditingController _vehicleName = .new();
+  final TextEditingController _vehicleColor = .new();
+  final TextEditingController _licensePlateNum = .new();
+  final TextEditingController _registrationNum = .new();
+  final TextEditingController _emergencyContactNum = .new();
 
+  @override
+  void dispose() {
+    super.dispose();
+    _phoneNumController.dispose();
+    _vehicleName.dispose();
+    _vehicleColor.dispose();
+    _licensePlateNum.dispose();
+    _registrationNum.dispose();
+    _emergencyContactNum.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
@@ -70,23 +90,41 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   ),
                   AppTextField(title: localization.phone, controller: _phoneNumController, hintText: localization.phone, textInputType: .number,),
                   Text(localization.vehicleInformation, style:AppTextStyles.btnTextStyle),
-                  AppTextField(hintText: localization.vehicleName,),
-                  AppTextField(hintText: localization.color,),
-                  AppTextField(hintText: localization.licensePlateNumber,),
-                  AppTextField(hintText: localization.registrationNumber,),
+                  AppTextField(hintText: localization.vehicleName, controller: _vehicleName,),
+                  AppTextField(hintText: localization.color, controller: _vehicleColor,),
+                  AppTextField(hintText: localization.licensePlateNumber, controller: _licensePlateNum,),
+                  AppTextField(hintText: localization.registrationNumber, controller: _registrationNum,),
                   Text(localization.emergencyContacts, style:AppTextStyles.btnTextStyle),
-                  AppTextField(hintText: localization.contactNum, textInputType: .number,),
+                  AppTextField(hintText: localization.contactNum, textInputType: .number, controller: _emergencyContactNum,),
                   SizedBox(
                     width: .infinity,
-                    child: PrimaryBtn(onTap: (){}, btnText: localization.submit),
+                    child: PrimaryBtn(onTap: _onSignupTap,  btnText: localization.submit),
                   )
                 ],
               ),),
             ),
-
           ],
         ),
       ),
     );
+  }
+
+  void _onSignupTap()async{
+    String phoneNum = _phoneNumController.text.trim();
+    String vehicleName = _vehicleName.text.trim();
+    String color = _vehicleColor.text.trim();
+    String licensePlateNum = _licensePlateNum.text.trim();
+    String registrationNum = _registrationNum.text.trim();
+    String emergencyContact = _emergencyContactNum.text.trim();
+
+    final provider = Provider.of<AuthenticationProvider>(context, listen: false);
+
+    String? isError = await provider.onCompleteProfileTap(phoneNum: phoneNum, vehicleName: vehicleName, vehicleColor: color, licensePlateNum: licensePlateNum, registrationNum: registrationNum, emergencyContact: emergencyContact);
+
+    if(isError != null){
+      CommonUI.showSnackBarMessage(context, isError: true, message: isError, title: "Signup failed");
+    }else{
+      context.go(NamedRoutes.home.routeName);
+    }
   }
 }

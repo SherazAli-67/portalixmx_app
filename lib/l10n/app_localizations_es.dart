@@ -317,4 +317,50 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get additionalDetails => 'Additional Details';
+
+  @override
+  String get pleaseEnterName => 'Por favor ingrese el nombre';
+
+  @override
+  String get pleaseEnterContactNumber =>
+      'Por favor ingrese el número de contacto';
+
+  @override
+  String get pleaseEnterCarPlateNumber =>
+      'Por favor ingrese el número de placa del auto';
+
+  @override
+  String get pleaseEnterVehicleModel =>
+      'Por favor ingrese el modelo del vehículo';
+
+  @override
+  String get pleaseEnterColor => 'Por favor ingrese el color';
+
+  @override
+  String get pleaseSelectFromDateTime =>
+      'Por favor seleccione la fecha y hora de inicio';
+
+  @override
+  String get pleaseSelectToDateTime =>
+      'Por favor seleccione la fecha y hora de fin';
+
+  @override
+  String get toDateTimeMustBeAfterFromDateTime =>
+      'La fecha/hora de fin debe ser posterior a la fecha/hora de inicio';
+
+  @override
+  String get pleaseSelectAtLeastOneDay =>
+      'Por favor seleccione al menos un día con horario';
+
+  @override
+  String get visitorAddedSuccessfully => 'Visitante agregado exitosamente';
+
+  @override
+  String get visitorUpdatedSuccessfully => 'Visitante actualizado exitosamente';
+
+  @override
+  String get somethingWentWrong => 'Algo salió mal';
+
+  @override
+  String get error => 'Error';
 }

@@ -5,6 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/res/app_colors.dart';
 import '../../../core/res/app_icons.dart';
+
+final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 class MainMenuPage extends StatelessWidget{
   const MainMenuPage({super.key, required this.navigationShell});
   final StatefulNavigationShell navigationShell;
@@ -12,53 +14,55 @@ class MainMenuPage extends StatelessWidget{
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      bottomNavigationBar: SizedBox(
-        height: 110,
-        child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            onTap: (index)=> navigationShell.goBranch(index),
-            backgroundColor: AppColors.primaryColor,
-            showSelectedLabels: false,
-            unselectedItemColor: Colors.white,
-            currentIndex: navigationShell.currentIndex,
-            selectedLabelStyle: TextStyle(fontSize: 11),
-            unselectedLabelStyle: TextStyle(fontSize: 12, color: Colors.white),
+      key: scaffoldKey,
+      resizeToAvoidBottomInset: true,
+      body: Scaffold(
+        bottomNavigationBar: SizedBox(
+          height: 110,
+          child: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              onTap: (index)=> navigationShell.goBranch(index),
+              backgroundColor: AppColors.primaryColor,
+              showSelectedLabels: false,
+              unselectedItemColor: Colors.white,
+              currentIndex: navigationShell.currentIndex,
+              selectedLabelStyle: TextStyle(fontSize: 11),
+              unselectedLabelStyle: TextStyle(fontSize: 12, color: Colors.white),
+              items: [
+                _buildBottomNavigationItemWidget(icon: AppIcons.icHomeMenu, label: AppLocalizations.of(context)!.home, isSelected: navigationShell.currentIndex == 0),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icMaintenance, label: AppLocalizations.of(context)!.maintenance, isSelected: navigationShell.currentIndex == 1),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icAccess, label: AppLocalizations.of(context)!.access, isSelected: navigationShell.currentIndex == 2),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icMenu, label: AppLocalizations.of(context)!.menu, isSelected: navigationShell.currentIndex == 3),
 
-            items: [
-              _buildBottomNavigationItemWidget(icon: AppIcons.icHomeMenu, label: AppLocalizations.of(context)!.home, isSelected: navigationShell.currentIndex == 0),
-              _buildBottomNavigationItemWidget(icon: AppIcons.icMaintenance, label: AppLocalizations.of(context)!.maintenance, isSelected: navigationShell.currentIndex == 1),
-              _buildBottomNavigationItemWidget(icon: AppIcons.icAccess, label: AppLocalizations.of(context)!.access, isSelected: navigationShell.currentIndex == 2),
-              _buildBottomNavigationItemWidget(icon: AppIcons.icMenu, label: AppLocalizations.of(context)!.menu, isSelected: navigationShell.currentIndex == 3),
-
-            ]),
-      ),
-      body: Stack(
-        children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: size.height*0.7,
-              width: double.infinity,
+              ]),
+        ),
+        body: Stack(
+          children: [
+            Align(
               alignment: Alignment.bottomCenter,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        AppColors.btnColor,
-                        AppColors.btnColor.withValues(alpha: 0.0)
-
-                      ])
+              child: Container(
+                height: size.height*0.7,
+                width: double.infinity,
+                alignment: Alignment.bottomCenter,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          AppColors.btnColor,
+                          AppColors.btnColor.withValues(alpha: 0.0)
+                        ])
+                ),
               ),
             ),
-          ),
-          Positioned(
-            right: 10,
-            top: 50,
-            child: Image.asset(AppIcons.icScreenBg, height: 150,),
-          ),
-          SafeArea(child: navigationShell),
-        ],
+            Positioned(
+              right: 10,
+              top: 50,
+              child: Image.asset(AppIcons.icScreenBg, height: 150,),
+            ),
+            SafeArea(child: navigationShell),
+          ],
+        ),
       ),
     );
   }

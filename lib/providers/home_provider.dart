@@ -1,129 +1,159 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
-import '../core/models/guest_api_response.dart';
-import '../core/models/visitor_api_response.dart';
-import '../core/res/api_constants.dart';
-import '../services/api_service.dart';
+import 'package:portalixmx_app/core/models/user_model.dart';
+import 'package:portalixmx_app/core/models/visitor_model.dart';
+import 'package:portalixmx_app/presentation/bottomsheets/add_update_guest_bottomsheet.dart';
+import 'package:portalixmx_app/services/user_service/user_service.dart';
+import 'package:portalixmx_app/services/visitor_service/visitor_service.dart';
+import '../core/helpers/bottom_sheet_helper.dart';
+import '../presentation/screens/main_menu/main_menu.dart';
 
 class HomeProvider extends ChangeNotifier {
-  bool addingGuestVisitor =  false;
-  final _apiService = ApiService();
-  List<Visitor> _visitors  = [];
-  List<Guest> _guests  = [];
+  bool addingGuestVisitor = false;
+  bool loadingVisitors = false;
+  final _userService = UserService.instance;
+  final _visitorService = VisitorService.instance;
+  int _selectedTab = 0;
 
-  List<Visitor> get visitors => _visitors;
-  List<Guest> get guests => _guests;
+  List<BaseVisitor> _visitors = [];
+  List<BaseVisitor> get visitors => _visitors;
+  List<GuestVisitor> get guests => _visitors.whereType<GuestVisitor>().toList();
+  List<RegularVisitor> get regularVisitors => _visitors.whereType<RegularVisitor>().toList();
+  int get selectedTab => _selectedTab;
 
-
-  Future<Map<String, dynamic>?> getAllVisitors() async{
-
-    try{
-      final response =  await _apiService.getRequest(endpoint: ApiConstants.allVisitorsEndPoint,);
-      debugPrint("Visitor api response: ${response?.body}");
-      if(jsonDecode(response!.body)['message'] == 'Token expired'){
-        return null;
-      }
-      VisitorResponse apiResponse = VisitorResponse.fromJson(jsonDecode(response.body));
-      _visitors = apiResponse.data;
-      _visitors.sort((a, b)=> b.createdAt.compareTo(a.createdAt));
-      notifyListeners();
-    }catch(e){
-      debugPrint("Error while logging in: ${e.toString()}");
-    }
-
-    return null;
+  HomeProvider() {
+    _initVisitorsAndGuests();
   }
 
-  Future<Map<String, dynamic>?> getAllGuests() async{
-
-    try{
-      final response =  await _apiService.getRequest(endpoint: ApiConstants.allGuestsEndPoint,);
-      if(response != null){
-        GuestResponse apiResponse = GuestResponse.fromJson(jsonDecode(response.body));
-        _guests = apiResponse.data;
-        _guests.sort((a, b)=> b.createdAt.compareTo(a.createdAt));
-        notifyListeners();
-      }
-    }catch(e){
-      debugPrint("Error while logging in: ${e.toString()}");
-    }
-
-    return null;
-  }
-
-  Future<bool> addGuest({required Map<String, dynamic> data, bool comingForUpdate = false}) async{
-    bool result = false;
-    addingGuestVisitor = true;
-    notifyListeners();
-    try{
-       final response = await _apiService.postRequestWithToken(endpoint: comingForUpdate ? ApiConstants.updateGuest : ApiConstants.addGuest, data: data);
-       if(response != null){
-         result = response.statusCode == 200 || jsonDecode(response.body)['success'];
-         debugPrint("Result found: $result");
-         if(!result){
-           Fluttertoast.showToast(msg: jsonDecode(response.body)['errors'][0]);
-         }
-       }
-    }catch(e){
-      debugPrint("Error while logging in: ${e.toString()}");
-    }
-    addingGuestVisitor = false;
-    notifyListeners();
-    return result;
-  }
-
-  Future<bool> addVisitor({ required Map<String, dynamic> data, bool comingForUpdate = false}) async{
-    bool result = false;
-    addingGuestVisitor = true;
-    notifyListeners();
-    try{
-       final response = await _apiService.postRequestWithToken(endpoint: comingForUpdate ? ApiConstants.updateVisitor : ApiConstants.addVisitor, data: data);
-       if(response != null){
-         result = response.statusCode == 200 || jsonDecode(response.body)['success'];
-         debugPrint("Result found: $result");
-         if(!result){
-           Fluttertoast.showToast(msg: jsonDecode(response.body)['errors'][0]);
-         }
-       }
-    }catch(e){
-      debugPrint("Error while adding user in: ${e.toString()}");
-    }
-    addingGuestVisitor = false;
-    notifyListeners();
-    return result;
-  }
-
-  Future<bool> deleteGuest({required String guestID, bool isVisitor = false}) async {
-    bool result = false;
-    debugPrint("Delete Api called");
+  Future<UserModel?> getCurrentUser() async {
     try {
-      String endPoint = '${ApiConstants.deleteGuest}/$guestID';
-      if (isVisitor) {
-        endPoint = '${ApiConstants.deleteVisitor}/$guestID';
-      }
-
-      final response = await _apiService.getRequest(endpoint: endPoint,);
-      if(response != null){
-        debugPrint("Delete api response: ${response.body}");
-        if (response.statusCode == 200) {
-          result = true;
-
-          if (isVisitor) {
-            Fluttertoast.showToast(msg: "Visitor is removed successfully");
-            getAllVisitors();
-          } else {
-            Fluttertoast.showToast(msg: "Guest is removed successfully");
-            getAllGuests();
-          }
-        }
-      }
-
+      UserModel? user = await _userService.getCurrentUser();
+      return user;
     } catch (e) {
-      debugPrint('Error occurred: $e');
+      return null;
     }
-    return result;
+  }
+
+  void _initVisitorsAndGuests() async {
+    await loadVisitors();
+  }
+
+  Future<void> loadVisitors() async {
+    try {
+      loadingVisitors = true;
+      notifyListeners();
+
+      final user = await getCurrentUser();
+      if (user == null) {
+        throw Exception('User not found');
+      }
+
+      _visitors = await _visitorService.getVisitors(user.userID);
+      
+      loadingVisitors = false;
+      notifyListeners();
+    } catch (e) {
+      loadingVisitors = false;
+      notifyListeners();
+      debugPrint('Error loading visitors: $e');
+    }
+  }
+
+  Future<bool> addVisitor(BaseVisitor visitor) async {
+    try {
+      addingGuestVisitor = true;
+      notifyListeners();
+
+      final user = await getCurrentUser();
+      if (user == null) {
+        throw Exception('User not found');
+      }
+
+      final visitorId = await _visitorService.addVisitor(user.userID, visitor);
+      
+      final updatedVisitor = visitor is GuestVisitor
+          ? visitor.copyWith(id: visitorId)
+          : (visitor as RegularVisitor).copyWith(id: visitorId);
+      
+      _visitors.add(updatedVisitor);
+      
+      addingGuestVisitor = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      addingGuestVisitor = false;
+      notifyListeners();
+      debugPrint('Error adding visitor: $e');
+      return false;
+    }
+  }
+
+  Future<bool> updateVisitor(String visitorID, BaseVisitor updatedVisitor) async {
+    try {
+      addingGuestVisitor = true;
+      notifyListeners();
+
+      final user = await getCurrentUser();
+      if (user == null) {
+        throw Exception('User not found');
+      }
+
+      await _visitorService.updateVisitor(user.userID, visitorID, updatedVisitor);
+      
+      final index = _visitors.indexWhere((v) => v.id == visitorID);
+      if (index != -1) {
+        _visitors[index] = updatedVisitor;
+      }
+      
+      addingGuestVisitor = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      addingGuestVisitor = false;
+      notifyListeners();
+      debugPrint('Error updating visitor: $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteVisitor(String visitorID) async {
+    try {
+      final user = await getCurrentUser();
+      if (user == null) {
+        throw Exception('User not found');
+      }
+
+      await _visitorService.deleteVisitor(user.userID, visitorID);
+      _visitors.removeWhere((v) => v.id == visitorID);
+      
+      notifyListeners();
+      return true;
+    } catch (e) {
+      debugPrint('Error deleting visitor: $e');
+      return false;
+    }
+  }
+
+  Future<dynamic> onAddGuestTap() async {
+    await BottomSheetHelper.showDraggableBottomSheet<dynamic>(
+      scaffoldKey: scaffoldKey,
+      initialHeight: 0.7,
+      child: AddUpdateGuestBottomSheet(),
+    );
+  }
+
+  Future<dynamic> onEditVisitorTap(BaseVisitor visitor) async {
+    await BottomSheetHelper.showDraggableBottomSheet<dynamic>(
+      scaffoldKey: scaffoldKey,
+      initialHeight: 0.7,
+      child: AddUpdateGuestBottomSheet(
+        visitor: visitor,
+        isEdit: true,
+      ),
+    );
+  }
+
+  void onTabChange(int index) {
+    _selectedTab = index;
+    notifyListeners();
   }
 }

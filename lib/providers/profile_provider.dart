@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:portalixmx_app/services/api_service.dart';
-import '../core/models/user_api_response_model.dart';
+import '../core/models/user_model.dart';
 import '../core/res/api_constants.dart';
 import '../core/res/app_constants.dart';
 
@@ -24,7 +24,7 @@ class ProfileProvider extends ChangeNotifier{
   }
 
   _initProfile()async{
-    _loadingProfile = true;
+    /*_loadingProfile = true;
     notifyListeners();
     final response = await _apiService.getRequest(endpoint: ApiConstants.userProfile, );
     if(response != null){
@@ -34,7 +34,7 @@ class ProfileProvider extends ChangeNotifier{
       }
       _loadingProfile = false;
       notifyListeners();
-    }
+    }*/
   }
 
   Future<bool> updateUserProfile({required Map<String, dynamic> data, Function(UserModel)? onProfileUpdated})async {
@@ -42,7 +42,7 @@ class ProfileProvider extends ChangeNotifier{
     bool result = false;
     _updatingProfile = true;
     notifyListeners();
-    try{
+   /* try{
       result = await _apiService.updateProfile(map: data);
       final response = await _apiService.getRequest(endpoint: ApiConstants.userProfile);
       if(response != null){
@@ -66,7 +66,7 @@ class ProfileProvider extends ChangeNotifier{
     }
 
     _updatingProfile = false;
-    notifyListeners();
+    notifyListeners();*/
     return result;
   }
 
