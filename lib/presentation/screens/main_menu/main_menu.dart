@@ -30,9 +30,10 @@ class MainMenuPage extends StatelessWidget{
               unselectedLabelStyle: TextStyle(fontSize: 12, color: Colors.white),
               items: [
                 _buildBottomNavigationItemWidget(icon: AppIcons.icHomeMenu, label: AppLocalizations.of(context)!.home, isSelected: navigationShell.currentIndex == 0),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icMaintenance, label: AppLocalizations.of(context)!.maintenance, isSelected: navigationShell.currentIndex == 1),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icAccess, label: AppLocalizations.of(context)!.access, isSelected: navigationShell.currentIndex == 2),
-                _buildBottomNavigationItemWidget(icon: AppIcons.icMenu, label: AppLocalizations.of(context)!.menu, isSelected: navigationShell.currentIndex == 3),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icPaymentsMenu, label: AppLocalizations.of(context)!.payments, isSelected: navigationShell.currentIndex == 1),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icMaintenance, label: AppLocalizations.of(context)!.maintenance, isSelected: navigationShell.currentIndex == 2),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icAccess, label: AppLocalizations.of(context)!.access, isSelected: navigationShell.currentIndex == 3),
+                _buildBottomNavigationItemWidget(icon: AppIcons.icMenu, label: AppLocalizations.of(context)!.menu, isSelected: navigationShell.currentIndex == 4),
 
               ]),
         ),

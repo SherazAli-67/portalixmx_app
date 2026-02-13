@@ -9,7 +9,7 @@ import '../homepage//widgets/vistor_info_item_widget.dart';
 
 class ComplaintSummaryPage extends StatelessWidget{
   const ComplaintSummaryPage({super.key, required this.complaint});
-  final Complaint complaint;
+  final ComplaintModel complaint;
   @override
   Widget build(BuildContext context) {
     return BgGradientScreen(child: Column(
@@ -48,7 +48,7 @@ class ComplaintSummaryPage extends StatelessWidget{
                       ),
                       Expanded(
                           child: VisitorInfoItemWidget(
-                            title: 'Status', subTitle: complaint.status,)
+                            title: 'Status', subTitle: complaint.status.name,)
                       ),
                     ],
                   ),

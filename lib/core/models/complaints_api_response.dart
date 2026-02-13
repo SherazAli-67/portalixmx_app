@@ -1,60 +1,98 @@
-class ComplaintsResponse {
-  final String message;
-  final bool status;
-  final List<Complaint> data;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  ComplaintsResponse({
-    required this.message,
-    required this.status,
-    required this.data,
-  });
-
-  factory ComplaintsResponse.fromJson(Map<String, dynamic> json) {
-    return ComplaintsResponse(
-      message: json['message'],
-      status: json['status'],
-      data: List<Complaint>.from(json['data'].map((x) => Complaint.fromJson(x))),
-    );
-  }
+enum ComplaintStatus {
+  pending,
+  inProgress,
+  resolved,
+  rejected,
 }
 
-class Complaint {
+class ComplaintModel {
   final String id;
-  final String complaintId;
-  final String status;
   final String complaint;
   final List<String> images;
-  final String createdBy;
-  final bool isRemoved;
+  final String complaintBy;
+  final String residentAdminID;
+  final String societyID;
+  final ComplaintStatus status;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final int v;
 
-  Complaint({
+  ComplaintModel({
     required this.id,
-    required this.complaintId,
-    required this.status,
     required this.complaint,
     required this.images,
-    required this.createdBy,
-    required this.isRemoved,
+    required this.complaintBy,
+    required this.residentAdminID,
+    required this.societyID,
+    required this.status,
     required this.createdAt,
     required this.updatedAt,
-    required this.v,
   });
 
-  factory Complaint.fromJson(Map<String, dynamic> json) {
-    return Complaint(
-      id: json['_id'],
-      complaintId: json['complaintId'],
-      status: json['status'],
-      complaint: json['complaint'],
-      images: List<String>.from(json['images']),
-      createdBy: json['createdBy'],
-      isRemoved: json['isRemoved'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-      v: json['__v'],
+  String _statusToString(ComplaintStatus status) {
+    return status.name; // Dart 2.17+
+  }
+
+  ComplaintStatus _stringToStatus(String status) {
+    return ComplaintStatus.values.firstWhere(
+          (e) => e.name == status,
+      orElse: () => ComplaintStatus.pending,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "id": id,
+      "complaint": complaint,
+      "images": images,
+      "complaintBy": complaintBy,
+      "residentAdminID": residentAdminID,
+      "societyID": societyID,
+      "status": _statusToString(status),
+      "createdAt": Timestamp.fromDate(createdAt),
+      "updatedAt": Timestamp.fromDate(updatedAt),
+    };
+  }
+
+  factory ComplaintModel.fromMap(Map<String, dynamic> map) {
+    return ComplaintModel(
+      id: map["id"] ?? '',
+      complaint: map["complaint"] ?? '',
+      images: List<String>.from(map["images"] ?? []),
+      complaintBy: map["complaintBy"] ?? '',
+      residentAdminID: map["residentAdminID"] ?? '',
+      societyID: map["societyID"] ?? '',
+      status: ComplaintStatus.values.firstWhere(
+            (e) => e.name == map["status"],
+        orElse: () => ComplaintStatus.pending,
+      ),
+      createdAt: (map["createdAt"] as Timestamp).toDate(),
+      updatedAt: (map["updatedAt"] as Timestamp).toDate(),
+    );
+  }
+
+  ComplaintModel copyWith({
+    String? id,
+    String? complaint,
+    List<String>? images,
+    String? complaintBy,
+    String? residentAdminID,
+    String? societyID,
+    ComplaintStatus? status,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return ComplaintModel(
+      id: id ?? this.id,
+      complaint: complaint ?? this.complaint,
+      images: images ?? this.images,
+      complaintBy: complaintBy ?? this.complaintBy,
+      residentAdminID: residentAdminID ?? this.residentAdminID,
+      societyID: societyID ?? this.societyID,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }

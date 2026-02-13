@@ -4,13 +4,15 @@ import '../../core/res/app_icons.dart';
 
 class BgGradientScreen extends StatelessWidget{
   const BgGradientScreen({super.key, required  this.
-  child, this.paddingFromTop});
+  child, this.paddingFromTop, this.floatingActionButton});
   final Widget child;
   final double? paddingFromTop;
+  final FloatingActionButton? floatingActionButton;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      floatingActionButton: floatingActionButton,
       body: Stack(
         children: [
           Align(

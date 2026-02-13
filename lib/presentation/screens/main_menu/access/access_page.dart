@@ -33,6 +33,7 @@ class _AccessMenuState extends State<AccessMenu> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<RequestAccessProvider>(context);
+    final localization = AppLocalizations.of(context)!;
     return BgGradientScreen(
         paddingFromTop: 50,
         child: Padding(
@@ -41,10 +42,10 @@ class _AccessMenuState extends State<AccessMenu> {
             spacing: 10,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: .spaceBetween,
                 children: [
                   const SizedBox(width: 40,),
-                  Text(AppLocalizations.of(context)!.accessRequests, style: AppTextStyles.regularTextStyle,),
+                  Text(localization.accessRequests, style: AppTextStyles.regularTextStyle,),
                   IconButton(
                       style: ElevatedButton.styleFrom(backgroundColor: AppColors.btnColor),
                       onPressed: ()=> _onRequestAccessTap(context), icon: Icon(Icons.add, color: Colors.white,)),

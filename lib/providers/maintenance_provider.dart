@@ -1,75 +1,68 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:portalixmx_app/services/api_service.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:portalixmx_app/core/helpers/bottom_sheet_helper.dart';
+import 'package:portalixmx_app/presentation/screens/main_menu/main_menu.dart';
+import 'package:portalixmx_app/presentation/bottomsheets/add_complaint_bottomsheet.dart';
+import 'package:portalixmx_app/services/complaints_service/complaints_service.dart';
 import '../core/models/complaints_api_response.dart';
-import '../core/res/api_constants.dart';
 
 class MaintenanceProvider extends ChangeNotifier {
   bool addingComplaint =  false;
-  final _apiService = ApiService();
-  List<Complaint> _allComplaints  = [];
+  List<ComplaintModel> _allComplaints  = [];
+  final _complaintService = ComplaintsService.instance;
+  List<ComplaintModel> get allComplaints => _allComplaints;
 
-  List<Complaint> get allComplaints => _allComplaints;
-
+  MaintenanceProvider(){
+    _initComplaints();
+  }
   Future<bool> addComplaint({required String token, required String complaint, required List<File> files}) async{
     bool result = false;
-    addingComplaint = true;
-    notifyListeners();
-    try{
-
-      result = await _apiService.uploadComplaintWithImages(token: token, complaintText: complaint, images: files);
-      debugPrint("Add complaint response: $result");
-      addingComplaint = false;
-      notifyListeners();
-    }catch(e){
-      addingComplaint = false;
-      notifyListeners();
-      debugPrint("Error while logging in: ${e.toString()}");
-    }
     return result;
   }
 
   Future<Map<String, dynamic>?> getAllComplaints() async{
-    try{
-      final response =  await _apiService.getRequest(endpoint: ApiConstants.allComplaints,);
-      if(response != null){
-        ComplaintsResponse apiResponse = ComplaintsResponse.fromJson(jsonDecode(response.body));
-        _allComplaints = apiResponse.data;
-        _allComplaints.sort((a, b)=> b.createdAt.compareTo(a.createdAt));
-        notifyListeners();
+    return null;
+  }
+
+  Future<bool> deleteComplaintByID(String complaintID) async {
+    bool result = false;
+    return result;
+  }
+
+  Future<String?> onAddComplaintTap()async{
+    final result = await BottomSheetHelper.showDraggableBottomSheet(scaffoldKey: scaffoldKey, child: AddComplaintBottomSheet(),);
+    if(result != null){
+      addingComplaint = true;
+      notifyListeners();
+
+      String complaintText = result['complaint'];
+      List<XFile> complaintFiles = result['files'];
+
+      if(complaintFiles.isNotEmpty){
       }
 
-
-    }catch(e){
-      debugPrint("Error while logging in: ${e.toString()}");
+      try{
+        ComplaintModel? complaint = await _complaintService.addComplaint(complaintText: complaintText,);
+        if(complaint != null){
+          _allComplaints.add(complaint);
+        }
+        addingComplaint = true;
+        notifyListeners();
+      }catch(e){
+        return e.toString();
+      }
     }
 
     return null;
   }
 
-  Future<bool> deleteComplaintByID(String complaintID) async {
-
-    bool result = false;
-    debugPrint("Delete Api called");
-    try {
-      String endPoint = '${ApiConstants.deleteComplaint}/$complaintID';
-
-
-      final response = await _apiService.getRequest(endpoint: endPoint,);
-      if(response != null){
-        debugPrint("Delete complaint api response: ${response.body}");
-        if (response.statusCode == 200) {
-          result = true;
-          Fluttertoast.showToast(msg: "Complaint is removed successfully");
-          getAllComplaints();
-        }
-      }
-
-    } catch (e) {
-      debugPrint('Error occurred: $e');
+  Future<void> _initComplaints() async {
+    try{
+      _allComplaints = await _complaintService.getAllComplaints();
+      notifyListeners();
+    }catch(e){
+      debugPrint("Error while fetching complaints: ${e.toString()}");
     }
-    return result;
   }
 }
