@@ -13,9 +13,9 @@ class VisitorService {
 
   CollectionReference _getVisitorsCollection(String userID) {
     return _firestore
-        .collection(FirebaseConst.residentsCollection)
+        .collection(FirebaseConst.residentsCol)
         .doc(userID)
-        .collection(FirebaseConst.visitorsCollection);
+        .collection(FirebaseConst.visitorsCol);
   }
 
   Future<String> addVisitor(String userID, BaseVisitor visitor) async {

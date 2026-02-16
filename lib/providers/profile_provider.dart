@@ -1,15 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:portalixmx_app/services/api_service.dart';
 import '../core/models/user_model.dart';
-import '../core/res/api_constants.dart';
-import '../core/res/app_constants.dart';
 
 class ProfileProvider extends ChangeNotifier{
-  final _apiService = ApiService();
   bool _loadingProfile = false;
   bool _updatingProfile = false;
 

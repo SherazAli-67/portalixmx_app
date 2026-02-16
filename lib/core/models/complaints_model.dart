@@ -31,14 +31,7 @@ class ComplaintModel {
   });
 
   String _statusToString(ComplaintStatus status) {
-    return status.name; // Dart 2.17+
-  }
-
-  ComplaintStatus _stringToStatus(String status) {
-    return ComplaintStatus.values.firstWhere(
-          (e) => e.name == status,
-      orElse: () => ComplaintStatus.pending,
-    );
+    return status.name;
   }
 
   Map<String, dynamic> toMap() {

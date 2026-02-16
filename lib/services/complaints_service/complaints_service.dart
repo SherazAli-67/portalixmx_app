@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:portalixmx_app/core/models/complaints_api_response.dart';
-import 'package:portalixmx_app/core/models/visitor_model.dart';
+import 'package:portalixmx_app/core/models/complaints_model.dart';
 import 'package:portalixmx_app/core/res/firebase_constant.dart';
 
 class ComplaintsService {
@@ -13,7 +12,7 @@ class ComplaintsService {
   final _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  CollectionReference get _getComplaintsCollection => _firestore.collection(FirebaseConst.complaints);
+  CollectionReference get _getComplaintsCollection => _firestore.collection(FirebaseConst.complaintsCol);
 
   Future<ComplaintModel?> addComplaint({required String complaintText, List<String>? images}) async {
     try {
@@ -30,7 +29,7 @@ class ComplaintsService {
       await _getComplaintsCollection.doc(complaint.id).set(complaint.toMap());
       return complaint;
     } catch (e) {
-      throw Exception('Failed to add visitor: $e');
+      throw Exception('Failed to create complaint request: $e');
     }
   }
 
@@ -42,6 +41,14 @@ class ComplaintsService {
           .toList();
     } catch (e) {
       throw Exception('Failed to get visitors: $e');
+    }
+  }
+
+  Future<void> deleteComplaintByID(String complaintID) async{
+    try {
+      await _getComplaintsCollection.doc(complaintID).delete();
+    } catch (e) {
+      throw Exception('Failed to delete complaint: $e');
     }
   }
 }

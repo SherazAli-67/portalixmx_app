@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
-import '../models/access_request_model.dart';
 import '../models/emergency_contact_model.dart';
-import '../res/app_icons.dart';
 
 class AppData {
   static  List<String> getDays(BuildContext context) {
@@ -36,14 +34,6 @@ class AppData {
       default:
         return AppLocalizations.of(context)!.monday;
     }
-  }
-
-  static List<AccessRequestModel> get getRequestAccessList {
-    return [
-      AccessRequestModel(id: '6834c003722289293bd0968a', icon: AppIcons.icPool, title: "Pool"),
-      AccessRequestModel(id: '6834c003722289293bd0968b', icon: AppIcons.icGame, title: "Game"),
-      AccessRequestModel(id: '6834c003722289293bd0968c', icon: AppIcons.icGym, title: "Gym"),
-    ];
   }
 
   static List<EmergencyContactModel> get emergencyContacts {

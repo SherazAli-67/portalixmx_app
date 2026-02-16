@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
-import '../../../../core/models/access_control_api_response.dart';
+import '../../../../core/models/access_request_model.dart';
 import '../../../../core/res/app_colors.dart';
 import '../../../../core/res/app_icons.dart';
 import '../../../../core/res/app_textstyles.dart';
@@ -21,7 +21,7 @@ class AccessSummaryPage extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               BackButton(color: Colors.white,),
-              Text('${access.name} Access', style: AppTextStyles.regularTextStyle,),
+              Text('${access.requestedAccessTitle} Access', style: AppTextStyles.regularTextStyle,),
               const SizedBox(width: 20)
             ],
           ),
@@ -45,11 +45,11 @@ class AccessSummaryPage extends StatelessWidget{
                       children: [
                         Expanded(
                           child: VisitorInfoItemWidget(
-                            title: 'Date', subTitle: DateTimeFormatHelpers.formatDateTime(access.access.first.timeStamp),showDivider: true,),
+                            title: 'Date', subTitle: DateTimeFormatHelpers.formatDateTime(access.createdAt),showDivider: true,),
                         ),
                         Expanded(
                             child: VisitorInfoItemWidget(
-                              title: 'Time', subTitle: DateTimeFormatHelpers.formatDateTime(access.access.first.timeStamp),showDivider: true,)
+                              title: 'Time', subTitle: DateTimeFormatHelpers.formatTime(access.requestedForTime),showDivider: true,)
                         ),
                       ],
                     ),
@@ -58,11 +58,11 @@ class AccessSummaryPage extends StatelessWidget{
                       children: [
                         Expanded(
                           child: VisitorInfoItemWidget(
-                            title: 'Requested Time', subTitle: 'Sep 20, 2024',),
+                            title: 'Requested Time', subTitle: '${DateTimeFormatHelpers.formatDateTime(access.requestedForDate)}}',),
                         ),
                         Expanded(
                             child: VisitorInfoItemWidget(
-                              title: 'Access Approved Date', subTitle: '10:00AM - 06:00PM',)
+                              title: 'Access Approved Date', subTitle: '',)
                         ),
                       ],
                     ),

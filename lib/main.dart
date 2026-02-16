@@ -6,7 +6,6 @@ import 'package:portalixmx_app/providers/authentication_provider/authentication_
 import 'package:portalixmx_app/providers/home_provider.dart';
 import 'package:portalixmx_app/providers/maintenance_provider.dart';
 import 'package:portalixmx_app/providers/profile_provider.dart';
-import 'package:portalixmx_app/providers/request_access_provider.dart';
 import 'package:portalixmx_app/providers/user_info_provider.dart';
 import 'package:portalixmx_app/router/app_router.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +23,7 @@ void main()async {
       ChangeNotifierProvider(create: (_)=> HomeProvider()),
       ChangeNotifierProvider(create: (_)=> MaintenanceProvider()),
       ChangeNotifierProvider(create: (_)=> LocaledProvider()),
-      ChangeNotifierProvider(create: (_)=> RequestAccessProvider()),
+      // ChangeNotifierProvider(create: (_)=> RequestAccessProvider()),
       ChangeNotifierProvider(create: (_)=> ProfileProvider()),
 
     ], child: const MyApp(),)

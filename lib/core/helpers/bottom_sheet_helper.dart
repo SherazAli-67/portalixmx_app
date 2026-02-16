@@ -4,10 +4,7 @@ import '../../presentation/widgets/draggable_bottom_sheet.dart';
 
 class _DraggableBottomSheetRoute<T> extends PageRouteBuilder<T> {
   _DraggableBottomSheetRoute({
-    required Widget child,
-    double minHeight = 0.3,
-    double maxHeight = 0.9,
-    double? initialHeight,
+    required Widget sheet,
   }) : super(
           opaque: false,
           barrierDismissible: false,
@@ -29,13 +26,7 @@ class _DraggableBottomSheetRoute<T> extends PageRouteBuilder<T> {
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: DraggableBottomSheet(
-                        minHeight: minHeight,
-                        maxHeight: maxHeight,
-                        initialHeight: initialHeight,
-                        onDismiss: () => Navigator.of(context).pop<T>(null),
-                        child: child,
-                      ),
+                      child: sheet,
                     ),
                   ),
                 ],
@@ -73,10 +64,35 @@ class BottomSheetHelper {
     if (ctx == null) return null;
     return Navigator.of(ctx).push<T>(
       _DraggableBottomSheetRoute<T>(
-        minHeight: minHeight,
-        maxHeight: maxHeight,
-        initialHeight: initialHeight,
-        child: child,
+        sheet: DraggableBottomSheet(
+          minHeight: minHeight,
+          maxHeight: maxHeight,
+          initialHeight: initialHeight,
+          onDismiss: () => Navigator.of(ctx).pop<T>(null),
+          child: child,
+        ),
+      ),
+    );
+  }
+
+  static Future<T?> showDraggableListBottomSheet<T>({
+    required GlobalKey<ScaffoldState> scaffoldKey,
+    required Widget Function(ScrollController scrollController, ScrollPhysics scrollPhysics) contentBuilder,
+    double minHeight = 0.3,
+    double maxHeight = 0.9,
+    double? initialHeight,
+  }) async {
+    final ctx = scaffoldKey.currentContext;
+    if (ctx == null) return null;
+    return Navigator.of(ctx).push<T>(
+      _DraggableBottomSheetRoute<T>(
+        sheet: DraggableBottomSheet(
+          minHeight: minHeight,
+          maxHeight: maxHeight,
+          initialHeight: initialHeight,
+          onDismiss: () => Navigator.of(ctx).pop<T>(null),
+          scrollableBuilder: contentBuilder,
+        ),
       ),
     );
   }

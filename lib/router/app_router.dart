@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
-import '../core/models/access_control_api_response.dart';
-import '../core/models/complaints_api_response.dart';
+import '../core/models/access_request_model.dart';
+import '../core/models/complaints_model.dart';
 import '../presentation/screens/authentication/create_account_page.dart';
 import '../presentation/screens/authentication/forget_password_page.dart';
 import '../presentation/screens/authentication/login_page.dart';
@@ -113,8 +113,8 @@ enum NamedRoutes {
   accessRequests('/access-requests'),
   profile('/profile-menu'),
   guestDetail('/guest-detail'),
-  accessRequestDetail('access-request-detail'),
-  complaintSummary('complaint-detail'),
+  accessRequestDetail('/access-request-detail'),
+  complaintSummary('/complaint-detail'),
   editProfile('/edit-profile'),
   userDirectory('/user-directory'),
   directoryDetail('/directory-detail'),

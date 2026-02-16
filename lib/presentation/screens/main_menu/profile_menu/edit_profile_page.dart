@@ -305,11 +305,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }*/
   }
 
-  void _onProfileUpdated(UserModel user){
-   /* final homeProvider = Provider.of<UserInfoProvider>(context, listen: false);
-    homeProvider.setUserName(user.name);*/
-  }
-
   void _onPickImageTap()async{
     ImagePicker imagePicker = ImagePicker();
     XFile? selectedImage = await imagePicker.pickImage(source: ImageSource.gallery);

@@ -1,10 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
-import 'package:portalixmx_app/providers/maintenance_provider.dart';
-import 'package:provider/provider.dart';
 import '../../core/res/app_colors.dart';
 import '../../core/res/app_icons.dart';
 import '../../core/res/app_textstyles.dart';
@@ -64,17 +61,15 @@ class _AddComplaintBottomSheetState extends State<AddComplaintBottomSheet> {
                 ],
               )).toList(),
             ),
-      
-            Consumer<MaintenanceProvider>(builder: (ctx,provider, _){
-              return  Padding(
-                padding: const EdgeInsets.symmetric(vertical: 18.0),
-                child: SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: PrimaryBtn(onTap: _onAddComplaintTap, btnText: AppLocalizations.of(context)!.submit, isLoading: provider.addingComplaint,),
-                ),
-              );
-            })
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 18.0),
+              child: SizedBox(
+                height: 50,
+                width: double.infinity,
+                child: PrimaryBtn(onTap: _onAddComplaintTap, btnText: AppLocalizations.of(context)!.submit,),
+              ),
+            )
           ],
         ),
       ),

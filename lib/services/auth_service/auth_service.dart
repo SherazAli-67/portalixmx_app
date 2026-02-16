@@ -16,7 +16,7 @@ class AuthService {
      if(userCredential.user != null){
        User authUser = userCredential.user!;
        UserModel user = UserModel(userID: authUser.uid, userName: name, email: email, createdAt: DateTime.now().toUtc());
-       await _firestore.collection(FirebaseConst.residentsCollection).doc(user.userID).set(user.toMap());
+       await _firestore.collection(FirebaseConst.residentsCol).doc(user.userID).set(user.toMap());
        return authUser;
      }
      return null;
@@ -73,7 +73,7 @@ class AuthService {
   Future<String?> deleteAccount() async {
     try{
       String currentUID = FirebaseAuth.instance.currentUser!.uid;
-      await _firestore.collection(FirebaseConst.residentsCollection).doc(currentUID).delete();
+      await _firestore.collection(FirebaseConst.residentsCol).doc(currentUID).delete();
 
       await _auth.currentUser!.delete();
       return null;
@@ -111,7 +111,7 @@ class AuthService {
   Future<UserModel?> getCurrentUser() async {
     try{
       String currentUID = FirebaseAuth.instance.currentUser!.uid;
-     final docSnap = await _firestore.collection(FirebaseConst.residentsCollection).doc(currentUID).get();
+     final docSnap = await _firestore.collection(FirebaseConst.residentsCol).doc(currentUID).get();
      if(docSnap.exists){
        return UserModel.fromMap(docSnap.data()!);
      }
@@ -124,7 +124,7 @@ class AuthService {
   Future<String?> updateUser({required UserModel user}) async{
     try{
       String currentUID = FirebaseAuth.instance.currentUser!.uid;
-       await _firestore.collection(FirebaseConst.residentsCollection).doc(currentUID).set(user.toMap());
+       await _firestore.collection(FirebaseConst.residentsCol).doc(currentUID).set(user.toMap());
        return null;
     } catch (e) {
       throw 'Failed to get user: $e';

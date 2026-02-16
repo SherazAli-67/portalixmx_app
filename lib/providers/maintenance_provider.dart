@@ -1,14 +1,14 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:portalixmx_app/core/helpers/bottom_sheet_helper.dart';
 import 'package:portalixmx_app/presentation/screens/main_menu/main_menu.dart';
 import 'package:portalixmx_app/presentation/bottomsheets/add_complaint_bottomsheet.dart';
 import 'package:portalixmx_app/services/complaints_service/complaints_service.dart';
-import '../core/models/complaints_api_response.dart';
+import '../core/models/complaints_model.dart';
 
 class MaintenanceProvider extends ChangeNotifier {
   bool addingComplaint =  false;
+  bool loadingComplaints = false;
   List<ComplaintModel> _allComplaints  = [];
   final _complaintService = ComplaintsService.instance;
   List<ComplaintModel> get allComplaints => _allComplaints;
@@ -16,18 +16,18 @@ class MaintenanceProvider extends ChangeNotifier {
   MaintenanceProvider(){
     _initComplaints();
   }
-  Future<bool> addComplaint({required String token, required String complaint, required List<File> files}) async{
-    bool result = false;
-    return result;
-  }
 
-  Future<Map<String, dynamic>?> getAllComplaints() async{
-    return null;
-  }
 
-  Future<bool> deleteComplaintByID(String complaintID) async {
-    bool result = false;
-    return result;
+  Future<String?> deleteComplaintByID(String complaintID) async {
+    try{
+      debugPrint("onDelete occurred");
+      _allComplaints.removeWhere((complaint) => complaint.id == complaintID);
+      notifyListeners();
+      await _complaintService.deleteComplaintByID(complaintID);
+      return null;
+    }catch(e){
+      return e.toString();
+    }
   }
 
   Future<String?> onAddComplaintTap()async{
@@ -59,10 +59,17 @@ class MaintenanceProvider extends ChangeNotifier {
 
   Future<void> _initComplaints() async {
     try{
+      loadingComplaints = true;
+      notifyListeners();
+
       _allComplaints = await _complaintService.getAllComplaints();
       notifyListeners();
     }catch(e){
       debugPrint("Error while fetching complaints: ${e.toString()}");
     }
+
+    loadingComplaints = false;
+    notifyListeners();
+
   }
 }

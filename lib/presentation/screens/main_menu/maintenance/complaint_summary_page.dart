@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/helpers/image_url_helper.dart';
-import '../../../../core/models/complaints_api_response.dart';
+import '../../../../core/models/complaints_model.dart';
 import '../../../../core/res/app_textstyles.dart';
 import '../../../../providers/datetime_format_helpers.dart';
 import '../../../widgets/bg_gradient_screen.dart';
@@ -48,7 +48,7 @@ class ComplaintSummaryPage extends StatelessWidget{
                       ),
                       Expanded(
                           child: VisitorInfoItemWidget(
-                            title: 'Status', subTitle: complaint.status.name,)
+                            title: 'Status', subTitle: complaint.status.name.toUpperCase(),)
                       ),
                     ],
                   ),

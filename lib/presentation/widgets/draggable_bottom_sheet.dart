@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DraggableBottomSheet extends StatefulWidget {
-  final Widget child;
+  final Widget? child;
+  final Widget Function(ScrollController scrollController, ScrollPhysics scrollPhysics)? scrollableBuilder;
   final double minHeight;
   final double maxHeight;
   final double? initialHeight;
@@ -9,12 +10,14 @@ class DraggableBottomSheet extends StatefulWidget {
 
   const DraggableBottomSheet({
     super.key,
-    required this.child,
+    this.child,
+    this.scrollableBuilder,
     this.minHeight = 0.3,
     this.maxHeight = 0.9,
     this.initialHeight,
     this.onDismiss,
-  });
+  }) : assert(child != null || scrollableBuilder != null, 'Provide either child or scrollableBuilder'),
+       assert(child == null || scrollableBuilder == null, 'Provide only one of child or scrollableBuilder');
 
   @override
   State<DraggableBottomSheet> createState() => _DraggableBottomSheetState();
@@ -24,17 +27,20 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   Animation<double>? _heightAnimation;
-  
+  ScrollController? _scrollController;
+
   double _currentHeight = 0.5; // Start at 50% as default
   double _dragStartHeight = 0.0;
   double _dragStartPosition = 0.0;
   bool _isDragging = false;
   final GlobalKey _contentKey = GlobalKey();
-  
+
   final List<double> _snapPoints = [0.3, 0.5, 0.7, 0.9];
-  
+
   static const double _maxHeightThreshold = 0.05; // Within 5% of max = "at max"
-  
+
+  bool get _useScrollableBuilder => widget.scrollableBuilder != null;
+
   @override
   void initState() {
     super.initState();
@@ -43,10 +49,14 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    
-    WidgetsBinding.instance.addPostFrameCallback((_) => _measureInitialHeight());
+    if (_useScrollableBuilder) {
+      _scrollController = ScrollController();
+    }
+    if (!_useScrollableBuilder) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _measureInitialHeight());
+    }
   }
-  
+
   void _measureInitialHeight() {
     if (widget.initialHeight != null) return;
     final RenderBox? renderBox = _contentKey.currentContext?.findRenderObject() as RenderBox?;
@@ -54,8 +64,8 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
       final screenHeight = MediaQuery.of(context).size.height;
       final contentHeight = renderBox.size.height + 24; // Add padding for drag handle
       final initialHeight = (contentHeight / screenHeight).clamp(widget.minHeight, widget.maxHeight);
-      
-      setState(()=>  _currentHeight = initialHeight);
+
+      setState(() => _currentHeight = initialHeight);
     }
   }
   
@@ -140,8 +150,12 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
     }
   }
   
+  ScrollPhysics get _scrollPhysics =>
+      _isAtMaxHeight ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics();
+
   @override
   void dispose() {
+    _scrollController?.dispose();
     _animationController.dispose();
     super.dispose();
   }
@@ -177,13 +191,13 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
               ),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                key: _contentKey,
-                physics: _isAtMaxHeight
-                    ? const AlwaysScrollableScrollPhysics()
-                    : const NeverScrollableScrollPhysics(),
-                child: widget.child,
-              ),
+              child: _useScrollableBuilder
+                  ? widget.scrollableBuilder!(_scrollController!, _scrollPhysics)
+                  : SingleChildScrollView(
+                      key: _contentKey,
+                      physics: _scrollPhysics,
+                      child: widget.child!,
+                    ),
             ),
           ],
         ),
