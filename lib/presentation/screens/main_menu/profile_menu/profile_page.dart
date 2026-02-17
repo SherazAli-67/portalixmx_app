@@ -1,13 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/presentation/widgets/profile_image_widget.dart';
 import 'package:portalixmx_app/providers/profile_provider.dart';
 import 'package:portalixmx_app/router/app_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/helpers/image_url_helper.dart';
 import '../../../../core/res/app_icons.dart';
 import '../../../../core/res/app_textstyles.dart';
 import '../../../widgets/loading_widget.dart';
@@ -31,14 +30,7 @@ class ProfileMenu extends StatelessWidget{
               child: Column(
                 spacing: 5,
                 children: [
-                  CircleAvatar(
-                    radius: 65,
-                    backgroundColor: Colors.white,
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundImage: CachedNetworkImageProvider(ImageUrlHelper.getImageUrl(provider.user!.profileImg!)),
-                    ),
-                  ),
+                  ProfileImageWidget(imageUrl: provider.user!.profileImg),
                   Text(provider.user!.userName, style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.white),),
                   InkWell(
                       onTap: ()=> context.push(NamedRoutes.editProfile.routeName),

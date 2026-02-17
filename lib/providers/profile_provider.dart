@@ -1,90 +1,72 @@
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:portalixmx_app/services/profile_service/profile_service.dart';
 import '../core/models/user_model.dart';
 
 class ProfileProvider extends ChangeNotifier{
+  final _profileService = ProfileService.instance;
   bool _loadingProfile = false;
   bool _updatingProfile = false;
 
   UserModel? _user;
-
+  XFile? _pickedImage;
   bool get loadingProfile => _loadingProfile;
   bool get updatingProfile => _updatingProfile;
   UserModel? get user => _user;
+  XFile? get pickedImage => _pickedImage;
 
   ProfileProvider(){
     _initProfile();
   }
 
   _initProfile()async{
-    /*_loadingProfile = true;
+    _loadingProfile = true;
     notifyListeners();
-    final response = await _apiService.getRequest(endpoint: ApiConstants.userProfile, );
-    if(response != null){
-      if(response.statusCode == 200){
-        UserApiResponse userApiResponse = UserApiResponse.fromJson(jsonDecode(response.body));
-        _user = userApiResponse.data;
-      }
-      _loadingProfile = false;
-      notifyListeners();
-    }*/
+    try{
+    _user = await _profileService.getCurrentUser();
+    }catch(e){
+      debugPrint("Error while fetching user: ${e.toString()}");
+    }
+    _loadingProfile = false;
+    notifyListeners();
   }
 
-  Future<bool> updateUserProfile({required Map<String, dynamic> data, Function(UserModel)? onProfileUpdated})async {
 
-    bool result = false;
-    _updatingProfile = true;
-    notifyListeners();
-   /* try{
-      result = await _apiService.updateProfile(map: data);
-      final response = await _apiService.getRequest(endpoint: ApiConstants.userProfile);
-      if(response != null){
-        UserApiResponse userApiResponse = UserApiResponse.fromJson(jsonDecode(response.body));
-        _user = userApiResponse.data;
+  void onPickImageTap()async{
+    ImagePicker imagePicker = ImagePicker();
+    XFile? selectedImage = await imagePicker.pickImage(source: ImageSource.gallery);
+    if(selectedImage != null){
+      _pickedImage = selectedImage;
+      notifyListeners();
+    }
+  }
+
+
+  Future<String?> onUpdateTap({required String name, required String phoneNum, required String vehicleName, required String color, required String licensePlateNum, required String registrationNum}) async {
+
+    String? errorMessage;
+    if(user != null){
+      _updatingProfile = true;
+      notifyListeners();
+      try{
+        //Profile image will be added later
+        final updatedUser = user!.copyWith(
+          userName: name,
+          phoneNum: phoneNum.isNotEmpty ? phoneNum : null,
+          vehicleInformation: user!.vehicleInformation!.copyWith(name: vehicleName, color: color, licensePlateNumber: licensePlateNum, registrationNumber: registrationNum),
+        );
+        _user = updatedUser;
         notifyListeners();
-        if(onProfileUpdated != null){
-          onProfileUpdated(_user!);
-        }
+        await  _profileService.updateUser(user: updatedUser);
+      }catch(e){
+        errorMessage= e.toString();
       }
-      // final response = await _apiService.postRequestWithToken(endpoint: ApiConstants.updateProfile, data: data,);
-    }catch(e){
-      String errorMessage = e.toString();
-      if(e is PlatformException){
-        errorMessage = e.message!;
-      }else if(e is SocketException){
-        errorMessage = AppConstants.noInternetMsg;
-      }
-      Fluttertoast.showToast(msg: errorMessage);
-      debugPrint("Error while updating profile: $errorMessage");
+    }else{
+      errorMessage = 'User not found';
     }
 
     _updatingProfile = false;
-    notifyListeners();*/
-    return result;
+    notifyListeners();
+    return errorMessage;
   }
-
- /* Future<bool> updateUserProfile({required Map<String, dynamic> data})async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String? token = sharedPreferences.getString('token');
-    bool result = false;
-    if(token != null){
-      _updatingProfile = true;
-      notifyListeners();
-      final response = await _apiService.updateProfile(map: data);
-      // final response = await _apiService.postRequestWithToken(endpoint: ApiConstants.updateProfile, data: data,);
-      if(response){
-
-        debugPrint("Update api response: ${response.body}");
-        result = response.statusCode == 200 || jsonDecode(response.body)['success'];
-        if(result){
-          _initProfile();
-        }
-      }
-      _updatingProfile = false;
-      notifyListeners();
-    }
-
-    return result;
-  }*/
-
-
 }

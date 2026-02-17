@@ -16,8 +16,10 @@ class AppTextField extends StatefulWidget {
     Color borderColor = Colors.transparent,
     int? maxLines,
     String? title,
-    TextCapitalization? capitalization
-  }) : _textController = controller,_hintText = hintText, _textInputType = textInputType, _fillColor = fillColor, _hintTextColor = hintTextColor, _borderColor = borderColor, _title = title, _capitalization = capitalization;
+    TextCapitalization? capitalization,
+    TextStyle? titleTextStyle,
+    bool isDense = false,
+  }) : _textController = controller,_hintText = hintText, _textInputType = textInputType, _fillColor = fillColor, _hintTextColor = hintTextColor, _borderColor = borderColor, _title = title, _capitalization = capitalization, _titleTextStyle = titleTextStyle, _isDense = isDense;
 
   final TextEditingController? _textController;
   final String _hintText;
@@ -30,7 +32,9 @@ class AppTextField extends StatefulWidget {
   final Color _borderColor;
   // final int? _maxLines;
   final String? _title;
+  final TextStyle? _titleTextStyle;
   final TextCapitalization? _capitalization;
+  final bool _isDense;
   @override
   State<AppTextField> createState() => _AppTextFieldState();
 }
@@ -41,10 +45,10 @@ class _AppTextFieldState extends State<AppTextField> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: .start,
-      spacing: 8,
+      spacing: 4,
       children: [
         if(widget._title != null)
-          Text(widget._title!, style: AppTextStyles.tileTitleTextStyle.copyWith(color: Colors.white),),
+          Text(widget._title!, style: widget._titleTextStyle ?? AppTextStyles.tileTitleTextStyle.copyWith(color: Colors.white),),
         TextField(
           controller: widget._textController,
           readOnly: widget.readOnly,
@@ -55,10 +59,11 @@ class _AppTextFieldState extends State<AppTextField> {
           onTapOutside: (_)=>  FocusManager.instance.primaryFocus?.unfocus(),
           decoration: InputDecoration(
               hintText: widget._hintText,
+              isDense: widget._isDense,
               hintStyle: AppTextStyles.hintTextStyle.copyWith(color: widget._hintTextColor),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: widget._borderColor)
+                borderSide:  BorderSide(color: widget._borderColor)
               ),
               suffixIcon: widget.isPassword ? TextButton(
                   onPressed: () => setState(() => hidePassword = !hidePassword),

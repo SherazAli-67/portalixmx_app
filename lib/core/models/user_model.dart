@@ -2,6 +2,7 @@ class UserModel {
   final String userID;
   final String userName;
   final String email;
+  final String? phoneNum;
   final DateTime createdAt;
   final String? profileImg;
   final VehicleInformation? vehicleInformation;
@@ -13,6 +14,7 @@ class UserModel {
     required this.email,
     required this.createdAt,
     this.profileImg,
+    this.phoneNum,
     this.vehicleInformation,
     this.emergencyContacts = const [],
   });
@@ -22,6 +24,7 @@ class UserModel {
       'userID': userID,
       'userName': userName,
       'emailAddress': email,
+      'phoneNum' : phoneNum,
       'createdAt': createdAt.toIso8601String(),
       'profileImg': profileImg,
       'vehicleInformation': vehicleInformation?.toMap(),
@@ -36,6 +39,7 @@ class UserModel {
       email: map['emailAddress'] ?? '',
       createdAt: DateTime.parse(map['createdAt']),
       profileImg: map['profileImg'],
+      phoneNum: map['phoneNum'],
       vehicleInformation: map['vehicleInformation'] != null
           ? VehicleInformation.fromMap(
           Map<String, dynamic>.from(map['vehicleInformation']))
@@ -52,6 +56,7 @@ class UserModel {
     String? email,
     DateTime? createdAt,
     String? profileImg,
+    String? phoneNum,
     VehicleInformation? vehicleInformation,
     List<String>? emergencyContacts,
   }) {
@@ -61,6 +66,7 @@ class UserModel {
       email: email ?? this.email,
       createdAt: createdAt ?? this.createdAt,
       profileImg: profileImg ?? this.profileImg,
+      phoneNum: phoneNum ?? this.phoneNum,
       vehicleInformation:
       vehicleInformation ?? this.vehicleInformation,
       emergencyContacts:

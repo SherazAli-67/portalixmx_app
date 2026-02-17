@@ -8,7 +8,7 @@ import '../core/models/access_request_model.dart';
 
 class RequestAccessProvider extends ChangeNotifier {
   bool addingRequestAccess =  false;
-  List<AccessModel> _allAccessItems = [];
+  final List<AccessModel> _allAccessItems = [];
   List<AccessRequestModel> _allAccessRequests  = [];
   final _requestsService = AccessRequestService.instance;
 
@@ -44,7 +44,7 @@ class RequestAccessProvider extends ChangeNotifier {
 
   void _initRequests() async {
     try {
-      _allAccessItems = await _requestsService.fetchAllAccess();
+      _allAccessRequests = await _requestsService.getAllRequests();
       notifyListeners();
     } catch (e) {
       debugPrint('RequestAccessProvider: failed to fetch access items: $e');

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/core/models/access_request_model.dart';
 import 'package:portalixmx_app/core/res/firebase_constant.dart';
@@ -39,9 +38,10 @@ class AccessRequestService {
     }
   }
 
-  Future<List<AccessRequestModel>> getAllComplaints() async {
+  Future<List<AccessRequestModel>> getAllRequests() async {
     try {
       final snapshot = await _getAccessRequestsCollection.where('requestByUID', isEqualTo: _auth.currentUser!.uid).get();
+      debugPrint("Access requests: ${snapshot.size}");
       return snapshot.docs
           .map((doc) => AccessRequestModel.fromMap(doc.data()! as Map<String, dynamic>))
           .toList();

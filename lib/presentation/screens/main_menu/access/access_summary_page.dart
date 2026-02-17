@@ -58,7 +58,7 @@ class AccessSummaryPage extends StatelessWidget{
                       children: [
                         Expanded(
                           child: VisitorInfoItemWidget(
-                            title: 'Requested Time', subTitle: '${DateTimeFormatHelpers.formatDateTime(access.requestedForDate)}}',),
+                            title: 'Requested Time', subTitle: DateTimeFormatHelpers.formatDateTime(access.requestedForDate),),
                         ),
                         Expanded(
                             child: VisitorInfoItemWidget(
