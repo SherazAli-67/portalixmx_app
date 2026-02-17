@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
 import 'package:portalixmx_app/providers/home_provider.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
-import 'package:portalixmx_app/router/app_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/models/user_model.dart';
 import '../../../../core/res/app_colors.dart';
 import '../../../../core/res/app_textstyles.dart';
+import '../../../widgets/guest_item_widget.dart';
+import '../../../widgets/regular_visitor_item_widget.dart';
 
 class HomePage extends StatelessWidget{
   const HomePage({super.key});
@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget{
               ],
             ),
             Expanded(
-            child:  Column(
+            child: Column(
               spacing: 20,
               children: [
                 Row(
@@ -59,16 +59,14 @@ class HomePage extends StatelessWidget{
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(backgroundColor: provider.selectedTab == 0 ?  AppColors.btnColor : Colors.white),
                         onPressed: ()=> provider.onTabChange(0), child: Text(localization.regularVisitors, style: AppTextStyles.tabsTextStyle.copyWith(color: provider.selectedTab == 0 ?  Colors.white : AppColors.primaryColor),)),
-
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(backgroundColor: provider.selectedTab == 1 ?  AppColors.btnColor : Colors.white),
                         onPressed: ()=> provider.onTabChange(1), child: Text(localization.guest, style: AppTextStyles.tabsTextStyle.copyWith(color: provider.selectedTab == 1 ?  Colors.white : AppColors.primaryColor),)),
-
                   ],
                 ),
                 provider.selectedTab == 0
-                    ? _buildAllVisitorPage(context, visitors: provider.regularVisitors, localization: localization,  onDeleteTap: (RegularVisitor visitor){})
-                    : _buildAllGuestsPage(context, guests: provider.guests, localization: localization, onDeleteTap: (GuestVisitor guest){debugPrint("Delete method");})
+                    ? _buildAllVisitorPage(context, visitors: provider.regularVisitors,  onDeleteTap: (RegularVisitor visitor){})
+                    : _buildAllGuestsPage(context, guests: provider.guests, onDeleteTap: (GuestVisitor guest){debugPrint("Delete method");})
               ],
             ),
           )
@@ -78,81 +76,28 @@ class HomePage extends StatelessWidget{
     );
   }
 
-  Widget _buildAllVisitorPage(BuildContext context, {required List<RegularVisitor> visitors, required AppLocalizations localization, required Function(RegularVisitor guest) onDeleteTap}){
+  Widget _buildAllVisitorPage(BuildContext context, {required List<RegularVisitor> visitors,required Function(RegularVisitor guest) onDeleteTap}){
     return Expanded(
-      child: ListView.builder(
+      child: ListView.separated(
           itemCount: visitors.length,
+          separatorBuilder: (ctx, index) => const SizedBox(height: 10,),
           itemBuilder: (ctx, index){
             RegularVisitor visitor = visitors[index];
-            return Card(
-              margin: EdgeInsets.only(bottom: 10),
-              child: ListTile(
-                onTap: ()=> context.push(NamedRoutes.guestDetail.routeName, extra: visitor),
-                contentPadding: EdgeInsets.only(left: 10),
-                leading: CircleAvatar(
-                  backgroundColor: AppColors.btnColor,
-                  child: Center(child: Icon(Icons.person, color: Colors.white,),),
-                ),
-                title: Text(visitor.name, style: AppTextStyles.tileTitleTextStyle,),
-                subtitle: Text(localization.regularVisitor, style: AppTextStyles.tileSubtitleTextStyle,),
-                trailing: PopupMenuButton(
-                    elevation: 0,
-                    color: Colors.white,
-                    position: PopupMenuPosition.under,
-                    padding: EdgeInsets.zero,
-                    icon: Icon(Icons.more_vert_rounded),
-                    onSelected: (_)=> onDeleteTap(visitor),
-                    itemBuilder: (ctx){
-                      return [
-                        PopupMenuItem(
-                            value: 1,
-                            child: Text(localization.deleteVisitor))
-                      ];
-                    }),
-              ),
-            );
+            return RegularVisitorItemWidget(visitor: visitor, onDeleteTap: onDeleteTap,);
           }),
     );
   }
 
-  Widget _buildAllGuestsPage(BuildContext context, {required List<GuestVisitor> guests, required Function(GuestVisitor guest) onDeleteTap, required AppLocalizations localization}){
+  Widget _buildAllGuestsPage(BuildContext context, {required List<GuestVisitor> guests, required Function(GuestVisitor guest) onDeleteTap, }){
     return Expanded(
-      child: ListView.builder(
+      child: ListView.separated(
           itemCount: guests.length,
+          separatorBuilder: (ctx, index) => const SizedBox(height: 10,),
           itemBuilder: (ctx, index){
             GuestVisitor guest = guests[index];
-            return Card(
-              margin: EdgeInsets.only(bottom: 10),
-              child: ListTile(
-                onTap: ()=> context.push(NamedRoutes.guestDetail.routeName, extra: guest),
-                contentPadding: EdgeInsets.only(left: 10),
-                leading: CircleAvatar(
-                  backgroundColor: AppColors.btnColor,
-                  child: Center(
-                    child:  Icon(Icons.person, color: Colors.white,),
-                  ),
-                ),
-                title: Text(guest.name, style: AppTextStyles.tileTitleTextStyle,),
-                subtitle: Text(localization.guest, style: AppTextStyles.tileSubtitleTextStyle,),
-                trailing: PopupMenuButton(
-                    elevation: 0,
-                    color: Colors.white,
-                    position: PopupMenuPosition.under,
-                    padding: EdgeInsets.zero,
-                    icon: Icon(Icons.more_vert_rounded),
-                    onSelected: (val){
-                      onDeleteTap(guest);
-                    },
-                    itemBuilder: (ctx){
-                      return [
-                        PopupMenuItem(
-                            value: 1,
-                            child: Text(localization.deleteGuest))
-                      ];
-                    }),
-              ),
-            );
+            return GuestItemWidget(guest: guest, onDeleteTap: onDeleteTap,);
           }),
     );
   }
 }
+

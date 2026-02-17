@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:portalixmx_app/core/models/user_model.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
 import 'package:portalixmx_app/presentation/bottomsheets/add_update_guest_bottomsheet.dart';
+import 'package:portalixmx_app/presentation/bottomsheets/directory_guests_sheet.dart';
 import 'package:portalixmx_app/services/user_service/user_service.dart';
 import 'package:portalixmx_app/services/visitor_service/visitor_service.dart';
 import '../core/helpers/bottom_sheet_helper.dart';
@@ -15,7 +16,11 @@ class HomeProvider extends ChangeNotifier {
   int _selectedTab = 0;
 
   List<BaseVisitor> _visitors = [];
+  // List<BaseVisitor> _directoryGuests = [];
+
   List<BaseVisitor> get visitors => _visitors;
+  // List<BaseVisitor> get directoryGuests => _directoryGuests;
+
   List<GuestVisitor> get guests => _visitors.whereType<GuestVisitor>().toList();
   List<RegularVisitor> get regularVisitors => _visitors.whereType<RegularVisitor>().toList();
   int get selectedTab => _selectedTab;
@@ -34,10 +39,6 @@ class HomeProvider extends ChangeNotifier {
   }
 
   void _initVisitorsAndGuests() async {
-    await loadVisitors();
-  }
-
-  Future<void> loadVisitors() async {
     try {
       loadingVisitors = true;
       notifyListeners();
@@ -48,7 +49,7 @@ class HomeProvider extends ChangeNotifier {
       }
 
       _visitors = await _visitorService.getVisitors(user.userID);
-      
+
       loadingVisitors = false;
       notifyListeners();
     } catch (e) {
@@ -57,6 +58,7 @@ class HomeProvider extends ChangeNotifier {
       debugPrint('Error loading visitors: $e');
     }
   }
+
 
   Future<bool> addVisitor(BaseVisitor visitor) async {
     try {
@@ -134,11 +136,22 @@ class HomeProvider extends ChangeNotifier {
   }
 
   Future<dynamic> onAddGuestTap() async {
-    await BottomSheetHelper.showDraggableBottomSheet<dynamic>(
+    /**/
+
+   BaseVisitor? visitor = await BottomSheetHelper.showDraggableListBottomSheet(scaffoldKey: scaffoldKey, contentBuilder: (scrollController, scrollPhysics){
+      return DirectoryGuestsSheet(scrollPhysics: scrollPhysics, scrollController: scrollController);
+    });
+
+   await BottomSheetHelper.showDraggableBottomSheet<dynamic>(
+     scaffoldKey: scaffoldKey,
+     initialHeight: 0.7,
+     child: AddUpdateGuestBottomSheet(visitor: visitor, comingFromGuestDirectory: visitor != null,),
+   );
+   /* await BottomSheetHelper.showDraggableBottomSheet<dynamic>(
       scaffoldKey: scaffoldKey,
       initialHeight: 0.7,
-      child: AddUpdateGuestBottomSheet(),
-    );
+      child: DirectoryGuestsSheet(),
+    );*/
   }
 
   Future<dynamic> onEditVisitorTap(BaseVisitor visitor) async {
@@ -156,4 +169,5 @@ class HomeProvider extends ChangeNotifier {
     _selectedTab = index;
     notifyListeners();
   }
+
 }

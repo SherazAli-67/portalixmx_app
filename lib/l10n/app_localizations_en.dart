@@ -358,4 +358,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error => 'Error';
+
+  @override
+  String get all => 'All';
+
+  @override
+  String get week => 'Week';
+
+  @override
+  String get month => 'Month';
 }

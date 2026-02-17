@@ -9,16 +9,16 @@ class DropdownTextFieldWidget extends StatelessWidget{
         required this.selectedValue,
         required this.onChanged,
         required this.guestTypes,
-        required this.width,
         required this.hintText,
+        this.borderRadius = 8
       });
 
   final bool isEmpty;
   final String? selectedValue;
   final Function(String? newValue) onChanged;
   final List<String> guestTypes;
-  final double width;
   final String hintText;
+  final double borderRadius;
   @override
   Widget build(BuildContext context) {
     return FormField<String>(
@@ -27,8 +27,9 @@ class DropdownTextFieldWidget extends StatelessWidget{
           decoration: InputDecoration(
             labelStyle: AppTextStyles.hintTextStyle.copyWith(color: AppColors.hintTextColor),
             hintStyle: AppTextStyles.hintTextStyle.copyWith(color: AppColors.hintTextColor),
-            contentPadding: EdgeInsets.zero,enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+            contentPadding: .zero,
+              enabledBorder: OutlineInputBorder(
+              borderRadius: .circular(borderRadius),
               borderSide: BorderSide(color: AppColors.borderColor)
           ),
             filled: true,

@@ -20,11 +20,12 @@ class AddUpdateGuestBottomSheet extends StatefulWidget{
     super.key, 
     this.visitor,
     this.isEdit = false,
+    this.comingFromGuestDirectory = false
   });
   
   final BaseVisitor? visitor;
   final bool isEdit;
-
+  final bool comingFromGuestDirectory;
   @override
   State<AddUpdateGuestBottomSheet> createState() => _AddUpdateGuestBottomSheetState();
 }
@@ -50,8 +51,7 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
   void initState() {
     _regularVisitorTime = List.generate(7, (index) => DayTimeModel(dayID: index));
 
-    // Pre-fill data if editing
-    if (widget.isEdit && widget.visitor != null) {
+    if (widget.visitor != null) {
       final visitor = widget.visitor!;
       
       // Determine visitor type
@@ -132,7 +132,6 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
                   selectedValue: _guestTypes[selectedGuestTypeIndex],
                   onChanged: (val) => setState(() => selectedGuestTypeIndex = _guestTypes.indexOf(val!)),
                   guestTypes: _guestTypes,
-                  width: .infinity,
                   hintText: localization.guest),
             AppTextField(controller: _contactNumberController,
               hintText: localization.contactNum,
@@ -282,7 +281,6 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
   Future<void> _onSubmitTap() async {
     final localization = AppLocalizations.of(context)!;
     
-    // Validate inputs
     if (!_validateInputs(localization)) {
       return;
     }
@@ -290,17 +288,14 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
     try {
       final provider = context.read<HomeProvider>();
       
-      // Create appropriate visitor object
       final BaseVisitor newVisitor = selectedGuestTypeIndex == 1
           ? _createGuestVisitor()
           : _createRegularVisitor();
       
       bool success;
       if (widget.isEdit) {
-        // Update existing visitor
         success = await provider.updateVisitor(widget.visitor!.id, newVisitor);
       } else {
-        // Add new visitor
         success = await provider.addVisitor(newVisitor);
       }
       

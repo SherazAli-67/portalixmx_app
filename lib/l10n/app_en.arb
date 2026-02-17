@@ -117,5 +117,8 @@
   "visitorAddedSuccessfully" : "Visitor added successfully",
   "visitorUpdatedSuccessfully" : "Visitor updated successfully",
   "somethingWentWrong" : "Something went wrong",
-  "error" : "Error"
+  "error" : "Error",
+  "all" : "All",
+  "week" : "Week",
+  "month" : "Month"
 }

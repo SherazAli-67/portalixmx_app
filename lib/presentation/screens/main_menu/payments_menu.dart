@@ -14,7 +14,6 @@ class PaymentsMenu extends StatefulWidget{
 class _PaymentsMenuState extends State<PaymentsMenu> {
   int _selectedServiceTypeIndex = 0;
 
-
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;

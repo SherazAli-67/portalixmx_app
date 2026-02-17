@@ -23,9 +23,10 @@ class MaintenanceMenu extends StatelessWidget{
           return BgGradientScreen(
             floatingActionButton: FloatingActionButton(onPressed: ()=> provider.onAddComplaintTap(), shape: RoundedRectangleBorder(borderRadius: .circular(100)), child: Icon(Icons.add_rounded, color: AppColors.primaryColor,)),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              padding: const .symmetric(horizontal: 10.0),
               child: Column(
                 spacing: 10,
+                crossAxisAlignment: .start,
                 children: [
                   Align(
                       alignment: .center,
@@ -33,23 +34,32 @@ class MaintenanceMenu extends StatelessWidget{
                         padding: const .only(top: 35.0, bottom: 11),
                         child: Text(AppLocalizations.of(context)!.maintenance, textAlign: .center, style: AppTextStyles.headingTextStyle,),
                       )),
+                  Row(
+                    spacing: 20,
+                    children: List.generate(provider.filters.length, (index){
+                      bool isSelected = provider.selectedFilter == provider.filters[index];
+                      return ElevatedButton(
+                          style: ElevatedButton.styleFrom(backgroundColor: isSelected ? AppColors.btnColor: Colors.white),
+                          onPressed: ()=> provider.onFilterUpdated(provider.filters[index]), child: Text(provider.filters[index], style: AppTextStyles.tabsTextStyle.copyWith(color: isSelected ? Colors.white : AppColors.primaryColor),));
+                    })
+                  ),
                   Expanded(
                       child: provider.loadingComplaints ? LoadingWidget() : ListView.builder(
-                          itemCount: provider.allComplaints.length,
+                          itemCount: provider.filteredComplaints.length,
                           itemBuilder: (ctx, index){
-                            ComplaintModel complaint = provider.allComplaints[index];
+                            ComplaintModel complaint = provider.filteredComplaints[index];
                             return Card(
-                              margin: EdgeInsets.only(bottom: 10),
+                              margin: .only(bottom: 10),
                               child: ListTile(
                                 onTap: ()=> context.push(NamedRoutes.complaintSummary.routeName, extra: complaint),
-                                contentPadding: EdgeInsets.only(left: 15),
+                                contentPadding: .only(left: 15),
                                 title: Text(complaint.complaint, style: AppTextStyles.tileTitleTextStyle),
                                 subtitle: Text(DateTimeFormatHelpers.formatDateTime(complaint.createdAt), style: AppTextStyles.tileSubtitleTextStyle,),
                                 trailing: PopupMenuButton(
                                     elevation: 0,
                                     color: Colors.white,
-                                    position: PopupMenuPosition.under,
-                                    padding: EdgeInsets.zero,
+                                    position: .under,
+                                    padding: .zero,
                                     icon: Icon(Icons.more_vert_rounded),
                                     onSelected: (_)=> provider.deleteComplaintByID(complaint.id),
                                     itemBuilder: (ctx){
