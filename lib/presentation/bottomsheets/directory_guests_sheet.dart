@@ -24,16 +24,16 @@ class DirectoryGuestsSheet extends StatelessWidget{
           spacing: 10,
           children: [
             Text("Guests Directory", style: AppTextStyles.btnTextStyle.copyWith(color: AppColors.primaryColor),),
-            Expanded(child: ListView.separated(itemBuilder: (ctx, index){
-              BaseVisitor visitor = provider.visitors[index];
+            Expanded(child: provider.directoryGuests.isEmpty ? Center(child: Text("No Visitor found!"),) : ListView.separated(itemBuilder: (ctx, index){
+              BaseVisitor visitor = provider.directoryGuests[index];
               return visitor is GuestVisitor
-                  ? GuestItemWidget(guest: visitor, onDeleteTap: (val) {}, onTap: ()=> Navigator.pop(context, visitor),)
+                  ? GuestItemWidget(guest: visitor, onDeleteTap: (val) {}, onTap: ()=> Navigator.pop(context, {'visitor' : visitor}),)
                   : RegularVisitorItemWidget(visitor: visitor as RegularVisitor, onDeleteTap: (val) {}, onTap: ()=> Navigator.pop(context, visitor),);
-            }, separatorBuilder: (_, index) => const SizedBox(height: 10,), itemCount: provider.visitors.length)),
+            }, separatorBuilder: (_, index) => const SizedBox(height: 10,), itemCount: provider.directoryGuests.length)),
 
             SizedBox(
                 width: .infinity,
-                child: PrimaryBtn(onTap: (){}, btnText: 'Add New Guest'))
+                child: PrimaryBtn(onTap: ()=> Navigator.pop(context, {'addNewGuest' : true}), btnText: 'Add New Guest'))
           ],
         ),
       )

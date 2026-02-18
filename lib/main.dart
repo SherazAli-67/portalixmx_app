@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:portalixmx_app/firebase_options.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/authentication_provider/authentication_provider.dart';
+import 'package:portalixmx_app/providers/directory_provider.dart';
 import 'package:portalixmx_app/providers/home_provider.dart';
 import 'package:portalixmx_app/providers/maintenance_provider.dart';
 import 'package:portalixmx_app/providers/profile_provider.dart';
@@ -25,6 +26,7 @@ void main()async {
       ChangeNotifierProvider(create: (_)=> LocaledProvider()),
       // ChangeNotifierProvider(create: (_)=> RequestAccessProvider()),
       ChangeNotifierProvider(create: (_)=> ProfileProvider()),
+      ChangeNotifierProvider(create: (_)=> DirectoryProvider()),
 
     ], child: const MyApp(),)
   );

@@ -298,7 +298,10 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
       } else {
         success = await provider.addVisitor(newVisitor);
       }
-      
+
+      if(!widget.comingFromGuestDirectory){
+        provider.addVisitorToDirectory(newVisitor);
+      }
       if (!mounted) return;
       
       if (success) {

@@ -96,11 +96,8 @@ class MaintenanceProvider extends ChangeNotifier {
 
   List<ComplaintModel> _getComplaintsOfCurrentWeek() {
     final now = DateTime.now();
-
-    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    final start = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
-
-    final end = start.add(const Duration(days: 7));
+    final end = DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
+    final start = end.subtract(const Duration(days: 7));
 
     return _allComplaints.where((complaint) {
       return complaint.createdAt.isAfter(start) &&

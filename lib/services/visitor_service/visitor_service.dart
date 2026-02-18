@@ -18,6 +18,13 @@ class VisitorService {
         .collection(FirebaseConst.visitorsCol);
   }
 
+  CollectionReference _getDirectoryGuestsCollection(String userID) {
+    return _firestore
+        .collection(FirebaseConst.residentsCol)
+        .doc(userID)
+        .collection(FirebaseConst.guestsDirectoryCol);
+  }
+
   Future<String> addVisitor(String userID, BaseVisitor visitor) async {
     try {
       final docRef = await _getVisitorsCollection(userID).add(visitor.toFirestore());
@@ -48,6 +55,17 @@ class VisitorService {
   Future<List<BaseVisitor>> getVisitors(String userID) async {
     try {
       final snapshot = await _getVisitorsCollection(userID).get();
+      return snapshot.docs
+          .map((doc) => BaseVisitor.fromFirestore(doc))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to get visitors: $e');
+    }
+  }
+
+  Future<List<BaseVisitor>> initDirectoryGuests(String userID) async {
+    try {
+      final snapshot = await _getDirectoryGuestsCollection(userID).get();
       return snapshot.docs
           .map((doc) => BaseVisitor.fromFirestore(doc))
           .toList();
@@ -98,5 +116,13 @@ class VisitorService {
               .map((doc) => BaseVisitor.fromFirestore(doc))
               .toList(),
         );
+  }
+
+  Future<void> addVisitorToDirectory(String userID, BaseVisitor newVisitor)async {
+    try {
+      await _getDirectoryGuestsCollection(userID).add(newVisitor.toFirestore());
+    } catch (e) {
+      throw Exception('Failed to add visitor: $e');
+    }
   }
 }

@@ -36,7 +36,9 @@ class _PaymentsMenuState extends State<PaymentsMenu> {
             ],
           ),
           Expanded(
-            child: ListView.builder(
+            child: Center(child: Text("Coming soon", style: AppTextStyles.regularTextStyle,),)
+            
+           /* ListView.builder(
                 itemCount: 5,
                 itemBuilder: (ctx, index){
                   return Container(
@@ -74,7 +76,7 @@ class _PaymentsMenuState extends State<PaymentsMenu> {
                       ],
                     )
                   );
-                }),
+                }),*/
           )
         ],
       ),
@@ -90,7 +92,7 @@ class _PaymentsMenuState extends State<PaymentsMenu> {
   }
 
 
-  Widget _buildServiceInfoItemWidget({required String serviceText, required int serviceCharges}) {
+/*  Widget _buildServiceInfoItemWidget({required String serviceText, required int serviceCharges}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -103,5 +105,5 @@ class _PaymentsMenuState extends State<PaymentsMenu> {
 
       ],
     );
-  }
+  }*/
 }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:portalixmx_app/core/models/visitor_model.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
-
+import 'package:portalixmx_app/presentation/widgets/guest_item_widget.dart';
+import 'package:portalixmx_app/presentation/widgets/loading_widget.dart';
+import 'package:portalixmx_app/presentation/widgets/regular_visitor_item_widget.dart';
+import 'package:portalixmx_app/providers/directory_provider.dart';
+import 'package:provider/provider.dart';
 import '../../../../core/res/app_colors.dart';
 import '../../../../core/res/app_textstyles.dart';
-import '../../../../router/app_router.dart';
 import '../../../widgets/bg_gradient_screen.dart';
 
 class DirectoryPage extends StatefulWidget {
@@ -17,16 +20,15 @@ class DirectoryPage extends StatefulWidget {
 class _DirectoryPageState extends State<DirectoryPage> {
    final TextEditingController _searchController = TextEditingController();
 
-
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<DirectoryProvider>(context);
     return BgGradientScreen(
       child: Column(
         spacing: 20,
@@ -72,10 +74,21 @@ class _DirectoryPageState extends State<DirectoryPage> {
                         ),
                       )
                     ),
-                    Expanded(child: ListView.builder(
-                        itemCount: 10,
+                    Expanded(child: provider.loadingDirectoryGuests ? LoadingWidget() : ListView.builder(
+                        itemCount: provider.directoryGuests.length,
                         itemBuilder: (ctx, index){
+                          BaseVisitor visitor = provider.directoryGuests[index];
                           return Padding(
+                            padding: const .only(bottom: 10.0),
+                            child: visitor is GuestVisitor
+                                ? GuestItemWidget(
+                                guest: visitor,
+                                onDeleteTap: (val) => provider.deleteVisitor(visitor.id))
+                                : RegularVisitorItemWidget(
+                                visitor: visitor as RegularVisitor,
+                                onDeleteTap: (val) => provider.deleteVisitor(visitor.id)),
+                          );
+                         /* return Padding(
                             padding: const EdgeInsets.only(bottom: 10.0),
                             child: Material(
                               color: AppColors.lightGreyBackgroundColor,
@@ -100,7 +113,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                                 trailing: IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_rounded)),
                               ),
                             ),
-                          );
+                          );*/
                     }))
                   ],
                 ),

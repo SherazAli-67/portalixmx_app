@@ -65,8 +65,11 @@ class HomePage extends StatelessWidget{
                   ],
                 ),
                 provider.selectedTab == 0
-                    ? _buildAllVisitorPage(context, visitors: provider.regularVisitors,  onDeleteTap: (RegularVisitor visitor){})
-                    : _buildAllGuestsPage(context, guests: provider.guests, onDeleteTap: (GuestVisitor guest){debugPrint("Delete method");})
+                    ? _buildAllVisitorPage(
+                    context, visitors: provider.regularVisitors,
+                    onDeleteTap: (RegularVisitor visitor) => provider.deleteVisitor(visitor.id))
+                    : _buildAllGuestsPage(context, guests: provider.guests,
+                    onDeleteTap: (GuestVisitor guest) => provider.deleteVisitor(guest.id))
               ],
             ),
           )
