@@ -44,11 +44,20 @@ class AccessMenu extends StatelessWidget{
                             ],
                           ),
                           const SizedBox(height: 10,),
+                          Row(
+                              spacing: 20,
+                              children: List.generate(provider.filters.length, (index){
+                                bool isSelected = provider.selectedFilter == provider.filters[index];
+                                return ElevatedButton(
+                                    style: ElevatedButton.styleFrom(backgroundColor: isSelected ? AppColors.btnColor: Colors.white),
+                                    onPressed: ()=> provider.onFilterUpdated(provider.filters[index]), child: Text(provider.filters[index], style: AppTextStyles.tabsTextStyle.copyWith(color: isSelected ? Colors.white : AppColors.primaryColor),));
+                              })
+                          ),
                           Expanded(
                               child: ListView.builder(
-                                  itemCount: provider.allAccessRequests.length,
+                                  itemCount: provider.filteredAccessRequests.length,
                                   itemBuilder: (ctx, index){
-                                    AccessRequestModel access = provider.allAccessRequests[index];
+                                    AccessRequestModel access = provider.filteredAccessRequests[index];
                                     return Card(
                                       margin: EdgeInsets.only(bottom: 10),
                                       child: ListTile(

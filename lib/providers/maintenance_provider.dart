@@ -17,14 +17,11 @@ class MaintenanceProvider extends ChangeNotifier {
   final _complaintService = ComplaintsService.instance;
   List<ComplaintModel> get allComplaints => _allComplaints;
   List<ComplaintModel> get filteredComplaints => _filteredComplaints;
-
+  List<String> get filters => _filters;
+  String get selectedFilter => _selectedFilter;
   MaintenanceProvider(){
     _initComplaints();
   }
-
-  List<String> get filters => _filters;
-  String get selectedFilter => _selectedFilter;
-
 
   Future<String?> deleteComplaintByID(String complaintID) async {
     try{
