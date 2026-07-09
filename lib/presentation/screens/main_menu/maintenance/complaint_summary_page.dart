@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:portalixmx_app/router/app_router.dart';
 import '../../../../core/helpers/image_url_helper.dart';
 import '../../../../core/models/complaints_model.dart';
 import '../../../../core/res/app_textstyles.dart';
@@ -58,9 +60,15 @@ class ComplaintSummaryPage extends StatelessWidget{
                   Expanded(child: GridView.builder(
                       itemCount: complaint.images.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,   mainAxisSpacing: 10, crossAxisSpacing: 10), itemBuilder: (ctx, index){
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: CachedNetworkImage(imageUrl: ImageUrlHelper.getImageUrl(complaint.images[index]), height: 75, fit: BoxFit.cover,),
+                    return GestureDetector(
+                      onTap: ()=> context.push(NamedRoutes.previewImage.routeName, extra: {
+                        'title' : complaint.complaint,
+                        'imageUrl': complaint.images[index]
+                      }),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: CachedNetworkImage(imageUrl: ImageUrlHelper.getImageUrl(complaint.images[index]), height: 75, fit: .cover,),
+                      ),
                     );
                   }))
                 ],

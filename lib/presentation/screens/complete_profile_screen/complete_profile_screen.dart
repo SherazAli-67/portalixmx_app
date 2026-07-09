@@ -37,6 +37,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     _registrationNum.dispose();
     _emergencyContactNum.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
@@ -120,8 +121,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     final provider = Provider.of<AuthenticationProvider>(context, listen: false);
 
     String? isError = await provider.onCompleteProfileTap(phoneNum: phoneNum, vehicleName: vehicleName, vehicleColor: color, licensePlateNum: licensePlateNum, registrationNum: registrationNum, emergencyContact: emergencyContact);
-
     if(isError != null){
+      print("Error: $isError");
       CommonUI.showSnackBarMessage(context, isError: true, message: isError, title: "Signup failed");
     }else{
       context.go(NamedRoutes.home.routeName);

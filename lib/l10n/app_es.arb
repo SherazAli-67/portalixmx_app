@@ -50,6 +50,19 @@
   "directory" : "Directorio",
   "communityCalendar" : "Calendario Comunitario",
   "communityPolls" : "Encuestas Comunitarias",
+  "pollEndsAt": "Termina {when}",
+  "@pollEndsAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "pollVote": "Votar",
+  "pollAlreadyVoted": "Ya votaste",
+  "pollEnded": "Esta encuesta ha terminado",
+  "pollVoteFailed": "No se pudo enviar el voto",
+  "pollSelectOption": "Selecciona una opción",
   "guards" : "Guardias",
   "carPooling" : "Compartir Auto",
   "emergencyCalls" : "Llamadas de Emergencia",

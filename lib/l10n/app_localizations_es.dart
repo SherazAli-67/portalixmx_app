@@ -27,6 +27,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get forgetPassword => 'Olvida tu contraseña';
 
   @override
+  String get selectSociety => 'Select Society';
+
+  @override
+  String accountRequestPending(Object societyName) {
+    return 'Your admin request for $societyName is pending. You will be notified as the admin update your request';
+  }
+
+  @override
   String welcomeMessage(Object name) {
     return 'Bienvenido $name';
   }
@@ -36,6 +44,39 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get guest => 'Invitado';
+
+  @override
+  String get year => 'Year';
+
+  @override
+  String get pending => 'Pending';
+
+  @override
+  String get approved => 'Approved';
+
+  @override
+  String get paymentDetails => 'Payment Details';
+
+  @override
+  String get paymentFor => 'Payment for';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get amount => 'Amount';
+
+  @override
+  String get receipt => 'Payment Receipt';
+
+  @override
+  String get received => 'Received';
+
+  @override
+  String get paymentDetail => 'Payment Details';
 
   @override
   String get accessRequests => 'Solicitudes de Acceso';
@@ -154,6 +195,26 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get communityPolls => 'Encuestas Comunitarias';
+
+  @override
+  String pollEndsAt(String when) {
+    return 'Termina $when';
+  }
+
+  @override
+  String get pollVote => 'Votar';
+
+  @override
+  String get pollAlreadyVoted => 'Ya votaste';
+
+  @override
+  String get pollEnded => 'Esta encuesta ha terminado';
+
+  @override
+  String get pollVoteFailed => 'No se pudo enviar el voto';
+
+  @override
+  String get pollSelectOption => 'Selecciona una opción';
 
   @override
   String get guards => 'Guardias';
@@ -372,4 +433,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get month => 'Month';
+
+  @override
+  String get automaticVisitorCode => 'Visitor Code';
+
+  @override
+  String get generateAccessCode => 'Generate Access Code';
 }

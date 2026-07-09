@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/core/helpers/bottom_sheet_helper.dart';
 import 'package:portalixmx_app/core/models/access_model.dart';
+import 'package:portalixmx_app/core/models/society_model.dart';
+import 'package:portalixmx_app/core/models/user_model.dart';
 import 'package:portalixmx_app/presentation/bottomsheets/request_for_access_sheet.dart';
 import 'package:portalixmx_app/presentation/screens/main_menu/main_menu.dart';
 import 'package:portalixmx_app/services/access_requests_service/access_request_service.dart';
+import 'package:portalixmx_app/services/user_service/user_service.dart';
 import '../core/models/access_request_model.dart';
 
 class RequestAccessProvider extends ChangeNotifier {
@@ -37,7 +40,11 @@ class RequestAccessProvider extends ChangeNotifier {
       AccessModel accessModel = result['requestedAccess'];
 
       try{
-      AccessRequestModel accessRequest =  await _requestsService.createRequest(date: date, time: time, access: accessModel);
+        UserModel? user = await UserService.instance.getCurrentUser();
+        if(user  == null) return;
+
+        SocietyModel? society = await UserService.instance.getSocietyByID(societyID: user.societyID ?? '');
+      AccessRequestModel accessRequest =  await _requestsService.createRequest(date: date, time: time, access: accessModel, society: society!,);
       _allAccessRequests.add(accessRequest);
       }catch(e){
         debugPrint("Exception while creating access request");
@@ -47,14 +54,19 @@ class RequestAccessProvider extends ChangeNotifier {
     }
   }
 
-  void _initRequests() async {
+  Future<void> _initRequests() async {
     try {
       _allAccessRequests = await _requestsService.getAllRequests();
-      _filteredAccessRequests.addAll(_allAccessRequests);
+      _filteredAccessRequests = List<AccessRequestModel>.from(_allAccessRequests);
       notifyListeners();
     } catch (e) {
       debugPrint('RequestAccessProvider: failed to fetch access items: $e');
     }
+  }
+
+  Future<void> refreshRequests() async {
+    await _initRequests();
+    onFilterUpdated(_selectedFilter);
   }
 
   void onFilterUpdated(dynamic val){

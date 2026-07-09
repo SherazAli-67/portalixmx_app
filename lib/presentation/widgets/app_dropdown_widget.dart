@@ -32,13 +32,13 @@ class AppDropdownWidget<T> extends StatelessWidget {
           foregroundDecoration: !isResident
               ? BoxDecoration(
             color: AppColors.fillColorGrey,
-            borderRadius: .circular(99),
+            borderRadius: .circular(8),
           )
               : null,
           padding: const .symmetric(horizontal: 15),
           decoration: BoxDecoration(
               color: AppColors.fillColorGrey,
-              borderRadius: .circular(99)),
+              borderRadius: .circular(8)),
           child: DropdownButton<dynamic>(
             value: value,
             isExpanded: true,

@@ -2,7 +2,10 @@ import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portalixmx_app/core/models/society_model.dart';
+import 'package:portalixmx_app/core/validators/validators.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/presentation/widgets/app_dropdown_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/common_ui.dart';
@@ -29,6 +32,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final TextEditingController _passwordController = .new();
   late AuthenticationProvider _provider;
 
+  final _formKey = GlobalKey<FormState>();
   @override
   void dispose() {
     _emailController.dispose();
@@ -52,47 +56,52 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             Expanded(
               child: SingleChildScrollView(
                 padding: .only(top: 16),
-                child: Column(
-                  crossAxisAlignment: .start,
-                  spacing: 16,
-                  children: [
-                    Align(
-                      alignment: .center,
-                      child: GestureDetector(
-                        onTap: _provider.onPickImageTap,
-                        child: Stack(
-                          children: [
-                            CircleAvatar(
-                                radius: 41,
-                                backgroundColor: Colors.white,
-                                child: CircleAvatar(
-                                  radius: 40,
-                                  backgroundImage: _provider.pickedImage != null
-                                      ? FileImage(File(_provider.pickedImage!.path))
-                                      : null,
-                                  // backgroundImage: AssetImage(AppIcons.icSplashLogo),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: .start,
+                    spacing: 16,
+                    children: [
+                      Align(
+                        alignment: .center,
+                        child: GestureDetector(
+                          onTap: _provider.onPickImageTap,
+                          child: Stack(
+                            children: [
+                              CircleAvatar(
+                                  radius: 41,
+                                  backgroundColor: Colors.white,
+                                  child: CircleAvatar(
+                                    radius: 40,
+                                    backgroundImage: _provider.pickedImage != null
+                                        ? FileImage(File(_provider.pickedImage!.path))
+                                        : null,
+                                    // backgroundImage: AssetImage(AppIcons.icSplashLogo),
+                                  ),
                                 ),
-                              ),
-                            Positioned(
-                              bottom: 0,
-                              right: 2,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    shape: .circle,
-                                    color: AppColors.btnColor
+                              Positioned(
+                                bottom: 0,
+                                right: 2,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      shape: .circle,
+                                      color: AppColors.btnColor
+                                  ),
+                                  padding: .all(5),
+                                  child: Icon(Icons.edit, color: Colors.white, size: 18,),
                                 ),
-                                padding: .all(5),
-                                child: Icon(Icons.edit, color: Colors.white, size: 18,),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    AppTextField(title: localization.name, controller: _nameController, hintText: localization.name,),
-                    AppTextField(title: localization.email, controller: _emailController, hintText: localization.email,textInputType: TextInputType.emailAddress,),
-                    AppTextField(title: localization.password, controller: _passwordController, hintText: localization.password, isPassword: true,),
-                  ],
+                      AppTextField(title: localization.name, controller: _nameController, hintText: localization.name,validator: Validators.validateFullName,),
+                      AppTextField(title: localization.email, controller: _emailController, hintText: localization.email,textInputType: TextInputType.emailAddress, validator: Validators.validateEmail,),
+                      AppTextField(title: localization.password, controller: _passwordController, hintText: localization.password, isPassword: true, validator: Validators.validatePassword,),
+                      AppDropdownWidget<SocietyModel>(title: localization.selectSociety, list: _provider.societies, value: _provider.selectedSociety, onChanged: (val)=> _provider.onSelectSocietyTap(val), getTitle: (item) => item.name)
+
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -120,15 +129,19 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
 
   void _onSignupTap() async {
-    String name = _nameController.text.trim();
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-
-    String? isError = await _provider.onCreateAccountTap(name: name, email: email, password: password);
-    if(isError != null){
-      CommonUI.showSnackBarMessage(context, isError: true, message: isError, title: "Signup failed");
-    }else{
-      context.push(NamedRoutes.completeProfile.routeName);
+    if(_formKey.currentState?.validate() ?? false){
+      String name = _nameController.text.trim();
+      String email = _emailController.text.trim();
+      String password = _passwordController.text.trim();
+      String? isError = await _provider.onCreateAccountTap(name: name, email: email, password: password);
+      if (!mounted) return;
+      if(isError != null){
+        CommonUI.showSnackBarMessage(context, isError: true, message: isError, title: "Signup failed");
+      }else{
+        if (!mounted) return;
+        if(mounted)
+          context.push(NamedRoutes.completeProfile.routeName);
+      }
     }
   }
 }

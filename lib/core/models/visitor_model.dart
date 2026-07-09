@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-/// Vehicle information model
 class VehicleInfo {
   final String plateNumber;
   final String model;
@@ -42,27 +41,29 @@ class VehicleInfo {
   }
 }
 
-/// Base visitor class with common fields
 abstract class BaseVisitor {
   final String id;
+  // final String code;
   final String name;
   final String contact;
   final String visitorType;
+  final String? accessFor;
   final VehicleInfo vehicleInfo;
   final DateTime createdAt;
   final DateTime updatedAt;
 
   BaseVisitor({
     required this.id,
+    // required this.code,
     required this.name,
     required this.contact,
     required this.visitorType,
+    this.accessFor,
     required this.vehicleInfo,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  /// Factory constructor to create appropriate subclass based on visitorType
   factory BaseVisitor.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     final type = data['visitorType'] as String;
@@ -76,39 +77,39 @@ abstract class BaseVisitor {
     }
   }
 
-  /// Convert to Firestore document
   Map<String, dynamic> toFirestore();
 
-  /// Copy with method for updates
   BaseVisitor copyWith();
 }
 
-/// Guest visitor with time-bound visit
 class GuestVisitor extends BaseVisitor {
   final DateTime fromDateTime;
   final DateTime toDateTime;
 
   GuestVisitor({
     required super.id,
+    // required super.code,
     required super.name,
     required super.contact,
     required super.vehicleInfo,
+    super.accessFor,
     required super.createdAt,
     required super.updatedAt,
     required this.fromDateTime,
     required this.toDateTime,
   }) : super(visitorType: 'guest');
 
-  /// Calculate visit duration
   Duration get duration => toDateTime.difference(fromDateTime);
 
   factory GuestVisitor.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return GuestVisitor(
       id: doc.id,
+      // code: data['code']?.toString() ?? '',
       name: data['name'] ?? '',
       contact: data['contact'] ?? '',
       vehicleInfo: VehicleInfo.fromMap(data['vehicleInfo'] ?? {}),
+      accessFor: data['accessFor'],
       fromDateTime: (data['fromDateTime'] as Timestamp).toDate(),
       toDateTime: (data['toDateTime'] as Timestamp).toDate(),
       createdAt: (data['createdAt'] as Timestamp).toDate(),
@@ -119,10 +120,12 @@ class GuestVisitor extends BaseVisitor {
   @override
   Map<String, dynamic> toFirestore() {
     return {
+      // 'code': code,
       'name': name,
       'contact': contact,
       'visitorType': visitorType,
       'vehicleInfo': vehicleInfo.toMap(),
+      'accessFor' : accessFor,
       'fromDateTime': Timestamp.fromDate(fromDateTime),
       'toDateTime': Timestamp.fromDate(toDateTime),
       'createdAt': Timestamp.fromDate(createdAt),
@@ -133,8 +136,10 @@ class GuestVisitor extends BaseVisitor {
   @override
   GuestVisitor copyWith({
     String? id,
+    String? code,
     String? name,
     String? contact,
+    String? accessFor,
     VehicleInfo? vehicleInfo,
     DateTime? fromDateTime,
     DateTime? toDateTime,
@@ -143,8 +148,10 @@ class GuestVisitor extends BaseVisitor {
   }) {
     return GuestVisitor(
       id: id ?? this.id,
+      // code: code ?? this.code,
       name: name ?? this.name,
       contact: contact ?? this.contact,
+      accessFor: accessFor ?? this.accessFor,
       vehicleInfo: vehicleInfo ?? this.vehicleInfo,
       fromDateTime: fromDateTime ?? this.fromDateTime,
       toDateTime: toDateTime ?? this.toDateTime,
@@ -154,15 +161,16 @@ class GuestVisitor extends BaseVisitor {
   }
 }
 
-/// Regular visitor with weekly schedule
 class RegularVisitor extends BaseVisitor {
   final Map<String, VisitorSchedule?> schedule;
 
   RegularVisitor({
     required super.id,
+    // required super.code,
     required super.name,
     required super.contact,
     required super.vehicleInfo,
+    super.accessFor,
     required super.createdAt,
     required super.updatedAt,
     required this.schedule,
@@ -185,8 +193,10 @@ class RegularVisitor extends BaseVisitor {
 
     return RegularVisitor(
       id: doc.id,
+      // code: data['code']?.toString() ?? '',
       name: data['name'] ?? '',
       contact: data['contact'] ?? '',
+      accessFor: data['accessFor'],
       vehicleInfo: VehicleInfo.fromMap(data['vehicleInfo'] ?? {}),
       schedule: schedule,
       createdAt: (data['createdAt'] as Timestamp).toDate(),
@@ -202,9 +212,11 @@ class RegularVisitor extends BaseVisitor {
     });
 
     return {
+      // 'code': code,
       'name': name,
       'contact': contact,
       'visitorType': visitorType,
+      'accessFor' :  accessFor,
       'vehicleInfo': vehicleInfo.toMap(),
       'schedule': scheduleMap,
       'createdAt': Timestamp.fromDate(createdAt),
@@ -215,8 +227,10 @@ class RegularVisitor extends BaseVisitor {
   @override
   RegularVisitor copyWith({
     String? id,
+    String? code,
     String? name,
     String? contact,
+    String? accessFor,
     VehicleInfo? vehicleInfo,
     Map<String, VisitorSchedule?>? schedule,
     DateTime? createdAt,
@@ -224,8 +238,10 @@ class RegularVisitor extends BaseVisitor {
   }) {
     return RegularVisitor(
       id: id ?? this.id,
+      // code: code ?? this.code,
       name: name ?? this.name,
       contact: contact ?? this.contact,
+      accessFor: accessFor ?? this.accessFor,
       vehicleInfo: vehicleInfo ?? this.vehicleInfo,
       schedule: schedule ?? this.schedule,
       createdAt: createdAt ?? this.createdAt,
@@ -234,7 +250,6 @@ class RegularVisitor extends BaseVisitor {
   }
 }
 
-/// Schedule for a specific day
 class VisitorSchedule {
   final TimeOfDay startTime;
   final TimeOfDay endTime;

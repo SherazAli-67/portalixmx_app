@@ -1,7 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portalixmx_app/core/models/community_event_model.dart';
+import 'package:portalixmx_app/core/models/community_poll_model.dart';
+import 'package:portalixmx_app/core/models/payment_model.dart';
+import 'package:portalixmx_app/core/models/user_model.dart';
+import 'package:portalixmx_app/presentation/screens/payment_detail/payment_detail_page.dart';
+import 'package:portalixmx_app/presentation/screens/preview_image/preview_image_screen.dart';
+import 'package:portalixmx_app/router/go_router_refresh.dart';
+import 'package:portalixmx_app/services/auth_service/auth_service.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
+import 'package:portalixmx_app/presentation/screens/account_pending/account_pending_page.dart';
 import '../core/models/access_request_model.dart';
 import '../core/models/complaints_model.dart';
 import '../presentation/screens/authentication/create_account_page.dart';
@@ -18,8 +27,8 @@ import '../presentation/screens/main_menu/maintenance/maintenance_page.dart';
 import '../presentation/screens/main_menu/payments_menu.dart';
 import '../presentation/screens/main_menu/profile_menu/community_calendar.dart';
 import '../presentation/screens/main_menu/profile_menu/community_detail_page.dart';
-import '../presentation/screens/main_menu/profile_menu/community_polls_detail_page.dart';
-import '../presentation/screens/main_menu/profile_menu/community_polls_page.dart';
+import '../presentation/screens/community_polls/community_polls_detail_page.dart';
+import '../presentation/screens/community_polls/community_polls_page.dart';
 import '../presentation/screens/main_menu/profile_menu/directory_detail_page.dart';
 import '../presentation/screens/main_menu/profile_menu/directory_page.dart';
 import '../presentation/screens/main_menu/profile_menu/edit_profile_page.dart';
@@ -29,11 +38,16 @@ import '../presentation/screens/main_menu/profile_menu/profile_guards_page.dart'
 import '../presentation/screens/main_menu/profile_menu/profile_page.dart';
 import '../presentation/screens/main_menu/main_menu.dart';
 
+final _authRefreshListenable =
+    GoRouterRefreshStream(FirebaseAuth.instance.authStateChanges());
 
 GoRouter appRouter = GoRouter(
+  refreshListenable: _authRefreshListenable,
   initialLocation: NamedRoutes.createAccount.routeName,
   routes: [
     GoRoute(path: NamedRoutes.createAccount.routeName, builder: (ctx, state)=> CreateAccountPage()),
+    GoRoute(path: NamedRoutes.accountPending.routeName, builder: (ctx, state)=> const PendingRequestPage()),
+
     GoRoute(path: NamedRoutes.completeProfile.routeName, builder: (ctx, state)=> CompleteProfileScreen()),
     GoRoute(path: NamedRoutes.login.routeName, builder: (ctx, state)=> LoginPage()),
       GoRoute(path: NamedRoutes.forgetPassword.routeName, builder: (ctx, state)=> ForgetPasswordPage()),
@@ -61,6 +75,8 @@ GoRouter appRouter = GoRouter(
       GoRoute(path: NamedRoutes.guestDetail.routeName, builder: (ctx, state){
         return GuestDetailPage(visitor: state.extra as BaseVisitor);
       }),
+    GoRoute(path: NamedRoutes.paymentDetail.routeName, builder: (ctx, state)=> PaymentDetailPage(payment: state.extra as PaymentModel)),
+
     GoRoute(path: NamedRoutes.accessRequestDetail.routeName, builder: (ctx, state)=> AccessSummaryPage(access: state.extra as AccessRequestModel)),
     GoRoute(path: NamedRoutes.complaintSummary.routeName, builder: (ctx, state)=> ComplaintSummaryPage(complaint: state.extra as ComplaintModel,)),
       GoRoute(path: NamedRoutes.editProfile.routeName, builder: (ctx, state)=> EditProfilePage()),
@@ -68,10 +84,10 @@ GoRouter appRouter = GoRouter(
     GoRoute(path: NamedRoutes.directoryDetail.routeName, builder: (ctx, state)=> DirectoryDetailPage()),
 
     GoRoute(path: NamedRoutes.communityCalendar.routeName, builder: (ctx, state)=> CommunityCalendarPage()),
-    GoRoute(path: NamedRoutes.communityCalendarDetail.routeName, builder: (ctx, state)=> CommunityDetailPage()),
+    GoRoute(path: NamedRoutes.communityCalendarDetail.routeName, builder: (ctx, state)=> CommunityDetailPage(event: state.extra as CommunityEventModel,)),
 
     GoRoute(path: NamedRoutes.communityPolls.routeName, builder: (ctx, state)=> CommunityPollsPage()),
-    GoRoute(path: NamedRoutes.communityPollsDetail.routeName, builder: (ctx, state)=> CommunityPollsDetailPage()),
+    GoRoute(path: NamedRoutes.communityPollsDetail.routeName, builder: (ctx, state)=> CommunityPollsDetailPage(poll: state.extra as CommunityPollModel,)),
 
     GoRoute(path: NamedRoutes.profileGuard.routeName, builder: (ctx, state)=> ProfileGuardsPage()),
 
@@ -81,22 +97,54 @@ GoRouter appRouter = GoRouter(
 
     GoRoute(path: NamedRoutes.privacyPolicy.routeName, builder: (ctx, state)=> Center(child: Text("Privacy Policy Page"),)),
     GoRoute(path: NamedRoutes.verifyOtp.routeName, builder: (ctx, state)=> VerifyOTPPage()),
+    GoRoute(path: NamedRoutes.previewImage.routeName, builder: (ctx, state){
+      final map = state.extra as Map<String, dynamic>;
+      return PreviewImageScreen(title: map['title'] as String, imageUrl:  map['imageUrl'],);
+    }),
 
   ],
-  redirect: (BuildContext context, GoRouterState state) {
-    final isAuthenticated = FirebaseAuth.instance.currentUser != null;
-    final isOnLoginPage = state.matchedLocation == NamedRoutes.login.routeName;
-    final isOnSignupPage = state.matchedLocation == NamedRoutes.createAccount.routeName;
-    final isOnForgetPasswordPage = state.matchedLocation == NamedRoutes.forgetPassword.routeName;
-    final isOnCompleteProfilePage = state.matchedLocation == NamedRoutes.completeProfile.routeName;
-    // final isOnVerifyOtpProfilePage = state.matchedLocation == NamedRoutes.verifyOtp.routeName;
+  redirect: (BuildContext context, GoRouterState state) async {
+    final loc = state.matchedLocation;
+    final isOnLoginPage = loc == NamedRoutes.login.routeName;
+    final isOnSignupPage = loc == NamedRoutes.createAccount.routeName;
+    final isOnForgetPasswordPage = loc == NamedRoutes.forgetPassword.routeName;
+    final isOnCompleteProfilePage = loc == NamedRoutes.completeProfile.routeName;
+    final isOnAccountPendingPage = loc == NamedRoutes.accountPending.routeName;
 
-    if (isAuthenticated && (isOnLoginPage || isOnSignupPage)) {
-      return NamedRoutes.home.routeName;
+    final firebaseUser = FirebaseAuth.instance.currentUser;
+    if (firebaseUser == null) {
+      if (!isOnSignupPage &&
+          !isOnLoginPage &&
+          !isOnForgetPasswordPage &&
+          !isOnCompleteProfilePage) {
+        return NamedRoutes.createAccount.routeName;
+      }
+      return null;
     }
 
-    if (!isAuthenticated && !isOnSignupPage && !isOnLoginPage && !isOnForgetPasswordPage && !isOnCompleteProfilePage) {
-      return NamedRoutes.createAccount.routeName;
+    UserModel? profile;
+    try {
+      profile = await AuthService.instance.getCurrentUser();
+    } catch (_) {
+      return null;
+    }
+
+    if (profile == null) {
+      if (!isOnCompleteProfilePage) {
+        return NamedRoutes.completeProfile.routeName;
+      }
+      return null;
+    }
+
+   /* if (profile.status == UserStatus.pending) {
+      if (isOnAccountPendingPage || isOnCompleteProfilePage) {
+        return null;
+      }
+      return NamedRoutes.accountPending.routeName;
+    }*/
+
+    if (isOnAccountPendingPage || isOnLoginPage || isOnSignupPage) {
+      return NamedRoutes.home.routeName;
     }
 
     return null;
@@ -128,7 +176,10 @@ enum NamedRoutes {
   emergencyCalls('/emergency-calls'),
   privacyPolicy('/privacy-policy'),
   completeProfile('/complete-profile'),
-  verifyOtp('/verify-otp')
+  verifyOtp('/verify-otp'),
+  accountPending('/account-pending'),
+  paymentDetail('/payment-details'),
+  previewImage('/preview-image')
   ;
   final String routeName;
   const NamedRoutes(this.routeName);

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:portalixmx_app/core/res/firebase_constant.dart';
+import '../../core/models/society_model.dart';
 import '../../core/models/user_model.dart';
 
 class UserService {
@@ -29,6 +30,20 @@ class UserService {
        return null;
     } catch (e) {
       throw 'Failed to get user: $e';
+    }
+  }
+
+  Future<SocietyModel?> getSocietyByID({required String societyID}) async {
+    try{
+      UserModel? user = await getCurrentUser();
+      if(user == null) throw Exception('User not found');
+      QuerySnapshot docSnap = await _firestore.collection(FirebaseConst.societiesCol).where('id', isEqualTo: societyID).get();
+      if(docSnap.docs.isNotEmpty){
+        return SocietyModel.fromMap(docSnap.docs.first.data() as Map<String, dynamic>);
+      }
+      return null;
+    } catch (e) {
+      throw 'Failed to get society: $e';
     }
   }
 }

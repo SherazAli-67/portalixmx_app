@@ -31,11 +31,12 @@ class AddUpdateGuestBottomSheet extends StatefulWidget{
 }
 
 class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _contactNumberController = TextEditingController();
-  final TextEditingController _carPlatNumberController = TextEditingController();
-  final TextEditingController _vehicleModelController = TextEditingController();
-  final TextEditingController _colorController = TextEditingController();
+  final TextEditingController _nameController = .new();
+  final TextEditingController _contactNumberController = .new();
+  final TextEditingController _accessFor = .new();
+  final TextEditingController _carPlatNumberController = .new();
+  final TextEditingController _vehicleModelController = .new();
+  final TextEditingController _colorController = .new();
 
   List<String> _guestTypes = [];
   int selectedGuestTypeIndex = 1;
@@ -54,16 +55,15 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
     if (widget.visitor != null) {
       final visitor = widget.visitor!;
       
-      // Determine visitor type
       if (visitor is GuestVisitor) {
         selectedGuestTypeIndex = 1; // Guest
         _nameController.text = visitor.name;
         _contactNumberController.text = visitor.contact;
+        _accessFor.text = visitor.accessFor ?? '';
         _carPlatNumberController.text = visitor.vehicleInfo.plateNumber;
         _vehicleModelController.text = visitor.vehicleInfo.model;
         _colorController.text = visitor.vehicleInfo.color;
         
-        // Set date and time
         _selectedFromDateTime = visitor.fromDateTime;
         _selectedToDateTime = visitor.toDateTime;
         _selectedFromTime = TimeOfDay.fromDateTime(visitor.fromDateTime);
@@ -72,11 +72,11 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
         selectedGuestTypeIndex = 0; // Regular Visitor
         _nameController.text = visitor.name;
         _contactNumberController.text = visitor.contact;
+        _accessFor.text = visitor.accessFor ?? '';
         _carPlatNumberController.text = visitor.vehicleInfo.plateNumber;
         _vehicleModelController.text = visitor.vehicleInfo.model;
         _colorController.text = visitor.vehicleInfo.color;
         
-        // Set schedule
         final days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
         for (int i = 0; i < days.length; i++) {
           final schedule = visitor.schedule[days[i]];
@@ -101,6 +101,7 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
   void dispose() {
     _nameController.dispose();
     _contactNumberController.dispose();
+    _accessFor.dispose();
     _carPlatNumberController.dispose();
     _vehicleModelController.dispose();
     _colorController.dispose();
@@ -139,6 +140,11 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
               hintTextColor: AppColors.hintTextColor,
               borderColor: AppColors.borderColor,
               textInputType: .numberWithOptions(),),
+            AppTextField(controller: _accessFor,
+              hintText: localization.accessFor,
+              fillColor: AppColors.fillColorGrey,
+              hintTextColor: AppColors.hintTextColor,
+              borderColor: AppColors.borderColor,),
             AppTextField(controller: _carPlatNumberController, hintText: localization.carPlateNumber, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
             AppTextField(controller: _vehicleModelController, hintText: localization.vehicleModel, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
             AppTextField(controller: _colorController, hintText: localization.color, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
@@ -287,11 +293,11 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
     
     try {
       final provider = context.read<HomeProvider>();
-      
+
       final BaseVisitor newVisitor = selectedGuestTypeIndex == 1
           ? _createGuestVisitor()
           : _createRegularVisitor();
-      
+
       bool success;
       if (widget.isEdit) {
         success = await provider.updateVisitor(widget.visitor!.id, newVisitor);
@@ -387,11 +393,13 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
     final now = DateTime.now();
     final fromDateTime = _combineDateTime(_selectedFromDateTime!, _selectedFromTime!);
     final toDateTime = _combineDateTime(_selectedToDateTime!, _selectedToTime!);
-    
+
     return GuestVisitor(
       id: widget.visitor?.id ?? '',
+      // code: code,
       name: _nameController.text.trim(),
       contact: _contactNumberController.text.trim(),
+      accessFor: _accessFor.text.trim().isEmpty ? null : _accessFor.text.trim(),
       vehicleInfo: VehicleInfo(
         plateNumber: _carPlatNumberController.text.trim(),
         model: _vehicleModelController.text.trim(),
@@ -408,7 +416,7 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
     final now = DateTime.now();
     final days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     final schedule = <String, VisitorSchedule?>{};
-    
+
     for (int i = 0; i < days.length; i++) {
       final dayTime = _regularVisitorTime[i];
       if (dayTime.time != null && dayTime.endTime != null) {
@@ -420,11 +428,13 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
         schedule[days[i]] = null;
       }
     }
-    
+
     return RegularVisitor(
       id: widget.visitor?.id ?? '',
+      // code: code,
       name: _nameController.text.trim(),
       contact: _contactNumberController.text.trim(),
+      accessFor: _accessFor.text.trim().isEmpty ? null : _accessFor.text.trim(),
       vehicleInfo: VehicleInfo(
         plateNumber: _carPlatNumberController.text.trim(),
         model: _vehicleModelController.text.trim(),
@@ -448,7 +458,6 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
 
   String getFormattedTime(DayTimeModel time) {
     return jsonEncode(time.toJson());
-    // return '${time.time!.hour}:${time.time!.minute} - ${time.endTime!.hour}:${time.endTime!.minute}';
   }
 }
 

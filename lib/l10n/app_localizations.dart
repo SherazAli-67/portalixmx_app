@@ -134,6 +134,18 @@ abstract class AppLocalizations {
   /// **'Forget your password'**
   String get forgetPassword;
 
+  /// No description provided for @selectSociety.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Society'**
+  String get selectSociety;
+
+  /// No description provided for @accountRequestPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Your admin request for {societyName} is pending. You will be notified as the admin update your request'**
+  String accountRequestPending(Object societyName);
+
   /// No description provided for @welcomeMessage.
   ///
   /// In en, this message translates to:
@@ -151,6 +163,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Guest'**
   String get guest;
+
+  /// No description provided for @year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get year;
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pending;
+
+  /// No description provided for @approved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get approved;
+
+  /// No description provided for @paymentDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Details'**
+  String get paymentDetails;
+
+  /// No description provided for @paymentFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment for'**
+  String get paymentFor;
+
+  /// No description provided for @status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get status;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get amount;
+
+  /// No description provided for @receipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Receipt'**
+  String get receipt;
+
+  /// No description provided for @received.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get received;
+
+  /// No description provided for @paymentDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Details'**
+  String get paymentDetail;
 
   /// No description provided for @accessRequests.
   ///
@@ -385,6 +463,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Community Polls'**
   String get communityPolls;
+
+  /// No description provided for @pollEndsAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends {when}'**
+  String pollEndsAt(String when);
+
+  /// No description provided for @pollVote.
+  ///
+  /// In en, this message translates to:
+  /// **'Vote'**
+  String get pollVote;
+
+  /// No description provided for @pollAlreadyVoted.
+  ///
+  /// In en, this message translates to:
+  /// **'You have already voted'**
+  String get pollAlreadyVoted;
+
+  /// No description provided for @pollEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'This poll has ended'**
+  String get pollEnded;
+
+  /// No description provided for @pollVoteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not submit vote'**
+  String get pollVoteFailed;
+
+  /// No description provided for @pollSelectOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select an option'**
+  String get pollSelectOption;
 
   /// No description provided for @guards.
   ///
@@ -781,6 +895,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Month'**
   String get month;
+
+  /// No description provided for @automaticVisitorCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Visitor Code'**
+  String get automaticVisitorCode;
+
+  /// No description provided for @generateAccessCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate Access Code'**
+  String get generateAccessCode;
 }
 
 class _AppLocalizationsDelegate

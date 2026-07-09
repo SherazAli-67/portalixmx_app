@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:portalixmx_app/services/auth_service/auth_service.dart';
 import 'package:portalixmx_app/services/profile_service/profile_service.dart';
 import '../core/models/user_model.dart';
 
@@ -50,10 +51,15 @@ class ProfileProvider extends ChangeNotifier{
       notifyListeners();
       try{
         //Profile image will be added later
+        String? imageUrl = user!.profileImg;
+        if(_pickedImage != null){
+          imageUrl = await AuthService.instance.updateProfilePicture(_pickedImage!);
+        }
         final updatedUser = user!.copyWith(
           userName: name,
           phoneNum: phoneNum.isNotEmpty ? phoneNum : null,
           vehicleInformation: user!.vehicleInformation!.copyWith(name: vehicleName, color: color, licensePlateNumber: licensePlateNum, registrationNumber: registrationNum),
+          profileImg: imageUrl
         );
         _user = updatedUser;
         notifyListeners();

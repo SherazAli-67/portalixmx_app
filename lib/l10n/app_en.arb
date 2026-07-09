@@ -6,9 +6,22 @@
   "password" : "Password",
    "login" : "Login",
    "forgetPassword" : "Forget your password",
+   "selectSociety" : "Select Society",
+   "accountRequestPending" : "Your admin request for {societyName} is pending. You will be notified as the admin update your request",
   "welcomeMessage": "Welcome {name}",
   "regularVisitors": "Regular Visitors",
   "guest": "Guest",
+  "year": "Year",
+  "pending" : "Pending",
+  "approved" : "Approved",
+  "paymentDetails" : "Payment Details",
+  "paymentFor" : "Payment for",
+  "status" : "Status",
+  "description" : "Description",
+  "amount" : "Amount",
+  "receipt" : "Payment Receipt",
+  "received" :"Received",
+  "paymentDetail" : "Payment Details",
   "accessRequests": "Access Requests",
   "poolAccess": "Pool Access",
   "add": "Add",
@@ -50,6 +63,19 @@
   "directory" : "Directory",
   "communityCalendar" : "Community Calendar",
   "communityPolls" : "Community Polls",
+  "pollEndsAt": "Ends {when}",
+  "@pollEndsAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "pollVote": "Vote",
+  "pollAlreadyVoted": "You have already voted",
+  "pollEnded": "This poll has ended",
+  "pollVoteFailed": "Could not submit vote",
+  "pollSelectOption": "Please select an option",
   "guards" : "Guards",
   "carPooling" : "Car Pooling",
   "emergencyCalls" : "Emergency Calls",
@@ -120,5 +146,7 @@
   "error" : "Error",
   "all" : "All",
   "week" : "Week",
-  "month" : "Month"
+  "month" : "Month",
+  "automaticVisitorCode" : "Visitor Code",
+  "generateAccessCode" : "Generate Access Code"
 }

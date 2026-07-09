@@ -6,16 +6,17 @@ import 'loading_widget.dart';
 class PrimaryBtn extends StatelessWidget{
   final VoidCallback onTap;
   final String btnText;
-  final Color color;
+  final Color bgColor;
   final bool isLoading;
-  const PrimaryBtn({super.key, required this.onTap, required this.btnText, this.color = AppColors.btnColorDark, this.isLoading = false});
+  final Color? textColor;
+  const PrimaryBtn({super.key, required this.onTap, required this.btnText, this.bgColor = AppColors.btnColorDark, this.textColor, this.isLoading = false});
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: color
+            backgroundColor: bgColor
         ),
-        onPressed: onTap, child: isLoading ? LoadingWidget() : Text(btnText,style: AppTextStyles.btnTextStyle,));
+        onPressed: onTap, child: isLoading ? LoadingWidget() : Text(btnText,style: AppTextStyles.btnTextStyle.copyWith(color: textColor),));
   }
 
 }

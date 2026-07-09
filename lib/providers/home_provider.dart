@@ -1,10 +1,12 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:portalixmx_app/core/models/user_model.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
 import 'package:portalixmx_app/presentation/bottomsheets/add_update_guest_bottomsheet.dart';
 import 'package:portalixmx_app/presentation/bottomsheets/directory_guests_sheet.dart';
+import 'package:portalixmx_app/presentation/dialogs/access_code_generated_dialog.dart';
 import 'package:portalixmx_app/services/user_service/user_service.dart';
 import 'package:portalixmx_app/services/visitor_service/visitor_service.dart';
+import 'package:share_plus/share_plus.dart';
 import '../core/helpers/bottom_sheet_helper.dart';
 import '../presentation/screens/main_menu/main_menu.dart';
 
@@ -27,6 +29,7 @@ class HomeProvider extends ChangeNotifier {
   List<RegularVisitor> get regularVisitors => _visitors.whereType<RegularVisitor>().toList();
   int get selectedTab => _selectedTab;
 
+  bool loading = false;
   HomeProvider() {
     _initVisitorsAndGuests();
     _initDirectoryGuests();
@@ -41,7 +44,7 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
-  void _initVisitorsAndGuests() async {
+  Future<void> _initVisitorsAndGuests() async {
     try {
       loadingVisitors = true;
       notifyListeners();
@@ -63,7 +66,7 @@ class HomeProvider extends ChangeNotifier {
   }
 
 
-  void _initDirectoryGuests() async {
+  Future<void> _initDirectoryGuests() async {
     try {
       loadingDirectoryGuests = true;
       notifyListeners();
@@ -201,6 +204,13 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> refreshVisitorsAndGuests() async {
+    await Future.wait([
+      _initVisitorsAndGuests(),
+      _initDirectoryGuests(),
+    ]);
+  }
+
   Future<bool> addVisitorToDirectory(BaseVisitor newVisitor) async {
     try {
 
@@ -221,4 +231,70 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> generateAccessCode(BuildContext context) async{
+
+    loading = true;
+    notifyListeners();
+    final user = await getCurrentUser();
+    if (user == null) throw Exception('User not found');
+    try{
+      String code =  await _visitorService.generateUniqueVisitorCode(user.userID,);
+      loading = false;
+      notifyListeners();
+      _showDialog(context, code: code);
+    }catch(e){
+      loading = false;
+      notifyListeners();
+      throw Exception(e.toString());
+    }
+  }
+
+  void _showDialog(BuildContext context, {required String code})async{
+    final result = await showDialog(
+        barrierDismissible: false,
+        context: context, builder: (ctx){
+      return Dialog(
+        insetPadding: .symmetric(horizontal: 20),
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: .circular(12)),
+        child: AccessCodeGeneratedDialog(accessCode: code,),
+      );
+    });
+    if(result != null){
+      loading = true;
+      notifyListeners();
+      try{
+        final user = await getCurrentUser();
+        if(user == null) throw Exception("User not found");
+
+        if(result['qrCodeImagePath'] != null){
+         await _shareAccessCodeQR(imagePath: result['qrCodeImagePath'], userName: user.userName);
+        }else if(result['code'] != null){
+          debugPrint("Code: ${result['code']}");
+          await _shareNumericCode(code: result['code'], userName: user.userName);
+        }else if(result['changeCode']){
+          generateAccessCode(context);
+        }
+        loading = false;
+        notifyListeners();
+      }catch(e){
+        loading = false;
+        notifyListeners();
+        throw Exception("Failed to share QR Code: ${e.toString()}");
+      }
+    }
+  }
+
+  Future<void> _shareAccessCodeQR({required String imagePath, required String userName}) async{
+    await SharePlus.instance.share(ShareParams(
+      files: [XFile(imagePath)],
+      text: "Access Code from, $userName",
+    ));
+  }
+
+  Future<void> _shareNumericCode({required code, required String userName}) async {
+    await SharePlus.instance.share(ShareParams(
+      text: "Access Code\n$code\n from, $userName",
+    ));
+  }
 }

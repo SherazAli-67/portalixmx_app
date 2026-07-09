@@ -44,34 +44,40 @@ class MaintenanceMenu extends StatelessWidget{
                     })
                   ),
                   Expanded(
-                      child: provider.loadingComplaints ? LoadingWidget() : ListView.builder(
-                          itemCount: provider.filteredComplaints.length,
-                          itemBuilder: (ctx, index){
-                            ComplaintModel complaint = provider.filteredComplaints[index];
-                            return Card(
-                              margin: .only(bottom: 10),
-                              child: ListTile(
-                                onTap: ()=> context.push(NamedRoutes.complaintSummary.routeName, extra: complaint),
-                                contentPadding: .only(left: 15),
-                                title: Text(complaint.complaint, style: AppTextStyles.tileTitleTextStyle),
-                                subtitle: Text(DateTimeFormatHelpers.formatDateTime(complaint.createdAt), style: AppTextStyles.tileSubtitleTextStyle,),
-                                trailing: PopupMenuButton(
-                                    elevation: 0,
-                                    color: Colors.white,
-                                    position: .under,
-                                    padding: .zero,
-                                    icon: Icon(Icons.more_vert_rounded),
-                                    onSelected: (_)=> provider.deleteComplaintByID(complaint.id),
-                                    itemBuilder: (ctx){
-                                      return [
-                                        PopupMenuItem(
-                                            value: 1,
-                                            child: Text(AppLocalizations.of(context)!.deleteComplaint))
-                                      ];
-                                    }),
-                              ),
-                            );
-                          }))
+                      child: provider.loadingComplaints
+                          ? LoadingWidget()
+                          : RefreshIndicator(
+                        onRefresh: provider.refreshComplaints,
+                        child: ListView.builder(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemCount: provider.filteredComplaints.length,
+                            itemBuilder: (ctx, index){
+                              ComplaintModel complaint = provider.filteredComplaints[index];
+                              return Card(
+                                margin: .only(bottom: 10),
+                                child: ListTile(
+                                  onTap: ()=> context.push(NamedRoutes.complaintSummary.routeName, extra: complaint),
+                                  contentPadding: .only(left: 15),
+                                  title: Text(complaint.complaint, style: AppTextStyles.tileTitleTextStyle),
+                                  subtitle: Text(DateTimeFormatHelpers.formatDateTime(complaint.createdAt), style: AppTextStyles.tileSubtitleTextStyle,),
+                                  trailing: PopupMenuButton(
+                                      elevation: 0,
+                                      color: Colors.white,
+                                      position: .under,
+                                      padding: .zero,
+                                      icon: Icon(Icons.more_vert_rounded),
+                                      onSelected: (_)=> provider.deleteComplaintByID(complaint.id),
+                                      itemBuilder: (ctx){
+                                        return [
+                                          PopupMenuItem(
+                                              value: 1,
+                                              child: Text(AppLocalizations.of(context)!.deleteComplaint))
+                                        ];
+                                      }),
+                                ),
+                              );
+                            }),
+                      ))
                 ],
               ),
             ),

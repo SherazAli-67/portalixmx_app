@@ -1,7 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portalixmx_app/core/common_ui.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/providers/authentication_provider/authentication_provider.dart';
+import 'package:provider/provider.dart';
 import '../../../core/res/app_constants.dart';
 import '../../../core/res/app_textstyles.dart';
 import '../../../router/app_router.dart';
@@ -54,18 +57,21 @@ class _LoginPageState extends State<LoginPage> {
                     AppTextField(title: localization.password,controller: _passwordController, hintText: localization.password, isPassword: true,),
                     Align(
                       alignment: .topRight,
-                      child: TextButton(onPressed: (){
-                      }, child: Text(localization.forgetPassword, style: AppTextStyles.btnTextStyle,)),
+                      child: TextButton(onPressed: ()=> context.push(NamedRoutes.forgetPassword.routeName), child: Text(localization.forgetPassword, style: AppTextStyles.btnTextStyle,)),
                     ),
                   ],
                 ),
               ),
             ),
 
-            SizedBox(
-              height: 50,
-              width: .infinity,
-              child: PrimaryBtn(onTap: _onLoginTap, btnText: localization.login, isLoading: _isLogging,),),
+            Consumer<AuthenticationProvider>(
+              builder: (ctx, provider, child){
+                return SizedBox(
+                  height: 50,
+                  width: .infinity,
+                  child: PrimaryBtn(onTap: _onLoginTap, btnText: localization.login, isLoading: provider.isSigningIn,),);
+              },
+            ),
             RichText(text: TextSpan(
               text: localization.dontHaveAnAccount,
               style: AppTextStyles.subHeadingTextStyle.copyWith(fontFamily: AppConstants.appFontFamily),
@@ -84,6 +90,18 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onLoginTap()async{
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if(email.isEmpty || password.isEmpty){
+      return;
+    }
+    String? result =  await context.read<AuthenticationProvider>().onSignInTap(email: email, password: password);
+    if(result != null){
+      CommonUI.showSnackBarMessage(context, isError: true, message: result);
+    }else{
+      context.go(NamedRoutes.home.routeName);
+    }
     /*
     FocusManager.instance.primaryFocus?.unfocus();
     String email = _emailController.text.trim();

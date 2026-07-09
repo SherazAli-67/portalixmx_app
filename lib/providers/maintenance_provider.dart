@@ -5,6 +5,9 @@ import 'package:portalixmx_app/presentation/screens/main_menu/main_menu.dart';
 import 'package:portalixmx_app/presentation/bottomsheets/add_complaint_bottomsheet.dart';
 import 'package:portalixmx_app/services/complaints_service/complaints_service.dart';
 import '../core/models/complaints_model.dart';
+import '../core/models/society_model.dart';
+import '../core/models/user_model.dart';
+import '../services/user_service/user_service.dart';
 
 class MaintenanceProvider extends ChangeNotifier {
   bool addingComplaint =  false;
@@ -25,7 +28,6 @@ class MaintenanceProvider extends ChangeNotifier {
 
   Future<String?> deleteComplaintByID(String complaintID) async {
     try{
-      debugPrint("onDelete occurred");
       _allComplaints.removeWhere((complaint) => complaint.id == complaintID);
       notifyListeners();
       await _complaintService.deleteComplaintByID(complaintID);
@@ -40,15 +42,19 @@ class MaintenanceProvider extends ChangeNotifier {
     if(result != null){
       addingComplaint = true;
       notifyListeners();
-
       String complaintText = result['complaint'];
       List<XFile> complaintFiles = result['files'];
 
+      UserModel? user = await UserService.instance.getCurrentUser();
+      if(user  == null) return 'User not found, Login again';
+      List<String>? imagesUrl;
       if(complaintFiles.isNotEmpty){
+        imagesUrl = await _complaintService.uploadComplaintImages(files: complaintFiles);
       }
 
+      SocietyModel? society = await UserService.instance.getSocietyByID(societyID: user.societyID ?? '');
       try{
-        ComplaintModel? complaint = await _complaintService.addComplaint(complaintText: complaintText,);
+        ComplaintModel? complaint = await _complaintService.addComplaint(complaintText: complaintText, society: society!, images: imagesUrl);
         if(complaint != null){
           _allComplaints.add(complaint);
         }
@@ -58,7 +64,6 @@ class MaintenanceProvider extends ChangeNotifier {
         return e.toString();
       }
     }
-
     return null;
   }
 
@@ -68,7 +73,7 @@ class MaintenanceProvider extends ChangeNotifier {
       notifyListeners();
 
       _allComplaints = await _complaintService.getAllComplaints();
-      _filteredComplaints.addAll(_allComplaints);
+      _filteredComplaints = List<ComplaintModel>.from(_allComplaints);
       notifyListeners();
     }catch(e){
       debugPrint("Error while fetching complaints: ${e.toString()}");
@@ -77,6 +82,11 @@ class MaintenanceProvider extends ChangeNotifier {
     loadingComplaints = false;
     notifyListeners();
 
+  }
+
+  Future<void> refreshComplaints() async {
+    await _initComplaints();
+    onFilterUpdated(_selectedFilter);
   }
 
   void onFilterUpdated(dynamic val){

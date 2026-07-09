@@ -68,10 +68,10 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                     elevation: 0,
                     margin: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30))
+                        borderRadius: .only(topLeft: .circular(30), topRight: .circular(30))
                     ),
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.only(top: 36.0, left: 18, right: 18),
+                      padding: const .only(top: 36.0, left: 18, right: 18),
                       child: Column(
                         children: [
                           Row(
@@ -83,7 +83,10 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                                     subTitle: DateTimeFormatHelpers.formatDateTime(widget._visitor.createdAt),
                                     showDivider: true),
                               ),
-                              Expanded(child: VisitorInfoItemWidget(title: localization.accessFor, subTitle: '',  showDivider: true)
+                              Expanded(child: VisitorInfoItemWidget(
+                                  title: localization.accessFor,
+                                  subTitle: widget._visitor.accessFor ?? '',
+                                  showDivider: true)
                               ),
                             ],
                           ),
@@ -106,6 +109,16 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                             ],
                           ),
                           Divider(),
+                          /*Column(
+                            crossAxisAlignment: .start,
+                            children: [
+                              VisitorInfoItemWidget(
+                                title: localization.automaticVisitorCode,
+                                subTitle: widget._visitor.code,
+                              ),
+                              Divider()
+                            ],
+                          ),*/
                           isGuest ? _buildGuestDetailPage(context) : _buildVisitorDetailPage(context)
 
                         ],
@@ -278,7 +291,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
           child: PrimaryBtn(
             onTap: () => _shareQrCode(widget._visitor.id),
             btnText: localization.shareKey,
-            color: AppColors.primaryColor,
+            bgColor: AppColors.primaryColor,
           ),
         )
       ],
@@ -334,7 +347,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
           child: PrimaryBtn(
             onTap: () => _shareQrCode(widget._visitor.id),
             btnText: localization.shareKey,
-            color: AppColors.primaryColor,
+            bgColor: AppColors.primaryColor,
           ),
         )
       ],
@@ -407,7 +420,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
       color: Colors.white,
       elevation: 1,
       child: Padding(
-        padding: const EdgeInsets.all(25.0),
+        padding: const .all(25.0),
         child: SizedBox(
           height: 200,
           child: QrImageView(data: jsonEncode(map)),

@@ -75,7 +75,7 @@ class AccessSummaryPage extends StatelessWidget{
                       margin: EdgeInsets.only(bottom: 40),
                       width: double.infinity,
                       child: PrimaryBtn(
-                        onTap: () {}, btnText: "Share Key", color: AppColors.primaryColor,),
+                        onTap: () {}, btnText: "Share Key", bgColor: AppColors.primaryColor,),
                     )
                   ],
                 )

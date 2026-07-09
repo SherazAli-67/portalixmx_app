@@ -54,22 +54,26 @@ class AccessMenu extends StatelessWidget{
                               })
                           ),
                           Expanded(
-                              child: ListView.builder(
-                                  itemCount: provider.filteredAccessRequests.length,
-                                  itemBuilder: (ctx, index){
-                                    AccessRequestModel access = provider.filteredAccessRequests[index];
-                                    return Card(
-                                      margin: EdgeInsets.only(bottom: 10),
-                                      child: ListTile(
-                                        onTap: ()=> context.push(NamedRoutes.accessRequestDetail.routeName, extra: access),
-                                        contentPadding: EdgeInsets.only(left: 15),
-                                        leading: SvgPicture.asset(AppIcons.icGame, colorFilter: ColorFilter.mode(AppColors.primaryColor, BlendMode.srcIn),),
-                                        title: Text(access.requestedAccessTitle, style: AppTextStyles.tileTitleTextStyle),
-                                        subtitle: Text(DateTimeFormatHelpers.formatDateTime(access.createdAt), style: AppTextStyles.tileSubtitleTextStyle,),
-                                        trailing: IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_rounded)),
-                                      ),
-                                    );
-                                  }))
+                              child: RefreshIndicator(
+                                onRefresh: provider.refreshRequests,
+                                child: ListView.builder(
+                                    physics: const AlwaysScrollableScrollPhysics(),
+                                    itemCount: provider.filteredAccessRequests.length,
+                                    itemBuilder: (ctx, index){
+                                      AccessRequestModel access = provider.filteredAccessRequests[index];
+                                      return Card(
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        child: ListTile(
+                                          onTap: ()=> context.push(NamedRoutes.accessRequestDetail.routeName, extra: access),
+                                          contentPadding: EdgeInsets.only(left: 15),
+                                          leading: SvgPicture.asset(AppIcons.icGame, colorFilter: ColorFilter.mode(AppColors.primaryColor, BlendMode.srcIn),),
+                                          title: Text(access.requestedAccessTitle, style: AppTextStyles.tileTitleTextStyle),
+                                          subtitle: Text(DateTimeFormatHelpers.formatDateTime(access.createdAt), style: AppTextStyles.tileSubtitleTextStyle,),
+                                          trailing: IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_rounded)),
+                                        ),
+                                      );
+                                    }),
+                              ))
                         ],
                       ),
                     ),

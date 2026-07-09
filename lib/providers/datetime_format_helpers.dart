@@ -37,4 +37,9 @@ class DateTimeFormatHelpers{
 
     return formatTime(time);
   }
+
+  static String getCommunityDateTime(DateTime createdAt, TimeOfDay eventTime) {
+    DateFormat dateFormat = DateFormat("MMM dd");
+    return '${dateFormat.format(createdAt)}, ${formatTime(eventTime)}';
+  }
 }

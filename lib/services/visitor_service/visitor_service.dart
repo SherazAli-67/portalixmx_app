@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
 import 'package:portalixmx_app/core/res/firebase_constant.dart';
@@ -23,6 +25,27 @@ class VisitorService {
         .collection(FirebaseConst.residentsCol)
         .doc(userID)
         .collection(FirebaseConst.guestsDirectoryCol);
+  }
+
+  static const int _maxCodeRetries = 20;
+
+  Future<String> generateUniqueVisitorCode(String userID, {int digits = 4}) async {
+    final random = Random();
+    for (var i = 0; i < _maxCodeRetries; i++) {
+      final max = pow(10, digits).toInt();
+      final code = random.nextInt(max).toString().padLeft(digits, '0');
+      final existsInVisitors = await _getVisitorsCollection(userID)
+          .where('code', isEqualTo: code)
+          .limit(1)
+          .get();
+      if (existsInVisitors.docs.isNotEmpty) continue;
+      final existsInDirectory = await _getDirectoryGuestsCollection(userID)
+          .where('code', isEqualTo: code)
+          .limit(1)
+          .get();
+      if (existsInDirectory.docs.isEmpty) return code;
+    }
+    throw Exception('Could not generate unique visitor code after $_maxCodeRetries attempts');
   }
 
   Future<String> addVisitor(String userID, BaseVisitor visitor) async {

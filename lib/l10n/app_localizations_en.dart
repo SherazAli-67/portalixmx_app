@@ -27,6 +27,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgetPassword => 'Forget your password';
 
   @override
+  String get selectSociety => 'Select Society';
+
+  @override
+  String accountRequestPending(Object societyName) {
+    return 'Your admin request for $societyName is pending. You will be notified as the admin update your request';
+  }
+
+  @override
   String welcomeMessage(Object name) {
     return 'Welcome $name';
   }
@@ -36,6 +44,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guest => 'Guest';
+
+  @override
+  String get year => 'Year';
+
+  @override
+  String get pending => 'Pending';
+
+  @override
+  String get approved => 'Approved';
+
+  @override
+  String get paymentDetails => 'Payment Details';
+
+  @override
+  String get paymentFor => 'Payment for';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get amount => 'Amount';
+
+  @override
+  String get receipt => 'Payment Receipt';
+
+  @override
+  String get received => 'Received';
+
+  @override
+  String get paymentDetail => 'Payment Details';
 
   @override
   String get accessRequests => 'Access Requests';
@@ -154,6 +195,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get communityPolls => 'Community Polls';
+
+  @override
+  String pollEndsAt(String when) {
+    return 'Ends $when';
+  }
+
+  @override
+  String get pollVote => 'Vote';
+
+  @override
+  String get pollAlreadyVoted => 'You have already voted';
+
+  @override
+  String get pollEnded => 'This poll has ended';
+
+  @override
+  String get pollVoteFailed => 'Could not submit vote';
+
+  @override
+  String get pollSelectOption => 'Please select an option';
 
   @override
   String get guards => 'Guards';
@@ -367,4 +428,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get month => 'Month';
+
+  @override
+  String get automaticVisitorCode => 'Visitor Code';
+
+  @override
+  String get generateAccessCode => 'Generate Access Code';
 }

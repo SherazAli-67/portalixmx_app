@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -5,13 +6,14 @@ import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/presentation/widgets/profile_image_widget.dart';
 import 'package:portalixmx_app/providers/profile_provider.dart';
 import 'package:portalixmx_app/router/app_router.dart';
+import 'package:portalixmx_app/services/push_notification_service/push_notification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/res/app_icons.dart';
 import '../../../../core/res/app_textstyles.dart';
 import '../../../widgets/loading_widget.dart';
 
-class ProfileMenu extends StatelessWidget{
+class ProfileMenu extends StatelessWidget {
   const ProfileMenu({super.key});
 
   @override
@@ -26,61 +28,112 @@ class ProfileMenu extends StatelessWidget{
                 ? LoadingWidget()
                 : provider.user != null
                 ? Padding(
-              padding: const EdgeInsets.only(top: 45.0),
-              child: Column(
-                spacing: 5,
-                children: [
-                  ProfileImageWidget(imageUrl: provider.user!.profileImg),
-                  Text(provider.user!.userName, style: AppTextStyles.bottomSheetHeadingTextStyle.copyWith(color: Colors.white),),
-                  InkWell(
-                      onTap: ()=> context.push(NamedRoutes.editProfile.routeName),
-                      child: Text(AppLocalizations.of(context)!.viewProfile, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.white),))
-                ],
-              ),
-            )
+                    padding: const EdgeInsets.only(top: 45.0),
+                    child: Column(
+                      spacing: 5,
+                      children: [
+                        ProfileImageWidget(imageUrl: provider.user!.profileImg),
+                        Text(
+                          provider.user!.userName,
+                          style: AppTextStyles.bottomSheetHeadingTextStyle
+                              .copyWith(color: Colors.white),
+                        ),
+                        InkWell(
+                          onTap: () =>
+                              context.push(NamedRoutes.editProfile.routeName),
+                          child: Text(
+                            AppLocalizations.of(context)!.viewProfile,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
                 : const SizedBox(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ProfileItemWidget(title: AppLocalizations.of(context)!.directory, icon: AppIcons.icDirectory,  onTap: ()=> _onDirectoryTap(context)),
-                ProfileItemWidget(title: AppLocalizations.of(context)!.communityCalendar, icon: AppIcons.icCalendar, onTap: ()=> _onCommunityCalendarTap(context)),
-                ProfileItemWidget(title: AppLocalizations.of(context)!.communityPolls, icon: AppIcons.icCommunityPolls,  onTap: ()=> _onCommunityPollsTap(context)),
-                ProfileItemWidget(title: AppLocalizations.of(context)!.guards, icon: AppIcons.icGuards, onTap: ()=> _onGuardsTap(context)),
-                ProfileItemWidget(title: AppLocalizations.of(context)!.carPooling, icon: AppIcons.icCarPooling, onTap: () {}),
-                ProfileItemWidget(title: AppLocalizations.of(context)!.emergencyCalls, icon: AppIcons.icEmergencyCalls, onTap: ()=> _onEmergencyTap(context)),
-                TextButton(onPressed: (){}, child: Text(AppLocalizations.of(context)!.privacyPolicy, style: AppTextStyles.tileTitleTextStyle2,)),
-                TextButton(onPressed: ()=> _onLogoutTap(context), child: Text(AppLocalizations.of(context)!.logout, style: AppTextStyles.tileTitleTextStyle2,)),
+                ProfileItemWidget(
+                  title: AppLocalizations.of(context)!.directory,
+                  icon: AppIcons.icDirectory,
+                  onTap: () => _onDirectoryTap(context),
+                ),
+                ProfileItemWidget(
+                  title: AppLocalizations.of(context)!.communityCalendar,
+                  icon: AppIcons.icCalendar,
+                  onTap: () => _onCommunityCalendarTap(context),
+                ),
+                ProfileItemWidget(
+                  title: AppLocalizations.of(context)!.communityPolls,
+                  icon: AppIcons.icCommunityPolls,
+                  onTap: () => _onCommunityPollsTap(context),
+                ),
+                ProfileItemWidget(
+                  title: AppLocalizations.of(context)!.guards,
+                  icon: AppIcons.icGuards,
+                  onTap: () => _onGuardsTap(context),
+                ),
+                ProfileItemWidget(
+                  title: AppLocalizations.of(context)!.carPooling,
+                  icon: AppIcons.icCarPooling,
+                  onTap: () {},
+                ),
+                ProfileItemWidget(
+                  title: AppLocalizations.of(context)!.emergencyCalls,
+                  icon: AppIcons.icEmergencyCalls,
+                  onTap: () => _onEmergencyTap(context),
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    AppLocalizations.of(context)!.privacyPolicy,
+                    style: AppTextStyles.tileTitleTextStyle2,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => _onLogoutTap(context),
+                  child: Text(
+                    AppLocalizations.of(context)!.logout,
+                    style: AppTextStyles.tileTitleTextStyle2,
+                  ),
+                ),
               ],
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  void _onDirectoryTap(BuildContext context){
+  void _onDirectoryTap(BuildContext context) {
     context.push(NamedRoutes.userDirectory.routeName);
   }
 
-  void _onCommunityCalendarTap(BuildContext context){
+  void _onCommunityCalendarTap(BuildContext context) {
     context.push(NamedRoutes.communityCalendar.routeName);
   }
 
-  void _onCommunityPollsTap(BuildContext context){
+  void _onCommunityPollsTap(BuildContext context) {
     context.push(NamedRoutes.communityPolls.routeName);
   }
 
-  void _onGuardsTap(BuildContext context){
+  void _onGuardsTap(BuildContext context) {
     context.push(NamedRoutes.profileGuard.routeName);
   }
 
-  void _onEmergencyTap(BuildContext context){
+  void _onEmergencyTap(BuildContext context) {
     context.push(NamedRoutes.emergencyCalls.routeName);
   }
 
-  void _onLogoutTap(BuildContext context)async{
+  void _onLogoutTap(BuildContext context) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
+    await PushNotificationService.instance.removeTokenForSignOut();
+    await FirebaseAuth.instance.signOut();
     context.go(NamedRoutes.login.routeName);
   }
 }
@@ -88,8 +141,12 @@ class ProfileMenu extends StatelessWidget{
 class ProfileItemWidget extends StatelessWidget {
   const ProfileItemWidget({
     super.key,
-    required String title, required String icon, required VoidCallback onTap,
-  }) : _title = title, _icon = icon, _onTap = onTap;
+    required String title,
+    required String icon,
+    required VoidCallback onTap,
+  }) : _title = title,
+       _icon = icon,
+       _onTap = onTap;
 
   final String _title;
   final String _icon;
@@ -99,9 +156,15 @@ class ProfileItemWidget extends StatelessWidget {
     return ListTile(
       onTap: _onTap,
       contentPadding: EdgeInsets.only(left: 15),
-      leading: SvgPicture.asset(_icon, colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn)),
+      leading: SvgPicture.asset(
+        _icon,
+        colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+      ),
       title: Text(_title, style: AppTextStyles.tileTitleTextStyle2),
-      trailing: IconButton(onPressed: _onTap, icon: Icon(Icons.navigate_next_rounded, color: Colors.white,)),
+      trailing: IconButton(
+        onPressed: _onTap,
+        icon: Icon(Icons.navigate_next_rounded, color: Colors.white),
+      ),
     );
   }
 }

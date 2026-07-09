@@ -28,100 +28,80 @@ class _DirectoryPageState extends State<DirectoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<DirectoryProvider>(context);
-    return BgGradientScreen(
-      child: Column(
-        spacing: 20,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 65.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return ChangeNotifierProvider(
+      create: (_)=> DirectoryProvider(),
+      builder: (ctx, child){
+        return Consumer<DirectoryProvider>(builder: (_, provider, _){
+          return BgGradientScreen(
+            child: Column(
+              spacing: 20,
               children: [
-                BackButton(color: Colors.white),
-                Text(AppLocalizations.of(context)!.directory, style: AppTextStyles.regularTextStyle),
-                const SizedBox(width: 40),
+                Padding(
+                  padding: const EdgeInsets.only(top: 65.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      BackButton(color: Colors.white),
+                      Text(AppLocalizations.of(context)!.directory, style: AppTextStyles.regularTextStyle),
+                      const SizedBox(width: 40),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Card(
+                    color: AppColors.lightGreyBackgroundColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Column(
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(top: 17),
+                              child: TextField(
+                                controller: _searchController,
+                                decoration: InputDecoration(
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(99),
+                                        borderSide: BorderSide.none
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(99),
+                                        borderSide: BorderSide.none
+                                    ),
+                                    hintText: AppLocalizations.of(context)!.search,
+                                    hintStyle: AppTextStyles.hintTextStyle
+                                ),
+                              )
+                          ),
+                          Expanded(child: provider.loadingDirectoryGuests ? LoadingWidget() : ListView.builder(
+                              itemCount: provider.directoryGuests.length,
+                              itemBuilder: (ctx, index){
+                                BaseVisitor visitor = provider.directoryGuests[index];
+                                return Padding(
+                                  padding: const .only(bottom: 10.0),
+                                  child: visitor is GuestVisitor
+                                      ? GuestItemWidget(
+                                      guest: visitor,
+                                      onDeleteTap: (val) => provider.deleteVisitor(visitor.id))
+                                      : RegularVisitorItemWidget(
+                                      visitor: visitor as RegularVisitor,
+                                      onDeleteTap: (val) => provider.deleteVisitor(visitor.id)),
+                                );
+                              }))
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-          Expanded(
-            child: Card(
-              color: AppColors.lightGreyBackgroundColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30)
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 17),
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(99),
-                            borderSide: BorderSide.none
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(99),
-                              borderSide: BorderSide.none
-                          ),
-                          hintText: AppLocalizations.of(context)!.search,
-                          hintStyle: AppTextStyles.hintTextStyle
-                        ),
-                      )
-                    ),
-                    Expanded(child: provider.loadingDirectoryGuests ? LoadingWidget() : ListView.builder(
-                        itemCount: provider.directoryGuests.length,
-                        itemBuilder: (ctx, index){
-                          BaseVisitor visitor = provider.directoryGuests[index];
-                          return Padding(
-                            padding: const .only(bottom: 10.0),
-                            child: visitor is GuestVisitor
-                                ? GuestItemWidget(
-                                guest: visitor,
-                                onDeleteTap: (val) => provider.deleteVisitor(visitor.id))
-                                : RegularVisitorItemWidget(
-                                visitor: visitor as RegularVisitor,
-                                onDeleteTap: (val) => provider.deleteVisitor(visitor.id)),
-                          );
-                         /* return Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: Material(
-                              color: AppColors.lightGreyBackgroundColor,
-                              child: ListTile(
-                                onTap: ()=> context.push(NamedRoutes.directoryDetail.routeName),
-                                contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15)
-                                ),
-                                tileColor: Colors.white,
-                                leading: CircleAvatar(
-                                  backgroundColor: AppColors.btnColor,
-                                  child: Center(child: Icon(Icons.person, color: Colors.white,),),
-                                ),
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Muhammad Ali", style: AppTextStyles.tileTitleTextStyle,),
-                                    Text("Mobile App Developer", style: AppTextStyles.tileSubtitleTextStyle,)
-                                  ],
-                                ),
-                                trailing: IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_rounded)),
-                              ),
-                            ),
-                          );*/
-                    }))
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+          );
+        });
+      },
     );
   }
 }

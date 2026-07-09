@@ -1,3 +1,15 @@
+enum UserStatus {
+  pending,
+  approved,
+}
+UserStatus _userStatusFromMap(dynamic raw) {
+  if (raw == null) return UserStatus.pending;
+  final idx = raw is int ? raw : int.tryParse(raw.toString());
+  if (idx == null || idx < 0 || idx >= UserStatus.values.length) {
+    return UserStatus.pending;
+  }
+  return UserStatus.values[idx];
+}
 class UserModel {
   final String userID;
   final String userName;
@@ -6,6 +18,8 @@ class UserModel {
   final DateTime createdAt;
   final String? profileImg;
   final VehicleInformation? vehicleInformation;
+  final String? societyID;
+  final UserStatus status;
   final List<String> emergencyContacts;
 
   UserModel({
@@ -15,8 +29,10 @@ class UserModel {
     required this.createdAt,
     this.profileImg,
     this.phoneNum,
+    this.societyID,
     this.vehicleInformation,
     this.emergencyContacts = const [],
+    this.status = UserStatus.pending,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,10 +41,12 @@ class UserModel {
       'userName': userName,
       'emailAddress': email,
       'phoneNum' : phoneNum,
+      'societyID': societyID,
       'createdAt': createdAt.toIso8601String(),
       'profileImg': profileImg,
       'vehicleInformation': vehicleInformation?.toMap(),
       'emergencyContacts': emergencyContacts,
+      'status': status.index,
     };
   }
 
@@ -40,6 +58,7 @@ class UserModel {
       createdAt: DateTime.parse(map['createdAt']),
       profileImg: map['profileImg'],
       phoneNum: map['phoneNum'],
+      societyID: map['societyID'],
       vehicleInformation: map['vehicleInformation'] != null
           ? VehicleInformation.fromMap(
           Map<String, dynamic>.from(map['vehicleInformation']))
@@ -47,6 +66,8 @@ class UserModel {
       emergencyContacts: map['emergencyContacts'] != null
           ? List<String>.from(map['emergencyContacts'])
           : [],
+
+      status: _userStatusFromMap(map['status']),
     );
   }
 
@@ -57,6 +78,8 @@ class UserModel {
     DateTime? createdAt,
     String? profileImg,
     String? phoneNum,
+    String? societyID,
+    UserStatus? status,
     VehicleInformation? vehicleInformation,
     List<String>? emergencyContacts,
   }) {
@@ -67,10 +90,12 @@ class UserModel {
       createdAt: createdAt ?? this.createdAt,
       profileImg: profileImg ?? this.profileImg,
       phoneNum: phoneNum ?? this.phoneNum,
+      societyID: societyID ?? this.societyID,
       vehicleInformation:
       vehicleInformation ?? this.vehicleInformation,
       emergencyContacts:
       emergencyContacts ?? this.emergencyContacts,
+      status: status ?? this.status,
     );
   }
 }

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/core/models/access_request_model.dart';
+import 'package:portalixmx_app/core/models/society_model.dart';
+import 'package:portalixmx_app/core/models/user_model.dart';
 import 'package:portalixmx_app/core/res/firebase_constant.dart';
 
 import '../../core/models/access_model.dart';
@@ -18,15 +20,15 @@ class AccessRequestService {
   CollectionReference get _getAccessRequestsCollection =>
       _firestore.collection(FirebaseConst.accessRequestsCol);
 
-  Future<AccessRequestModel> createRequest({required DateTime date, required TimeOfDay time, required AccessModel access}) async {
+  Future<AccessRequestModel> createRequest({required DateTime date, required TimeOfDay time, required AccessModel access, required SocietyModel society, }) async {
     try {
       DateTime now = DateTime.now().toUtc();
       AccessRequestModel accessRequestModel = AccessRequestModel(id: now.toIso8601String(),
           requestByUID: _auth.currentUser!.uid,
           requestedAccessTitle: access.name,
           requestedAccessImage: access.image,
-          residentAdminID: '1',
-          societyID: '1',
+          residentAdminID: society.residentAdmin!,
+          societyID: society.id,
           requestedForDate: date,
           requestedForTime: time,
           createdAt: now,
