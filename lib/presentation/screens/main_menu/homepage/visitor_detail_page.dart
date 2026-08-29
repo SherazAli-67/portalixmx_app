@@ -1,19 +1,15 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
+import 'package:portalixmx_app/core/models/zkbio_qr_model.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/presentation/widgets/zkbio_qr_widget.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
 import 'package:portalixmx_app/providers/home_provider.dart';
+import 'package:portalixmx_app/services/zkbio_access_service/zkbio_access_service.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:screenshot/screenshot.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:path_provider/path_provider.dart';
 import '../../../../core/models/day_time_model.dart';
 import '../../../../core/app_data/app_data.dart';
 import '../../../../core/res/app_colors.dart';
@@ -34,8 +30,48 @@ class GuestDetailPage extends StatefulWidget{
 }
 
 class _GuestDetailPageState extends State<GuestDetailPage> {
+  final bool _loadingSave = false;
+  bool _loadingQr = false;
+  String? _qrError;
+  ZkbioQrModel? _guestQr;
+  final _zkbioService = ZkbioAccessService.instance;
 
-  bool _loadingSave = false;
+  @override
+  void initState() {
+    super.initState();
+    if (widget._visitor is GuestVisitor) {
+      _loadGuestQr();
+    }
+  }
+
+  Future<void> _loadGuestQr() async {
+    final guest = widget._visitor as GuestVisitor;
+    if (guest.isZkCheckedOut || !guest.isWithinAccessWindow) return;
+
+    setState(() {
+      _loadingQr = true;
+      _qrError = null;
+    });
+
+    try {
+      final qr = guest.hasZkRegistration
+          ? await _zkbioService.refreshGuestQr(guest.id)
+          : await _zkbioService.registerGuestZkAccess(guest.id);
+      if (mounted) {
+        setState(() {
+          _guestQr = qr;
+          _loadingQr = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _qrError = _zkbioService.mapFirebaseError(e);
+          _loadingQr = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -278,23 +314,56 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
             ),
           ],
         ),
-        const SizedBox(
-          height: 20,
+        const SizedBox(height: 20),
+        Text(
+          localization.qrCode,
+          style: AppTextStyles.visitorDetailTitleTextStyle,
         ),
-        _buildQRImage(),
-        const SizedBox(
-          height: 20,
-        ),
-        SizedBox(
-          height: 50,
-          width: double.infinity,
-          child: PrimaryBtn(
-            onTap: () => _shareQrCode(widget._visitor.id),
-            btnText: localization.shareKey,
-            bgColor: AppColors.primaryColor,
-          ),
-        )
+        const SizedBox(height: 12),
+        _buildGuestQrSection(localization, guest),
       ],
+    );
+  }
+
+  Widget _buildGuestQrSection(AppLocalizations localization, GuestVisitor guest) {
+    if (guest.isZkCheckedOut) {
+      return Text(
+        localization.guestVisitEnded,
+        style: AppTextStyles.visitorDetailSubtitleTextStyle,
+      );
+    }
+    if (!guest.isWithinAccessWindow) {
+      return Text(
+        localization.guestQrOutsideWindow,
+        style: AppTextStyles.visitorDetailSubtitleTextStyle,
+      );
+    }
+    if (_loadingQr) {
+      return const Padding(
+        padding: EdgeInsets.all(24),
+        child: LoadingWidget(),
+      );
+    }
+    if (_qrError != null) {
+      return Column(
+        spacing: 8,
+        children: [
+          Text(_qrError!, textAlign: TextAlign.center),
+          TextButton(onPressed: _loadGuestQr, child: Text(localization.tryAgain)),
+        ],
+      );
+    }
+    if (_guestQr == null) {
+      return Text(localization.guestQrUnavailable);
+    }
+    return ZkbioQrWidget(
+      qrPayload: _guestQr!.qrPayload,
+      shareLabel: '${localization.guestAccessQr} - ${guest.name}',
+      onRefresh: () async {
+        final refreshed = await _zkbioService.refreshGuestQr(guest.id);
+        setState(() => _guestQr = refreshed);
+        return refreshed.qrPayload;
+      },
     );
   }
 
@@ -338,14 +407,12 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
           style: AppTextStyles.visitorDetailTitleTextStyle,
         ),
         Image.asset(AppIcons.icQRCode),
-        const SizedBox(
-          height: 20,
-        ),
+        const SizedBox(height: 20),
         SizedBox(
           height: 50,
           width: double.infinity,
           child: PrimaryBtn(
-            onTap: () => _shareQrCode(widget._visitor.id),
+            onTap: () {},
             btnText: localization.shareKey,
             bgColor: AppColors.primaryColor,
           ),
@@ -369,63 +436,5 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
       );
     }
     return null;
-  }
-
-  void _shareQrCode(String? content) async {
-    String userName = widget._visitor.name;
-    if (content != null && content.isNotEmpty) {
-      try {
-        setState(() => _loadingSave = true);
-        Uint8List? capturedImage = await _takeScreenshot();
-        final directory = await getTemporaryDirectory();
-        final imagePath = '${directory.path}/$userName.png';
-        final imageFile = File(imagePath);
-        await imageFile.writeAsBytes(capturedImage!);
-
-        // Share the image
-        await SharePlus.instance.share(ShareParams(
-          files: [XFile(imagePath)],
-          text: content,
-        ));
-      } catch (e) {
-        debugPrint("Failed to share QR Code: ${e.toString()}");
-      }
-      setState(() => _loadingSave = false);
-    }
-  }
-
-  Future<Uint8List?> _takeScreenshot() async {
-    Uint8List? uint8List;
-    ScreenshotController screenshotController = ScreenshotController();
-
-    try {
-      uint8List = await screenshotController.captureFromWidget(
-        InheritedTheme.captureAll(context, _buildQRImage()),
-        delay: const Duration(seconds: 1), // Optional delay to ensure rendering
-      );
-    } catch (e) {
-      debugPrint('Error while taking screenshot: ${e.toString()}');
-    }
-    return uint8List;
-  }
-
-  Widget _buildQRImage() {
-    final map = {
-      'isGuest': widget._visitor is GuestVisitor,
-      'userID': widget._visitor.id,
-      'name': widget._visitor.name,
-      'type': widget._visitor.visitorType,
-    };
-    return Card(
-      color: Colors.white,
-      elevation: 1,
-      child: Padding(
-        padding: const .all(25.0),
-        child: SizedBox(
-          height: 200,
-          child: QrImageView(data: jsonEncode(map)),
-        ),
-      ),
-    );
   }
 }

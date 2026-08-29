@@ -58,6 +58,11 @@ class ProfileMenu extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ProfileItemWidget(
+                  title: AppLocalizations.of(context)!.myAccessQr,
+                  icon: AppIcons.icQRCode,
+                  onTap: () => context.push(NamedRoutes.myAccessQr.routeName),
+                ),
+                ProfileItemWidget(
                   title: AppLocalizations.of(context)!.directory,
                   icon: AppIcons.icDirectory,
                   onTap: () => _onDirectoryTap(context),

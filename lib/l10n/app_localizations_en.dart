@@ -434,4 +434,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get generateAccessCode => 'Generate Access Code';
+
+  @override
+  String get myAccessQr => 'My Access QR';
+
+  @override
+  String get myAccessQrDescription =>
+      'Show this QR code at the door reader to enter the community.';
+
+  @override
+  String get refreshQr => 'Refresh QR';
+
+  @override
+  String get shareQrCode => 'Share QR Code';
+
+  @override
+  String get zkbioNotConfigured =>
+      'Door access is not configured for your society yet.';
+
+  @override
+  String get accountNotApprovedForQr =>
+      'Your account must be approved by the society admin before you can use access QR.';
+
+  @override
+  String get tryAgain => 'Try Again';
+
+  @override
+  String get guestAccessQr => 'Guest Access QR';
+
+  @override
+  String get guestQrShowAtDoor =>
+      'Show this QR at the door reader during the visit window.';
+
+  @override
+  String get guestQrUnavailable => 'Unable to load guest access QR.';
+
+  @override
+  String get guestVisitEnded => 'This guest visit has ended.';
+
+  @override
+  String get guestQrOutsideWindow =>
+      'Guest QR is only available during the scheduled visit window.';
+
+  @override
+  String get close => 'Close';
 }

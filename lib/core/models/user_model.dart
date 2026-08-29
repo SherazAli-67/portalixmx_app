@@ -21,6 +21,9 @@ class UserModel {
   final String? societyID;
   final UserStatus status;
   final List<String> emergencyContacts;
+  final String? zkPin;
+  final DateTime? zkProvisionedAt;
+  final List<String> zkAccLevelIds;
 
   UserModel({
     required this.userID,
@@ -33,6 +36,9 @@ class UserModel {
     this.vehicleInformation,
     this.emergencyContacts = const [],
     this.status = UserStatus.pending,
+    this.zkPin,
+    this.zkProvisionedAt,
+    this.zkAccLevelIds = const [],
   });
 
   Map<String, dynamic> toMap() {
@@ -47,6 +53,9 @@ class UserModel {
       'vehicleInformation': vehicleInformation?.toMap(),
       'emergencyContacts': emergencyContacts,
       'status': status.index,
+      'zkPin': zkPin,
+      'zkProvisionedAt': zkProvisionedAt?.toIso8601String(),
+      'zkAccLevelIds': zkAccLevelIds,
     };
   }
 
@@ -68,8 +77,19 @@ class UserModel {
           : [],
 
       status: _userStatusFromMap(map['status']),
+      zkPin: map['zkPin'],
+      zkProvisionedAt: map['zkProvisionedAt'] != null
+          ? DateTime.tryParse(map['zkProvisionedAt'].toString())
+          : null,
+      zkAccLevelIds: map['zkAccLevelIds'] != null
+          ? List<String>.from(map['zkAccLevelIds'])
+          : [],
     );
   }
+
+  bool get isApproved => status == UserStatus.approved;
+
+  bool get hasZkAccess => zkPin != null && zkPin!.isNotEmpty;
 
   UserModel copyWith({
     String? userID,
@@ -82,6 +102,9 @@ class UserModel {
     UserStatus? status,
     VehicleInformation? vehicleInformation,
     List<String>? emergencyContacts,
+    String? zkPin,
+    DateTime? zkProvisionedAt,
+    List<String>? zkAccLevelIds,
   }) {
     return UserModel(
       userID: userID ?? this.userID,
@@ -96,6 +119,9 @@ class UserModel {
       emergencyContacts:
       emergencyContacts ?? this.emergencyContacts,
       status: status ?? this.status,
+      zkPin: zkPin ?? this.zkPin,
+      zkProvisionedAt: zkProvisionedAt ?? this.zkProvisionedAt,
+      zkAccLevelIds: zkAccLevelIds ?? this.zkAccLevelIds,
     );
   }
 }

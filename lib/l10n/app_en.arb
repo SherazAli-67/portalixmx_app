@@ -148,5 +148,18 @@
   "week" : "Week",
   "month" : "Month",
   "automaticVisitorCode" : "Visitor Code",
-  "generateAccessCode" : "Generate Access Code"
+  "generateAccessCode" : "Generate Access Code",
+  "myAccessQr": "My Access QR",
+  "myAccessQrDescription": "Show this QR code at the door reader to enter the community.",
+  "refreshQr": "Refresh QR",
+  "shareQrCode": "Share QR Code",
+  "zkbioNotConfigured": "Door access is not configured for your society yet.",
+  "accountNotApprovedForQr": "Your account must be approved by the society admin before you can use access QR.",
+  "tryAgain": "Try Again",
+  "guestAccessQr": "Guest Access QR",
+  "guestQrShowAtDoor": "Show this QR at the door reader during the visit window.",
+  "guestQrUnavailable": "Unable to load guest access QR.",
+  "guestVisitEnded": "This guest visit has ended.",
+  "guestQrOutsideWindow": "Guest QR is only available during the scheduled visit window.",
+  "close": "Close"
 }

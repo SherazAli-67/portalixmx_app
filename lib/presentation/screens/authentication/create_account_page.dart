@@ -139,8 +139,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         CommonUI.showSnackBarMessage(context, isError: true, message: isError, title: "Signup failed");
       }else{
         if (!mounted) return;
-        if(mounted)
+        if(mounted) {
           context.push(NamedRoutes.completeProfile.routeName);
+        }
       }
     }
   }

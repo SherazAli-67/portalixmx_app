@@ -22,7 +22,7 @@ class PushNotificationService {
       );
 
   GoRouter? _router;
-  String? _currentToken;
+  // String? _currentToken;
   bool _initialized = false;
   final FlutterLocalNotificationsPlugin _localNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -66,7 +66,7 @@ class PushNotificationService {
           .doc(uid)
           .set({'token': FieldValue.delete()}, SetOptions(merge: true));
     } catch (_) {}
-    _currentToken = null;
+    // _currentToken = null;
   }
 
   Future<void> _handleInitialMessage() async {
@@ -121,7 +121,7 @@ class PushNotificationService {
   }
 
   Future<void> _onTokenRefresh(String token) async {
-    _currentToken = token;
+    // _currentToken = token;
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
     await FirebaseFirestore.instance
@@ -133,9 +133,9 @@ class PushNotificationService {
   Future<void> _syncToken(String uid) async {
     try {
       final token = await FirebaseMessaging.instance.getToken();
-      debugPrint("Token: $token");
+      // debugPrint("Token: $token");
       if (token == null) return;
-      _currentToken = token;
+      // _currentToken = token;
       await FirebaseFirestore.instance
           .collection(FirebaseConst.residentsCol)
           .doc(uid)

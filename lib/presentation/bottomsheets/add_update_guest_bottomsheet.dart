@@ -299,25 +299,39 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
           : _createRegularVisitor();
 
       bool success;
+      String? visitorId;
       if (widget.isEdit) {
         success = await provider.updateVisitor(widget.visitor!.id, newVisitor);
       } else {
-        success = await provider.addVisitor(newVisitor);
+        visitorId = await provider.addVisitor(newVisitor);
+        success = visitorId != null;
       }
 
-      if(!widget.comingFromGuestDirectory){
+      if (!widget.comingFromGuestDirectory) {
         provider.addVisitorToDirectory(newVisitor);
       }
       if (!mounted) return;
-      
+
       if (success) {
         Fluttertoast.showToast(
-          msg: widget.isEdit 
-              ? localization.visitorUpdatedSuccessfully 
+          msg: widget.isEdit
+              ? localization.visitorUpdatedSuccessfully
               : localization.visitorAddedSuccessfully,
           toastLength: Toast.LENGTH_SHORT,
         );
-        Navigator.pop(context);
+
+        if (!widget.isEdit &&
+            selectedGuestTypeIndex == 1 &&
+            visitorId != null &&
+            newVisitor is GuestVisitor) {
+          await provider.showGuestZkQrDialog(
+            context,
+            visitorId: visitorId,
+            guestName: newVisitor.name,
+          );
+        }
+
+        if (mounted) Navigator.pop(context);
       } else {
         Fluttertoast.showToast(
           msg: localization.somethingWentWrong,

@@ -38,22 +38,17 @@ class HomePage extends StatelessWidget{
                           padding: EdgeInsets.zero,
                           icon: Icon(Icons.add, color: Colors.white,),
                           style: IconButton.styleFrom(backgroundColor: AppColors.btnColor),
-                          onSelected: (val){
-                            if(val ==1){
+                          onSelected: (val) {
+                            if (val == 1) {
                               provider.onAddGuestTap();
-                            }else {
-                              provider.generateAccessCode(context);
                             }
                           },
-                          itemBuilder: (ctx){
+                          itemBuilder: (ctx) {
                             return [
                               PopupMenuItem(
-                                  value: 1,
-                                  child: Text(localization.addGuest)),
-                              PopupMenuItem(
-                                  value: 2,
-                                  child: Text(localization.generateAccessCode)),
-
+                                value: 1,
+                                child: Text(localization.addGuest),
+                              ),
                             ];
                           }),
                       /*      IconButton(

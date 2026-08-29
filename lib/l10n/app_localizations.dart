@@ -907,6 +907,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Generate Access Code'**
   String get generateAccessCode;
+
+  /// No description provided for @myAccessQr.
+  ///
+  /// In en, this message translates to:
+  /// **'My Access QR'**
+  String get myAccessQr;
+
+  /// No description provided for @myAccessQrDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this QR code at the door reader to enter the community.'**
+  String get myAccessQrDescription;
+
+  /// No description provided for @refreshQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh QR'**
+  String get refreshQr;
+
+  /// No description provided for @shareQrCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Share QR Code'**
+  String get shareQrCode;
+
+  /// No description provided for @zkbioNotConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'Door access is not configured for your society yet.'**
+  String get zkbioNotConfigured;
+
+  /// No description provided for @accountNotApprovedForQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account must be approved by the society admin before you can use access QR.'**
+  String get accountNotApprovedForQr;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
+  /// No description provided for @guestAccessQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest Access QR'**
+  String get guestAccessQr;
+
+  /// No description provided for @guestQrShowAtDoor.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this QR at the door reader during the visit window.'**
+  String get guestQrShowAtDoor;
+
+  /// No description provided for @guestQrUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load guest access QR.'**
+  String get guestQrUnavailable;
+
+  /// No description provided for @guestVisitEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'This guest visit has ended.'**
+  String get guestVisitEnded;
+
+  /// No description provided for @guestQrOutsideWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest QR is only available during the scheduled visit window.'**
+  String get guestQrOutsideWindow;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
 }
 
 class _AppLocalizationsDelegate

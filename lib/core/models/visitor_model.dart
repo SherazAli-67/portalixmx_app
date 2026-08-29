@@ -85,6 +85,10 @@ abstract class BaseVisitor {
 class GuestVisitor extends BaseVisitor {
   final DateTime fromDateTime;
   final DateTime toDateTime;
+  final String? zkVisEmpPin;
+  final String? zkCertNum;
+  final DateTime? zkRegisteredAt;
+  final DateTime? zkCheckedOutAt;
 
   GuestVisitor({
     required super.id,
@@ -97,7 +101,19 @@ class GuestVisitor extends BaseVisitor {
     required super.updatedAt,
     required this.fromDateTime,
     required this.toDateTime,
+    this.zkVisEmpPin,
+    this.zkCertNum,
+    this.zkRegisteredAt,
+    this.zkCheckedOutAt,
   }) : super(visitorType: 'guest');
+
+  bool get hasZkRegistration => zkRegisteredAt != null;
+  bool get isZkCheckedOut => zkCheckedOutAt != null;
+
+  bool get isWithinAccessWindow {
+    final now = DateTime.now();
+    return !now.isBefore(fromDateTime) && !now.isAfter(toDateTime);
+  }
 
   Duration get duration => toDateTime.difference(fromDateTime);
 
@@ -112,6 +128,14 @@ class GuestVisitor extends BaseVisitor {
       accessFor: data['accessFor'],
       fromDateTime: (data['fromDateTime'] as Timestamp).toDate(),
       toDateTime: (data['toDateTime'] as Timestamp).toDate(),
+      zkVisEmpPin: data['zkVisEmpPin'],
+      zkCertNum: data['zkCertNum'],
+      zkRegisteredAt: data['zkRegisteredAt'] != null
+          ? (data['zkRegisteredAt'] as Timestamp).toDate()
+          : null,
+      zkCheckedOutAt: data['zkCheckedOutAt'] != null
+          ? (data['zkCheckedOutAt'] as Timestamp).toDate()
+          : null,
       createdAt: (data['createdAt'] as Timestamp).toDate(),
       updatedAt: (data['updatedAt'] as Timestamp).toDate(),
     );
@@ -128,6 +152,14 @@ class GuestVisitor extends BaseVisitor {
       'accessFor' : accessFor,
       'fromDateTime': Timestamp.fromDate(fromDateTime),
       'toDateTime': Timestamp.fromDate(toDateTime),
+      'zkVisEmpPin': zkVisEmpPin,
+      'zkCertNum': zkCertNum,
+      'zkRegisteredAt': zkRegisteredAt != null
+          ? Timestamp.fromDate(zkRegisteredAt!)
+          : null,
+      'zkCheckedOutAt': zkCheckedOutAt != null
+          ? Timestamp.fromDate(zkCheckedOutAt!)
+          : null,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': Timestamp.fromDate(updatedAt),
     };
@@ -143,6 +175,10 @@ class GuestVisitor extends BaseVisitor {
     VehicleInfo? vehicleInfo,
     DateTime? fromDateTime,
     DateTime? toDateTime,
+    String? zkVisEmpPin,
+    String? zkCertNum,
+    DateTime? zkRegisteredAt,
+    DateTime? zkCheckedOutAt,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -155,6 +191,10 @@ class GuestVisitor extends BaseVisitor {
       vehicleInfo: vehicleInfo ?? this.vehicleInfo,
       fromDateTime: fromDateTime ?? this.fromDateTime,
       toDateTime: toDateTime ?? this.toDateTime,
+      zkVisEmpPin: zkVisEmpPin ?? this.zkVisEmpPin,
+      zkCertNum: zkCertNum ?? this.zkCertNum,
+      zkRegisteredAt: zkRegisteredAt ?? this.zkRegisteredAt,
+      zkCheckedOutAt: zkCheckedOutAt ?? this.zkCheckedOutAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

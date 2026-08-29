@@ -122,5 +122,18 @@
   "visitorAddedSuccessfully" : "Visitante agregado exitosamente",
   "visitorUpdatedSuccessfully" : "Visitante actualizado exitosamente",
   "somethingWentWrong" : "Algo salió mal",
-  "error" : "Error"
+  "error" : "Error",
+  "myAccessQr": "Mi código QR de acceso",
+  "myAccessQrDescription": "Muestre este código QR en el lector de la puerta para entrar a la comunidad.",
+  "refreshQr": "Actualizar QR",
+  "shareQrCode": "Compartir QR",
+  "zkbioNotConfigured": "El acceso con puerta aún no está configurado para su comunidad.",
+  "accountNotApprovedForQr": "Su cuenta debe ser aprobada por el administrador antes de usar el QR de acceso.",
+  "tryAgain": "Intentar de nuevo",
+  "guestAccessQr": "QR de acceso para invitado",
+  "guestQrShowAtDoor": "Muestre este QR en el lector de la puerta durante la ventana de visita.",
+  "guestQrUnavailable": "No se pudo cargar el QR de acceso del invitado.",
+  "guestVisitEnded": "Esta visita de invitado ha finalizado.",
+  "guestQrOutsideWindow": "El QR del invitado solo está disponible durante la ventana programada.",
+  "close": "Cerrar"
 }

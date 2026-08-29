@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:portalixmx_app/core/models/user_model.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
 import 'package:portalixmx_app/presentation/bottomsheets/add_update_guest_bottomsheet.dart';
 import 'package:portalixmx_app/presentation/bottomsheets/directory_guests_sheet.dart';
-import 'package:portalixmx_app/presentation/dialogs/access_code_generated_dialog.dart';
+import 'package:portalixmx_app/presentation/dialogs/guest_zk_qr_dialog.dart';
 import 'package:portalixmx_app/services/user_service/user_service.dart';
 import 'package:portalixmx_app/services/visitor_service/visitor_service.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:portalixmx_app/services/zkbio_access_service/zkbio_access_service.dart';
 import '../core/helpers/bottom_sheet_helper.dart';
 import '../presentation/screens/main_menu/main_menu.dart';
 
@@ -17,6 +18,7 @@ class HomeProvider extends ChangeNotifier {
 
   final _userService = UserService.instance;
   final _visitorService = VisitorService.instance;
+  final _zkbioService = ZkbioAccessService.instance;
   int _selectedTab = 0;
 
   List<BaseVisitor> _visitors = [];
@@ -37,8 +39,7 @@ class HomeProvider extends ChangeNotifier {
 
   Future<UserModel?> getCurrentUser() async {
     try {
-      UserModel? user = await _userService.getCurrentUser();
-      return user;
+      return await _userService.getCurrentUser();
     } catch (e) {
       return null;
     }
@@ -65,7 +66,6 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
-
   Future<void> _initDirectoryGuests() async {
     try {
       loadingDirectoryGuests = true;
@@ -86,7 +86,7 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> addVisitor(BaseVisitor visitor) async {
+  Future<String?> addVisitor(BaseVisitor visitor) async {
     try {
       addingGuestVisitor = true;
       notifyListeners();
@@ -97,21 +97,21 @@ class HomeProvider extends ChangeNotifier {
       }
 
       final visitorId = await _visitorService.addVisitor(user.userID, visitor);
-      
+
       final updatedVisitor = visitor is GuestVisitor
           ? visitor.copyWith(id: visitorId)
           : (visitor as RegularVisitor).copyWith(id: visitorId);
-      
+
       _visitors.add(updatedVisitor);
-      
+
       addingGuestVisitor = false;
       notifyListeners();
-      return true;
+      return visitorId;
     } catch (e) {
       addingGuestVisitor = false;
       notifyListeners();
       debugPrint('Error adding visitor: $e');
-      return false;
+      return null;
     }
   }
 
@@ -126,12 +126,12 @@ class HomeProvider extends ChangeNotifier {
       }
 
       await _visitorService.updateVisitor(user.userID, visitorID, updatedVisitor);
-      
+
       final index = _visitors.indexWhere((v) => v.id == visitorID);
       if (index != -1) {
         _visitors[index] = updatedVisitor;
       }
-      
+
       addingGuestVisitor = false;
       notifyListeners();
       return true;
@@ -150,6 +150,15 @@ class HomeProvider extends ChangeNotifier {
         throw Exception('User not found');
       }
 
+      final visitor = _visitors.firstWhere((v) => v.id == visitorID);
+      if (visitor is GuestVisitor && visitor.hasZkRegistration && !visitor.isZkCheckedOut) {
+        try {
+          await _zkbioService.checkoutGuestZkAccess(visitorID);
+        } catch (e) {
+          debugPrint('ZKBio checkout failed: $e');
+        }
+      }
+
       _visitors.removeWhere((v) => v.id == visitorID);
       notifyListeners();
       await _visitorService.deleteVisitor(user.userID, visitorID);
@@ -160,32 +169,74 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> showGuestZkQrDialog(BuildContext context, {
+    required String visitorId,
+    required String guestName,
+  }) async {
+    loading = true;
+    notifyListeners();
+    try {
+      final user = await getCurrentUser();
+      if (user == null) throw Exception('User not found');
+      if (!user.isApproved) {
+        Fluttertoast.showToast(msg: 'Account must be approved before generating access QR');
+        return;
+      }
+
+      final qr = await _zkbioService.registerGuestZkAccess(visitorId);
+      if (!context.mounted) return;
+
+      await showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (ctx) => Dialog(
+          insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: GuestZkQrDialog(
+            guestName: guestName,
+            qrPayload: qr.qrPayload,
+            visitorId: visitorId,
+          ),
+        ),
+      );
+    } catch (e) {
+      Fluttertoast.showToast(msg: _zkbioService.mapFirebaseError(e));
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
+  }
+
   Future<dynamic> onAddGuestTap() async {
-   final result= await BottomSheetHelper.showDraggableListBottomSheet(scaffoldKey: scaffoldKey, contentBuilder: (scrollController, scrollPhysics){
-      return DirectoryGuestsSheet(scrollPhysics: scrollPhysics, scrollController: scrollController);
-    });
-
-   if(result != null){
-     if(result['visitor'] != null){
-       await BottomSheetHelper.showDraggableBottomSheet<dynamic>(
-         scaffoldKey: scaffoldKey,
-         initialHeight: 0.7,
-         child: AddUpdateGuestBottomSheet(visitor: result['visitor'] , comingFromGuestDirectory: true,),
-       );
-     }else if(result['addNewGuest'] != null){
-       await BottomSheetHelper.showDraggableBottomSheet<dynamic>(
-         scaffoldKey: scaffoldKey,
-         initialHeight: 0.7,
-         child: AddUpdateGuestBottomSheet(),
-       );
-     }
-   }
-
-   /* await BottomSheetHelper.showDraggableBottomSheet<dynamic>(
+    final result = await BottomSheetHelper.showDraggableListBottomSheet(
       scaffoldKey: scaffoldKey,
-      initialHeight: 0.7,
-      child: DirectoryGuestsSheet(),
-    );*/
+      contentBuilder: (scrollController, scrollPhysics) {
+        return DirectoryGuestsSheet(
+          scrollPhysics: scrollPhysics,
+          scrollController: scrollController,
+        );
+      },
+    );
+
+    if (result != null) {
+      if (result['visitor'] != null) {
+        await BottomSheetHelper.showDraggableBottomSheet<dynamic>(
+          scaffoldKey: scaffoldKey,
+          initialHeight: 0.7,
+          child: AddUpdateGuestBottomSheet(
+            visitor: result['visitor'],
+            comingFromGuestDirectory: true,
+          ),
+        );
+      } else if (result['addNewGuest'] != null) {
+        await BottomSheetHelper.showDraggableBottomSheet<dynamic>(
+          scaffoldKey: scaffoldKey,
+          initialHeight: 0.7,
+          child: const AddUpdateGuestBottomSheet(),
+        );
+      }
+    }
   }
 
   Future<dynamic> onEditVisitorTap(BaseVisitor visitor) async {
@@ -213,7 +264,6 @@ class HomeProvider extends ChangeNotifier {
 
   Future<bool> addVisitorToDirectory(BaseVisitor newVisitor) async {
     try {
-
       final user = await getCurrentUser();
       if (user == null) {
         throw Exception('User not found');
@@ -229,72 +279,5 @@ class HomeProvider extends ChangeNotifier {
       debugPrint('Error adding visitor: $e');
       return false;
     }
-  }
-
-  Future<void> generateAccessCode(BuildContext context) async{
-
-    loading = true;
-    notifyListeners();
-    final user = await getCurrentUser();
-    if (user == null) throw Exception('User not found');
-    try{
-      String code =  await _visitorService.generateUniqueVisitorCode(user.userID,);
-      loading = false;
-      notifyListeners();
-      _showDialog(context, code: code);
-    }catch(e){
-      loading = false;
-      notifyListeners();
-      throw Exception(e.toString());
-    }
-  }
-
-  void _showDialog(BuildContext context, {required String code})async{
-    final result = await showDialog(
-        barrierDismissible: false,
-        context: context, builder: (ctx){
-      return Dialog(
-        insetPadding: .symmetric(horizontal: 20),
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: .circular(12)),
-        child: AccessCodeGeneratedDialog(accessCode: code,),
-      );
-    });
-    if(result != null){
-      loading = true;
-      notifyListeners();
-      try{
-        final user = await getCurrentUser();
-        if(user == null) throw Exception("User not found");
-
-        if(result['qrCodeImagePath'] != null){
-         await _shareAccessCodeQR(imagePath: result['qrCodeImagePath'], userName: user.userName);
-        }else if(result['code'] != null){
-          debugPrint("Code: ${result['code']}");
-          await _shareNumericCode(code: result['code'], userName: user.userName);
-        }else if(result['changeCode']){
-          generateAccessCode(context);
-        }
-        loading = false;
-        notifyListeners();
-      }catch(e){
-        loading = false;
-        notifyListeners();
-        throw Exception("Failed to share QR Code: ${e.toString()}");
-      }
-    }
-  }
-
-  Future<void> _shareAccessCodeQR({required String imagePath, required String userName}) async{
-    await SharePlus.instance.share(ShareParams(
-      files: [XFile(imagePath)],
-      text: "Access Code from, $userName",
-    ));
-  }
-
-  Future<void> _shareNumericCode({required code, required String userName}) async {
-    await SharePlus.instance.share(ShareParams(
-      text: "Access Code\n$code\n from, $userName",
-    ));
   }
 }

@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/core/models/access_request_model.dart';
 import 'package:portalixmx_app/core/models/society_model.dart';
-import 'package:portalixmx_app/core/models/user_model.dart';
 import 'package:portalixmx_app/core/res/firebase_constant.dart';
 
 import '../../core/models/access_model.dart';

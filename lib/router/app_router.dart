@@ -5,6 +5,7 @@ import 'package:portalixmx_app/core/models/community_event_model.dart';
 import 'package:portalixmx_app/core/models/community_poll_model.dart';
 import 'package:portalixmx_app/core/models/payment_model.dart';
 import 'package:portalixmx_app/core/models/user_model.dart';
+import 'package:portalixmx_app/presentation/screens/access/my_access_qr_page.dart';
 import 'package:portalixmx_app/presentation/screens/payment_detail/payment_detail_page.dart';
 import 'package:portalixmx_app/presentation/screens/preview_image/preview_image_screen.dart';
 import 'package:portalixmx_app/router/go_router_refresh.dart';
@@ -75,6 +76,7 @@ GoRouter appRouter = GoRouter(
       GoRoute(path: NamedRoutes.guestDetail.routeName, builder: (ctx, state){
         return GuestDetailPage(visitor: state.extra as BaseVisitor);
       }),
+    GoRoute(path: NamedRoutes.myAccessQr.routeName, builder: (ctx, state)=> const MyAccessQrPage()),
     GoRoute(path: NamedRoutes.paymentDetail.routeName, builder: (ctx, state)=> PaymentDetailPage(payment: state.extra as PaymentModel)),
 
     GoRoute(path: NamedRoutes.accessRequestDetail.routeName, builder: (ctx, state)=> AccessSummaryPage(access: state.extra as AccessRequestModel)),
@@ -117,7 +119,7 @@ GoRouter appRouter = GoRouter(
           !isOnLoginPage &&
           !isOnForgetPasswordPage &&
           !isOnCompleteProfilePage) {
-        return NamedRoutes.createAccount.routeName;
+        return NamedRoutes.login.routeName;
       }
       return null;
     }
@@ -136,12 +138,13 @@ GoRouter appRouter = GoRouter(
       return null;
     }
 
-   /* if (profile.status == UserStatus.pending) {
+    // debugPrint("User ${profile.userID}, Name: ${profile.userName}");
+   if (profile.status == UserStatus.pending) {
       if (isOnAccountPendingPage || isOnCompleteProfilePage) {
         return null;
       }
       return NamedRoutes.accountPending.routeName;
-    }*/
+    }
 
     if (isOnAccountPendingPage || isOnLoginPage || isOnSignupPage) {
       return NamedRoutes.home.routeName;
@@ -179,6 +182,7 @@ enum NamedRoutes {
   verifyOtp('/verify-otp'),
   accountPending('/account-pending'),
   paymentDetail('/payment-details'),
+  myAccessQr('/my-access-qr'),
   previewImage('/preview-image')
   ;
   final String routeName;

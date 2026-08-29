@@ -1,0 +1,678 @@
+
+--- PAGE 1 ---
+ZKBio CVSecurity delivers a web-based security platform which integrates biometric authentication and 
+advanced computer vision technology seamlessly. ZKBio CVSecurity enables organizations of all sizes to 
+transform their physical security infrastructure while streamlining daily operations.
+• A Microservice architecture for robust performance and scalability.
+• Enterprise-grade data security (ISO/IEC 27001:2013, 27701:2019)
+• Achieved ISO 20000 certification for the international standard for IT Service Management.
+• Achieved ISO 9001:2015 for the quality-assured management system.
+All-in-One Biometric Security Advanced Solutions
+Version 6.7.0
+Technical Excellence
+Key Features
+Multi-Module Linkage
+Seven modules (access control, entrance control, video surveillance, 
+space/energy/system management, intrusion alarm) support automated 
+cross-module actions. Conﬁgure triggers per module to activate 
+emergency responses, broadcasts, or notiﬁcations (Email/SMS/WhatsApp).
+Data Integration & Management
+Supports multiple integration methods-including API-based 
+data pulling, real-time push notiﬁcations, and direct 
+database integration-for seamless connectivity with existing 
+systems.
+Simple Deployment
+Users can install and deploy it by themselves.
+Distributed Deployment
+Distributed deployment is an optional 
+conﬁguration. It achieves load balancing through network 
+collaboration and is ﬂexibly suitable for large-scale projects.
+Customizable Data Dashboards
+Assign tailored dashboards to diﬀerent roles and users based on 
+their speciﬁc needs and responsibilities.
+AI Assistant
+An intelligent chatbot handles inquiries and assists with 
+common tasks, with conﬁgurable AI agents tailored to 
+speciﬁc security scenarios and workﬂows.
+Scenario Center
+Conﬁgure and customize security scenarios to match your 
+operational requirements and workﬂows.
+Alarm Subscription
+Subscribe to relevant notiﬁcations based on your speciﬁc 
+monitoring needs.
+Access Control
+Elevator 
+Control
+Visitor 
+Management
+Entrance 
+Control
+Parking 
+Management
+Locker 
+Management
+Space 
+Management
+Facekiosk
+Time & 
+Attendance
+Consumption
+Video 
+Surveillance
+Guard Patrol
+Video 
+Intercom
+Energy Saving
+Intrusion 
+Alarm
+Service Center
+Audio 
+Broadcast
+System
+
+--- PAGE 2 ---
+ Features of Main Modules
+Module Features
+Access Control
+• Access Level: Precisely manage the entry and exit of personnel to enhance campus security.
+• Access Records: Detailed logging of each visit's time, location, and visitor information for easy reporting and 
+analysis.
+• Video Linkage: Integrates with video surveillance systems for real-time monitoring and event recording.
+• Emergency Evacuation: Quick evacuation guidance in emergencies to improve rescue efficiency.
+• Advanced Features: Support for global anti-tailgating, interlocking, and linkage to meet complex security 
+management needs.
+Time & Attendance
+• Flexible Attendance Rules: Different scheduling rules can be set for different departments and employee 
+categories.
+• Accurate Calculation: Precisely track regular work hours, overtime, tardiness, and absences to ensure accurate 
+payroll processing.
+• Comprehensive Tracking: Manage make-up cards, leave requests, approval workflows, and monitor sick leaves 
+and personal leaves.
+• Regulated Overtime Management: Systemize overtime and compensatory time arrangements to ensure 
+compliance and minimize disputes.
+• Seamless Integration: Offer extensive APIs for seamless integration with payroll systems.
+• Employee Self-Service: Enable employees to view personal attendance records and apply for leaves 
+independently.
+• Insightful Reporting: Provide detailed attendance reports to help management identify trends and potential 
+issues.
+Visitor Management
+• Suitable for All Scenarios: We offer a variety of visitor check-in and check-out solutions to meet the needs of 
+different occasions.
+• Efficient Reception: Utilizing OCR and ID card readers for swift identity verification and information scanning, with 
+automatic receipt printing post-registration for a seamless process.
+• Self-Service Kiosks: Integrating advanced facial authentication, we enable self-check-in for visitors, instantly 
+issuing receipts, enhancing experience, and reducing front desk workload.
+• Online Scheduling and Access: Our app allows you to invite and pre-register visitors. They gain automatic access 
+during the scheduled time, streamlining the visit process.
+• Watchlist Management: Our system intelligently identifies and flags visitors of various categories, alerting staff 
+with VIP notifications for enhanced etiquette.
+• Comprehensive Notification Service: The system provides timely alerts for all stages, including bookings, 
+approvals, check-ins, check-outs, no-shows, and overtime check-outs, through various channels like Email, 
+WhatsApp, and SMS.
+Parking Management
+• Automated Management: Swift response to vehicle entry and exit with automated barrier systems for improved 
+traffic efficiency.
+• Diverse Payment Options: Supports various payment methods for different user categories, including temporary, 
+regular, special, and monthly renters, catering to diverse management needs.
+• Stringent Fee Collection: Computerized billing and charging record every transaction, preventing revenue 
+leakage and ensuring parking lot profitability.
+• Centralized Control: Real-time transmission of parking equipment status and space usage to the control center 
+via the network, enhancing supervision.
+• High Plate Recognition Rate: High-definition cameras boast a plate authentication rate above 99%, adaptable to 
+complex environments.
+Elevator Control
+• Enhanced Security: Fine-grained access control ensures only authorized users access designated floors, effectively 
+preventing unauthorized entry and enhancing building security.
+• Floor Control Capability: Our elevator access controllers are powerful, capable of managing up to 128 floors, 
+meeting the vertical transportation needs of high-rise buildings.
+• Efficient Dispatch System: Integrates seamlessly with 3rd party elevator control systems, e.g. DCS, for coordinated 
+access management, like MITSUBISHI ELECTRIC and KONE, enabling intelligent destination dispatch to reduce wait 
+times and improve transportation efficiency.
+• Personalized Services: Custom services cater to passenger habits and needs, offering exclusive elevator services 
+such as VIP direct floors and management-specific elevators for special groups.
+
+--- PAGE 3 ---
+Module Features
+Entrance Control
+• Enhanced Security: Identity verification through facial, fingerprint, palm, card, and other authentication methods 
+ensures that only authorized personnel can access specific areas.
+• Crowd Management: Effectively control and monitor the flow of people to prevent overcrowding, enhancing 
+order and security in the area.
+• Data Recording: The system records detailed information of each passage, including time and identity of 
+personnel, facilitating post-incident audits and data analysis.
+• Emergency Response: In emergency situations, such as fires or security incidents, the access gates can be quickly 
+opened to ensure rapid evacuation of personnel.
+Video Intercom
+• Enhanced Security: Video identity verification ensures that only authorized visitors enter, enhancing the security 
+of residential and workplace environments.
+• Two-Way Communication: Intercom units, indoor monitors, phones, mobile apps, and PC clients can call each 
+other, enabling two-way communication capabilities.
+• Simplified Configuration: The software automatically assigns SIP accounts, quickly synchronizing them with 
+devices and apps, eliminating the hassle of manual configuration.
+• Access Control Integration: In emergency situations, the system automatically dials designated apps to ensure 
+that no critical alerts are missed.
+Smart Video Surveillance
+• Expanded Capacity: Capable of handling up to 1024 video channels, with support for 64-channel prereview and 
+16-channel simultaneous real-time playback.
+• Essential Video Management: Offers fundamental functionalities including real-time preview, PTZ (Pan-Tilt-Zoom) 
+control, video playback, and video decoding.
+• Intelligent Alert Management: Allows for viewing and addressing intelligent camera alerts such as intrusion and 
+rapid movement directly from the software's alarm center.
+• Enhanced Surveillance: Video patrol features bolster security personnel's situational awareness and patrol 
+effectiveness, with the software maintaining comprehensive patrol records.
+• Watermark Protection: Incorporates a watermark function to safeguard user photos and data, preventing 
+unauthorized copying and reuse.
+Guard Patrol
+• Standardized Management: Streamline patrol processes to ensure tasks are carried out according to established 
+plans and frequencies.
+• Real-time Monitoring: Continuously monitor the status of patrol personnel to promptly detect and respond to 
+any anomalies.
+• Flexible Scheduling: Adjust patrol routes and schedules as needed to accommodate varying security 
+requirements.
+• Cost Reduction: No need to purchase additional patrol equipment; access control devices also serve as patrol 
+points, and patrols can be completed using facial authentication, fingerprint scanning, or card swiping.
+Consumption
+• Fast Checkout: Supports facial authentication or card payments, which is convenient and fast, reducing waiting 
+time in lines.
+• Account Management: Facilitates personal account management, including recharges, balance inquiries, and 
+transaction history reviews.
+• Subsidy Distribution: Simplifies the process of issuing and managing meal subsidies for employees or students.
+• Data Tracking: Provides comprehensive consumption statistics reports, assisting cafeteria managers in analyzing 
+consumption patterns and trends.
+Intrusion Alarm
+• Seamless Integration: Harmoniously integrates with Alarm Control Panels from leading brands like BOSCH and 
+RISCO, ZKTeco enabling comprehensive monitoring and control over various partitions and points within the 
+security system.
+• Enhanced Visualization: Offers an intuitive defense zone display on the map, providing a clear visual overview of 
+security zones for enhanced situational awareness and efficient response to any incidents.
+
+--- PAGE 4 ---
+Module Features
+Locker Management
+• Automated Management: Automatically assigns and releases lockers to designated personnel.
+• Real-time Monitoring: The system can monitor the usage status of lockers in real time to ensure the rational 
+allocation of resources.
+• Data Recording: The system automatically records data on the use of lockers, facilitating management and 
+tracking.
+• Advertising Opportunities: The system interface can display advertisements, providing an additional revenue 
+stream for operators.
+• Emergency Access: In emergency situations, management personnel can quickly access lockers.
+Space Management
+• Mobile Access: Book meeting rooms from any location via smartphones or tablets.
+• Flexibility: Book and manage meetings flexibly based on personal schedules and room availability.
+• Conflict Reduction: The system can automatically detect and prevent scheduling conflicts, ensuring that only one 
+meeting is arranged for the same time slot.
+• Automated Notifications: After a successful reservation, the system automatically sends notifications to meeting 
+participants, reminding them of the meeting time and location.
+• Energy Saving: Provides intelligent linkage with lighting and air-conditioning, powering equipment only in active 
+use, reducing standby power consumption. (Linkage with energy saving module).
+• Security: Access control ensures that only authorized personnel can book or access specific meeting rooms.
+• Online Meeting: Integration Zoom  to quickly create online meetings.
+• Microsoft 365 Integration: Create meetings in Outlook or Teams and sync schedules to devices.
+Energy Saving
+• Improve Energy Utilization Efficiency: Occupancy-based automation ensures lights and AC turn off when rooms 
+are vacant, maximizing energy savings.
+• Enhance Environmental Comfort: Through precise environmental control, the system maintains consistent indoor 
+temperature, humidity, and oxygen levels, providing a comfortable and healthy space environment.
+Audio Broadcast
+• Immediate Broadcast Task Assignment: Enables scenario-based broadcast distribution with intelligent, group-
+targeted push notifications to streamline task deployment.
+• Cross-module Intelligent Broadcast Linkage: Triggers alerts or audio warnings when access-control or video 
+analytics flag anomalies, preventing threats and dangers.
+• GIS Visualized Broadcast Status Monitoring: Displays real-time broadcast terminal status on the GIS interface, 
+enabling quick location of anomalies and immediate strategy adjustments.
+
+--- PAGE 5 ---
+Software Specifications
+Operation System
+Microsoft® Windows 7
+Microsoft® Windows 8
+Microsoft® Windows 10
+Microsoft® Windows 11
+Microsoft® Windows Server 2008
+Microsoft® Windows Server 2012
+Microsoft® Windows Server 2016
+Microsoft® Windows Server 2019
+Microsoft® Windows Server 2022
+Microsoft® Windows Server 2025
+Browser Version
+Google Chrome® 84 and above
+Firefox® 84 and above
+Safari® 11 and above
+Microsoft® Edge 89 and above
+Internet Explorer® 11 and above
+Database
+PostgreSQL, 
+Oracle11g/12c/18c/19c/21c, 
+SQL Server
+OS for Mobile Client iOS 10.0 and above
+Android 7.0 and above
+System Requirement
+* For high stability and good performance, the following system requirements must be met.
+Operating System 3rd-Party Integration
+Server-Side
+Windows7/8/10/11, 
+Windows Server 
+2008/2012/2016/2019/2022 
+/2025
+Notification / Messages Line / WhatsApp / Amazon SNS / SMS
+GIS Map Google Map / Baidu Map / SuperMap
+Microsoft Integration Active Directory / Microsoft 365(Outlook&Teams)
+Intrusion Alarm Integration Bosch / RISCO
+Database
+PostgreSQL, Oracle11g/12c/18c/ 
+19c /21c, SQL Server 2008/2012/2
+014/2016/2017/2019/2022
+API
+Restful API Supports: 
+Person Interface of Attendance Area RESTful API
+Person Interface RESTful API
+Person Biometric Template Interface RESTful API
+Card Interface RESTful API
+Department Interface RESTful API
+Area Interface RESTful API
+Reader Interface RESTful API
+Media Interface RESTful API
+Door Interface RESTful API
+Floor Interface RESTful API
+Access Control Interface RESTful API
+Access Control Device Interface RESTful API
+Access Level RESTful API
+Access Control Transaction Interface RESTful API
+Attendance Transaction Interface RESTful API
+Attendance Device Interface RESTful API
+Elevator Control Level Interface RESTful API
+Elevator Device Interface RESTful API
+Elevator Transaction Interface RESTful API
+Vehicle Management Authorization Interface RESTful API
+Vehicle Management Transaction Interface RESTful API
+Visitor Reservation Interface RESTful API
+Visitor Level Interface RESTful API
+Visitor Registration Check Out Interface RESTful API
+Temperature Transactions Interface RESTful API
+FaceKiosk Device Interface RESTful API
+FaceKiosk Area Interface RESTful API
+Suggested Browser for 
+Client-Side
+IE 11 or later,
+Chrome 33 or later,
+Safari 6.1.3 or later
+Edge
+Certifications ISO/IEC 27001:2013,  ISO/IEC 
+27701:2019, ISO9001, ISO20000.
+Database Platform
+Maximum Number of 
+ClientsAllowed to Access
+Unlimited
+(depending on the performance 
+of the server & network) Maximum Supported Admin Users
+Maximum Supported Personnel 300,000
+Maximum RFID Cards 300,000
+Maximum Passwords 300,000
+Maximum Fingerprints 300,000
+Maximum Faces 300,000
+Maximum Access Controlled Doors 5,000
+Maximum Access Control Level
+Unlimited
+(depending on the performance 
+of the server & network) 
+Maximum Attendance Points 2,000
+Maximum Visitors (Monthly) 100,000
+Maximum Surveillance Cameras 1024
+Maximum Intelligent Video Servers 50 Elevator Destination 
+Control System Integration KONE, MITSUBISHI ELECTRIC
+Maximum Controlled Outputs
+Maximum Inputs
+Unlimited
+(depending on the device's 
+configuration)
+Cybersecurity
+Data Protection 256-bit AES encryption
+
+--- PAGE 6 ---
+Application 
+Scenario
+Device
+Protocol
+Device 
+Quantity
+Deployment 
+Method 
+Description
+Recommended Server Configuration
+Server Type Memory CPU Hard Drive 
+Capacity GPU
+Small-scale 
+Project
+Push /
+ Pull / 
+Best
+Push Device: 50 pcs
+Pull  Device: 20 pcs
+  Video Channel: 64 
+Cameras
+If MS SQL or Oracle 
+database is used, 
+an additional 
+separate database 
+server needs to be 
+deployed.
+ZKBio CVSecurity
+Server 8GB
+Core i5 quad-
+core with a clock 
+speed of 2.8 GHz 
+or higher
+100GB /
+ZKBio CVSecurity
+Client
+(Supports 
+simultaneous 
+preview of 64 
+videos)
+16GB
+Core i7 quad-
+core with a clock 
+speed of 3.0 GHz 
+or higher
+100GB
+NVIDIA 
+GTX750
+(Only preview 
+video devices 
+are needed)
+Database Server
+(Only required 
+when using MS 
+SQL and Oracle)
+8GB
+Core i5 quad-
+core with a clock 
+speed of 2.8 GHz 
+or higher
+100GB /
+Media-scale 
+project
+Push /
+ Pull / 
+Best
+Push Device: 50~200 pcs
+Pull  Device: 50 pcs
+Video Channel:128 
+Cameras
+1. When the number 
+of devices exceeds 
+100, it is not 
+recommended to 
+use MS SQL
+2. If using MS SQL 
+or Oracle databases, 
+an additional 
+separate database 
+server needs to be 
+deployed.
+ZKBio CVSecurity
+Server 16GB
+Core i5 hexa-
+core with a clock 
+speed of 3.0 GHz 
+or higher
+200GB
+(SSD) /
+ZKBio CVSecurity
+V6600 Client
+(Supports 
+simultaneous 
+preview of 64 
+videos)
+16GB
+Core i7 quad-
+core with a clock 
+speed of 3.0 GHz 
+or higher
+100GB
+NVIDIA 
+GTX750
+(Only preview 
+video devices 
+are needed)
+Database Server
+( only required 
+when using MS 
+SQL and Oracle)
+8GB
+Core i5 hexa-
+core with a clock 
+speed of 3.0 GHz 
+or higher
+200GB
+(SSD) /
+Medium to 
+large-
+scale project
+Push /
+ Pull / 
+Best
+Push Device: 200~600 pcs
+PullDevice: 50 pcs
+Video Channel: 256 
+1. MS SQL is not 
+recommended.
+2. If using an Oracle 
+database, an 
+additional separate 
+database server is 
+required.
+ZKBio CVSecurity
+Server 16GB
+Core i7 octa-
+core with a clock 
+speed of 3.2 GHz 
+or higher
+500GB
+(SSD) /
+ZKBio CVSecurity
+Client
+(Supports 
+simultaneous 
+preview of 64 
+videos)
+16GB
+Core i7 quad-
+core with a clock 
+speed of 3.0 GHz 
+or higher
+100GB
+NVIDIA 
+GTX750
+(Only preview 
+video devices 
+are needed)
+Database Server
+(Only required 
+when using Oracle)
+16GB
+Core i5 hexa-
+core with a clock 
+speed of 3.2 GHz 
+or higher
+500GB
+(SSD) /
+Server Configuration
+* To ensure optimal system performance, should you plan to connect more than 600 devices, we recommend that you contact our Technical Support Center. Our professional 
+team will provide you with customized server configuration recommendations to ensure smooth and efficient operation of your devices. 
+
+--- PAGE 7 ---
+System Topology
+Mobile APP-ZKBio Zexus
+ZKTECO CO.,LTD. www.zkteco.com E-mail: sales@zkteco.com
+V1.0   11/26/2025
+Copyright © 2025 ZKTECO CO., LTD. All rights reserved.
+ISO 20000
+Access Control (Guard Patrol)
+Space Management
+Entrance Control Access Control
+Time & AttendanceElevator Control
+Smart LockIntelligent Analytics
+Parking System
+Consumption Locker ManagementIntrusion Alarm
+FaceDepot 4A
+Main Server
+TCP/IP TCP/IP
+TCP/IP
+TCP/IP
+HDMI
+TCP/IP
+TCP/IP
+TCP/IPTCP/IPTCP/IPTCP/IPTCP/IP
+TCP/IP
+TCP/IP
+FaceKiosk-H13C
+ProMerc-20
+(Online/Offline)
+Facekiosk H10A
+DG03-A9W15
+ProMerc-300H
+(Online)
+LockerPad-G4 Pro
+Visitor Management
+ProBG3000
+Barrier
+LPRS1000
+Relay Out
+VR10 Pro 
+Radar
+Relay Out
+UHF 
+Reader
+inBio Pro 
+Controller
+ProBG3000
+Barrier
+Relay Out
+VR10 Pro 
+Radar
+Relay Out
+Parking System
+Lock
+Relay Out
+inBio Pro Controller
+ FR1500S ProID101
+Wiegand
+RS485
+TCP/IP
+TCP/IP
+ZKIVA-Edge T1
+ZKIPC
+ 3rd Party IPC
+ZKIPC
+ZK/3rd Party IPC (Video Source)
+RTSP
+H.264
+H.265 Video Stream
+ZK-DEC-8609-4K Decoder
+Video Wall
+KB200
+TCP/IP
+Video Management
+TCP/IPTCP/IP
+Registration Site
+Card Printer
+ OCR ReaderBadge Printer
+RTSP
+H.264
+H.265
+Z8508NEQ-S NVR
+ZK/3rd Party IPC
+ (Video Source)
+ZKIPC
+ 3rd Party IPC
+Video Stream
+USB
+Powered of
+datasystems
+Rose
+Client 1Standby Server
+ Client 2
+⋯
+3rd-Party Integration
+·  
+Standard 3rd-Party API/ Middle Table
+·  Active Directory Integration
+·  Integrated with 3rd-Party Video Platforms: Arteco, C2P·  
+Message Noti/f_ication via WhatsApp, LINE, SMS, Amazon SNS, Email
+TCP/IP
+3rd Party 
+IA System
+Points
+ Points
+Partition 1 Partition N
+Management Keypad 
+and Software
+......
+3rd Party Intrusion Alarm 
+Control Panel 
+ZKBio Zexus
+Outdoor
+Electronic lock
+Indoor Monitor
+(V T07-B01)
+Smart Video 
+Outdoor Station
+(VEX-B22A)
+Video Intercom
+EC16
+DEX 16
+RS485
+Wiegand
+Verification Readers
+QR50
+ KF1100
+ KF1200
+Zigbee 
+Gateway
+Smart Lock
+(SL03-T420H-Customized)
+Zigbee
+Network Switch / Router
+Entrance Gate
+(Comet Series)
+Under Mount 
+Facial Recognition
+Access Control 
+Terminal
+(G5)
+B- B-A+ A+ GND 12V GND12V
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+1 2 3 4
+Lock Control 
+Board
+Electronic Cabinet lock
+(ECL02) 
+RS485
+Microsoft 365
+Teams Outlook
+API Integration
+Personnel PageAdmin Page
+New APP
+iOS Android
+You can reserve the space 
+and manage visitors 
+on the mobile app.
+Keep an eye on everything, 
+guard every moment, 
+24/7 security defense.
+Video Call Visitor Invitation My Activities Call Elevator
+My Credentials Visitor Approval Book Space Space Service Mobile
+Attendance

@@ -439,4 +439,49 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get generateAccessCode => 'Generate Access Code';
+
+  @override
+  String get myAccessQr => 'Mi código QR de acceso';
+
+  @override
+  String get myAccessQrDescription =>
+      'Muestre este código QR en el lector de la puerta para entrar a la comunidad.';
+
+  @override
+  String get refreshQr => 'Actualizar QR';
+
+  @override
+  String get shareQrCode => 'Compartir QR';
+
+  @override
+  String get zkbioNotConfigured =>
+      'El acceso con puerta aún no está configurado para su comunidad.';
+
+  @override
+  String get accountNotApprovedForQr =>
+      'Su cuenta debe ser aprobada por el administrador antes de usar el QR de acceso.';
+
+  @override
+  String get tryAgain => 'Intentar de nuevo';
+
+  @override
+  String get guestAccessQr => 'QR de acceso para invitado';
+
+  @override
+  String get guestQrShowAtDoor =>
+      'Muestre este QR en el lector de la puerta durante la ventana de visita.';
+
+  @override
+  String get guestQrUnavailable =>
+      'No se pudo cargar el QR de acceso del invitado.';
+
+  @override
+  String get guestVisitEnded => 'Esta visita de invitado ha finalizado.';
+
+  @override
+  String get guestQrOutsideWindow =>
+      'El QR del invitado solo está disponible durante la ventana programada.';
+
+  @override
+  String get close => 'Cerrar';
 }

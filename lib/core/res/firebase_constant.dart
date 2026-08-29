@@ -12,6 +12,7 @@ class FirebaseConst {
   static const communityCalendarEventsCol = 'community_calendar_events';
   static const communityPollsCol = 'community_polls';
   static const communityPollVotesSub = 'votes';
+  static const guardLogsCol = 'guard_logs';
 
   // Visitor types
   static const visitorTypeGuest = 'guest';

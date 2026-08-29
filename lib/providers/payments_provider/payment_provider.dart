@@ -21,7 +21,7 @@ class PaymentProvider extends ChangeNotifier{
     _initPayments();
   }
 
-  String? selectedFilter;
+  String selectedFilter = 'All';
   String? selectedPaymentStatusFilter;
 
   List<String> getFilterList(AppLocalizations localization){
@@ -43,13 +43,15 @@ class PaymentProvider extends ChangeNotifier{
   List<PaymentModel> getFilteredPayments(AppLocalizations l10n) {
     DateTime? dateCutoff;
     if (selectedFilter != null && selectedFilter != l10n.all) {
-      if (selectedFilter == l10n.week) dateCutoff = DateTime.now().subtract(const Duration(days: 7));
-      else if (selectedFilter == l10n.month) dateCutoff = DateTime.now().subtract(const Duration(days: 30));
+      if (selectedFilter == l10n.week) {
+        dateCutoff = .now().subtract(const Duration(days: 7));
+      } else if (selectedFilter == l10n.month) dateCutoff = DateTime.now().subtract(const Duration(days: 30));
       else if (selectedFilter == l10n.year) dateCutoff = DateTime.now().subtract(const Duration(days: 365));
     }
     PaymentStatus? statusFilter;
-    if (selectedPaymentStatusFilter == l10n.pending) statusFilter = PaymentStatus.pending;
-    else if (selectedPaymentStatusFilter == l10n.received) statusFilter = PaymentStatus.received;
+    if (selectedPaymentStatusFilter == l10n.pending) {
+      statusFilter = PaymentStatus.pending;
+    } else if (selectedPaymentStatusFilter == l10n.received) statusFilter = PaymentStatus.received;
     return _payments.where((p) {
       if (dateCutoff != null && p.dateTime.isBefore(dateCutoff)) return false;
       if (statusFilter != null && p.paymentStatus != statusFilter) return false;

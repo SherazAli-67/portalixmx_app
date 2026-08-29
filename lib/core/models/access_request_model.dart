@@ -1,6 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+enum AccessRequestStatus {
+  pending,
+  approved,
+  rejected,
+}
+
+AccessRequestStatus _accessRequestStatusFromMap(dynamic raw) {
+  if (raw == null) return AccessRequestStatus.pending;
+  if (raw is String) {
+    return AccessRequestStatus.values.firstWhere(
+      (e) => e.name == raw,
+      orElse: () => AccessRequestStatus.pending,
+    );
+  }
+  return AccessRequestStatus.pending;
+}
+
 class AccessRequestModel {
   final String id;
   final String requestByUID;
@@ -12,6 +29,8 @@ class AccessRequestModel {
   final TimeOfDay requestedForTime;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final AccessRequestStatus status;
+  final DateTime? zkAccessGrantedAt;
 
   AccessRequestModel({
     required this.id,
@@ -23,7 +42,9 @@ class AccessRequestModel {
     required this.requestedForDate,
     required this.requestedForTime,
     required this.createdAt,
-    required this.updatedAt
+    required this.updatedAt,
+    this.status = AccessRequestStatus.pending,
+    this.zkAccessGrantedAt,
   });
 
   String _timeOfDayToString(TimeOfDay time) {
@@ -44,6 +65,10 @@ class AccessRequestModel {
       'requestedForTime': _timeOfDayToString(requestedForTime),
       "createdAt": Timestamp.fromDate(createdAt),
       "updatedAt": Timestamp.fromDate(updatedAt),
+      "status": status.name,
+      "zkAccessGrantedAt": zkAccessGrantedAt != null
+          ? Timestamp.fromDate(zkAccessGrantedAt!)
+          : null,
     };
   }
 
@@ -64,6 +89,10 @@ class AccessRequestModel {
         hour: int.parse(parts[0]),
         minute: int.parse(parts[1]),
       ),
+      status: _accessRequestStatusFromMap(map['status']),
+      zkAccessGrantedAt: map['zkAccessGrantedAt'] != null
+          ? (map['zkAccessGrantedAt'] as Timestamp).toDate()
+          : null,
     );
   }
 
@@ -78,6 +107,8 @@ class AccessRequestModel {
     TimeOfDay? requestedForTime,
     DateTime? createdAt,
     DateTime? updatedAt,
+    AccessRequestStatus? status,
+    DateTime? zkAccessGrantedAt,
   }) {
     return AccessRequestModel(
       id: id ?? this.id,
@@ -92,6 +123,8 @@ class AccessRequestModel {
       requestedForTime: requestedForTime ?? this.requestedForTime,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      status: status ?? this.status,
+      zkAccessGrantedAt: zkAccessGrantedAt ?? this.zkAccessGrantedAt,
     );
   }
 }

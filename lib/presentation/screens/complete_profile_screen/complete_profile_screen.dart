@@ -122,7 +122,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
 
     String? isError = await provider.onCompleteProfileTap(phoneNum: phoneNum, vehicleName: vehicleName, vehicleColor: color, licensePlateNum: licensePlateNum, registrationNum: registrationNum, emergencyContact: emergencyContact);
     if(isError != null){
-      print("Error: $isError");
+      // print("Error: $isError");
       CommonUI.showSnackBarMessage(context, isError: true, message: isError, title: "Signup failed");
     }else{
       context.go(NamedRoutes.home.routeName);

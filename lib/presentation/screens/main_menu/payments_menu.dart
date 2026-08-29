@@ -42,6 +42,15 @@ class PaymentsMenu extends StatelessWidget{
                         const SizedBox(width: 40,),
                       ],
                     ),
+                    Row(
+                        spacing: 20,
+                        children: List.generate(provider.getFilterList(localization).length, (index){
+                          bool isSelected = provider.selectedFilter == provider.getFilterList(localization)[index];
+                          return ElevatedButton(
+                              style: ElevatedButton.styleFrom(backgroundColor: isSelected ? AppColors.btnColor: Colors.white),
+                              onPressed: ()=> provider.onChangeFilterTap(provider.getFilterList(localization)[index]), child: Text(provider.getFilterList(localization)[index], style: AppTextStyles.tabsTextStyle.copyWith(color: isSelected ? Colors.white : AppColors.primaryColor),));
+                        })
+                    ),
                     Expanded(
                         child: provider.loadingPayments
                             ? LoadingWidget()
