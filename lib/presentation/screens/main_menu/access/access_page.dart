@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portalixmx_app/presentation/widgets/date_range_filter_bar.dart';
 import 'package:portalixmx_app/presentation/widgets/loading_widget.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
 import 'package:portalixmx_app/providers/request_access_provider.dart';
@@ -44,14 +45,12 @@ class AccessMenu extends StatelessWidget{
                             ],
                           ),
                           const SizedBox(height: 10,),
-                          Row(
-                              spacing: 20,
-                              children: List.generate(provider.filters.length, (index){
-                                bool isSelected = provider.selectedFilter == provider.filters[index];
-                                return ElevatedButton(
-                                    style: ElevatedButton.styleFrom(backgroundColor: isSelected ? AppColors.btnColor: Colors.white),
-                                    onPressed: ()=> provider.onFilterUpdated(provider.filters[index]), child: Text(provider.filters[index], style: AppTextStyles.tabsTextStyle.copyWith(color: isSelected ? Colors.white : AppColors.primaryColor),));
-                              })
+                          DateRangeFilterBar(
+                            dateFrom: provider.dateFrom,
+                            dateTo: provider.dateTo,
+                            onDateFromChanged: provider.setDateFrom,
+                            onDateToChanged: provider.setDateTo,
+                            onClear: provider.clearDateRange,
                           ),
                           Expanded(
                               child: RefreshIndicator(

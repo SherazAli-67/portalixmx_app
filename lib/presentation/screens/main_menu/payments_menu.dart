@@ -10,6 +10,7 @@ import '../../../core/res/app_textstyles.dart';
 import '../../../providers/datetime_format_helpers.dart';
 import '../../../providers/payments_provider/payment_provider.dart';
 import '../../../router/app_router.dart';
+import '../../widgets/date_range_filter_bar.dart';
 import '../../widgets/full_page_loading_widget.dart';
 import '../../widgets/loading_widget.dart';
 
@@ -42,14 +43,12 @@ class PaymentsMenu extends StatelessWidget{
                         const SizedBox(width: 40,),
                       ],
                     ),
-                    Row(
-                        spacing: 20,
-                        children: List.generate(provider.getFilterList(localization).length, (index){
-                          bool isSelected = provider.selectedFilter == provider.getFilterList(localization)[index];
-                          return ElevatedButton(
-                              style: ElevatedButton.styleFrom(backgroundColor: isSelected ? AppColors.btnColor: Colors.white),
-                              onPressed: ()=> provider.onChangeFilterTap(provider.getFilterList(localization)[index]), child: Text(provider.getFilterList(localization)[index], style: AppTextStyles.tabsTextStyle.copyWith(color: isSelected ? Colors.white : AppColors.primaryColor),));
-                        })
+                    DateRangeFilterBar(
+                      dateFrom: provider.dateFrom,
+                      dateTo: provider.dateTo,
+                      onDateFromChanged: provider.setDateFrom,
+                      onDateToChanged: provider.setDateTo,
+                      onClear: provider.clearDateRange,
                     ),
                     Expanded(
                         child: provider.loadingPayments

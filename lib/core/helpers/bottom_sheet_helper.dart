@@ -26,7 +26,13 @@ class _DraggableBottomSheetRoute<T> extends PageRouteBuilder<T> {
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: sheet,
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 24),
+                          child: sheet,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -78,11 +84,12 @@ class BottomSheetHelper {
   static Future<T?> showDraggableListBottomSheet<T>({
     required GlobalKey<ScaffoldState> scaffoldKey,
     required Widget Function(ScrollController scrollController, ScrollPhysics scrollPhysics) contentBuilder,
+    BuildContext? context,
     double minHeight = 0.3,
     double maxHeight = 0.9,
     double? initialHeight,
   }) async {
-    final ctx = scaffoldKey.currentContext;
+    final ctx = context ?? scaffoldKey.currentContext;
     if (ctx == null) return null;
     return Navigator.of(ctx).push<T>(
       _DraggableBottomSheetRoute<T>(

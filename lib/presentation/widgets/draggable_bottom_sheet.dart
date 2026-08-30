@@ -37,7 +37,8 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
 
   final List<double> _snapPoints = [0.3, 0.5, 0.7, 0.9];
 
-  static const double _maxHeightThreshold = 0.05; // Within 5% of max = "at max"
+  static const double _maxHeightThreshold = 0.05;
+  static const double _dismissFlingVelocity = 700;
 
   bool get _useScrollableBuilder => widget.scrollableBuilder != null;
 
@@ -87,7 +88,7 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
     
     final screenHeight = MediaQuery.of(context).size.height;
     final dragDelta = (_dragStartPosition - details.globalPosition.dy) / screenHeight;
-    final newHeight = (_dragStartHeight + dragDelta).clamp(widget.minHeight, widget.maxHeight);
+    final newHeight = (_dragStartHeight + dragDelta).clamp(0.0, widget.maxHeight);
     
     setState(()=> _currentHeight = newHeight);
   }
@@ -96,23 +97,40 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
     if (!_isDragging) return;
     
     setState(() => _isDragging = false);
-    
-    final screenHeight = MediaQuery.of(context).size.height;
-    final velocity = -details.velocity.pixelsPerSecond.dy / screenHeight;
-    
-    if (_currentHeight <= widget.minHeight + 0.05 || velocity > 0.5) {
+
+    final downwardVelocity = details.velocity.pixelsPerSecond.dy;
+    final dismissThreshold = widget.minHeight * 0.5;
+
+    if (_currentHeight < dismissThreshold || downwardVelocity > _dismissFlingVelocity) {
       _dismissSheet();
       return;
     }
     
     _snapToNearestPoint();
   }
+
+  void _onVerticalDragCancel() {
+    if (!_isDragging) return;
+    setState(() => _isDragging = false);
+    _snapToNearestPoint();
+  }
+
+  List<double> get _effectiveSnapPoints {
+    final points = <double>{widget.minHeight, widget.maxHeight};
+    for (final snap in _snapPoints) {
+      if (snap >= widget.minHeight && snap <= widget.maxHeight) {
+        points.add(snap);
+      }
+    }
+    return points.toList()..sort();
+  }
   
   void _snapToNearestPoint() {
-    double nearestSnap = _snapPoints[0];
-    double minDistance = (_currentHeight - _snapPoints[0]).abs();
+    final snapPoints = _effectiveSnapPoints;
+    double nearestSnap = snapPoints.first;
+    double minDistance = (_currentHeight - snapPoints.first).abs();
     
-    for (final snap in _snapPoints) {
+    for (final snap in snapPoints) {
       final distance = (_currentHeight - snap).abs();
       if (distance < minDistance) {
         minDistance = distance;
@@ -166,9 +184,11 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
     final currentSheetHeight = _currentHeight * screenHeight;
     
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onVerticalDragStart: _onVerticalDragStart,
       onVerticalDragUpdate: _onVerticalDragUpdate,
       onVerticalDragEnd: _onVerticalDragEnd,
+      onVerticalDragCancel: _onVerticalDragCancel,
       child: Container(
         height: currentSheetHeight,
         decoration: BoxDecoration(

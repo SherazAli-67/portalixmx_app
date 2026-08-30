@@ -734,6 +734,18 @@ abstract class AppLocalizations {
   /// **'Date'**
   String get date;
 
+  /// No description provided for @dateFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Date From'**
+  String get dateFrom;
+
+  /// No description provided for @dateTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Date To'**
+  String get dateTo;
+
   /// No description provided for @hasBeenEditedMessage.
   ///
   /// In en, this message translates to:
@@ -985,6 +997,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get close;
+
+  /// No description provided for @fundManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Fund Management'**
+  String get fundManagement;
+
+  /// No description provided for @createFundReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Fund Report'**
+  String get createFundReport;
+
+  /// No description provided for @reportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Title'**
+  String get reportTitle;
+
+  /// No description provided for @income.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get income;
+
+  /// No description provided for @expenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get expenses;
+
+  /// No description provided for @expenseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense Label'**
+  String get expenseLabel;
+
+  /// No description provided for @addExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Expense'**
+  String get addExpense;
+
+  /// No description provided for @balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get balance;
+
+  /// No description provided for @note.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get note;
+
+  /// No description provided for @publishReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish Report'**
+  String get publishReport;
+
+  /// No description provided for @saveAsDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as Draft'**
+  String get saveAsDraft;
+
+  /// No description provided for @published.
+  ///
+  /// In en, this message translates to:
+  /// **'Published'**
+  String get published;
+
+  /// No description provided for @draft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get draft;
+
+  /// No description provided for @emptyFundReportsMsg.
+  ///
+  /// In en, this message translates to:
+  /// **'No fund reports yet'**
+  String get emptyFundReportsMsg;
+
+  /// No description provided for @totalExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Expenses'**
+  String get totalExpenses;
+
+  /// No description provided for @noExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses listed'**
+  String get noExpenses;
+
+  /// No description provided for @emergencyCall.
+  ///
+  /// In en, this message translates to:
+  /// **'EMERGENCY CALL'**
+  String get emergencyCall;
+
+  /// No description provided for @removeContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Contact'**
+  String get removeContact;
+
+  /// No description provided for @selectEmergencyContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Emergency Contacts'**
+  String get selectEmergencyContacts;
+
+  /// No description provided for @saveContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveContacts;
+
+  /// No description provided for @emergencyAlertSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency notification sent'**
+  String get emergencyAlertSent;
+
+  /// No description provided for @emergencyAlertFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send emergency alert'**
+  String get emergencyAlertFailed;
+
+  /// No description provided for @addEmergencyContactsFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Add emergency contacts first'**
+  String get addEmergencyContactsFirst;
+
+  /// No description provided for @noResidentsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No residents found'**
+  String get noResidentsFound;
+
+  /// No description provided for @noEmergencyContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'No emergency contacts'**
+  String get noEmergencyContacts;
+
+  /// No description provided for @holdToSendEmergency.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold for 3 seconds to send'**
+  String get holdToSendEmergency;
 }
 
 class _AppLocalizationsDelegate

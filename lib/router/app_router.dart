@@ -8,12 +8,15 @@ import 'package:portalixmx_app/core/models/user_model.dart';
 import 'package:portalixmx_app/presentation/screens/access/my_access_qr_page.dart';
 import 'package:portalixmx_app/presentation/screens/payment_detail/payment_detail_page.dart';
 import 'package:portalixmx_app/presentation/screens/preview_image/preview_image_screen.dart';
+import 'package:portalixmx_app/presentation/screens/reports/report_detail_page.dart';
+import 'package:portalixmx_app/presentation/screens/reports/reports_page.dart';
 import 'package:portalixmx_app/router/go_router_refresh.dart';
 import 'package:portalixmx_app/services/auth_service/auth_service.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
 import 'package:portalixmx_app/presentation/screens/account_pending/account_pending_page.dart';
 import '../core/models/access_request_model.dart';
 import '../core/models/complaints_model.dart';
+import '../core/models/fund_report_model.dart';
 import '../presentation/screens/authentication/create_account_page.dart';
 import '../presentation/screens/authentication/forget_password_page.dart';
 import '../presentation/screens/authentication/login_page.dart';
@@ -104,6 +107,13 @@ GoRouter appRouter = GoRouter(
       return PreviewImageScreen(title: map['title'] as String, imageUrl:  map['imageUrl'],);
     }),
 
+    GoRoute(
+        path: NamedRoutes.reports.routeName,
+        builder: (ctx, state) => ReportsPage()),
+    GoRoute(
+        path: NamedRoutes.reportDetail.routeName,
+        builder: (ctx, state) => FundReportDetailPage(
+            report: state.extra as FundReportModel)),
   ],
   redirect: (BuildContext context, GoRouterState state) async {
     final loc = state.matchedLocation;
@@ -183,7 +193,9 @@ enum NamedRoutes {
   accountPending('/account-pending'),
   paymentDetail('/payment-details'),
   myAccessQr('/my-access-qr'),
-  previewImage('/preview-image')
+  previewImage('/preview-image'),
+  reports('/reports'),
+  reportDetail('/report-detail')
   ;
   final String routeName;
   const NamedRoutes(this.routeName);

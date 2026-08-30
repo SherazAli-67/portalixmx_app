@@ -8,6 +8,7 @@ import 'package:portalixmx_app/presentation/screens/main_menu/main_menu.dart';
 import 'package:portalixmx_app/services/access_requests_service/access_request_service.dart';
 import 'package:portalixmx_app/services/user_service/user_service.dart';
 import '../core/models/access_request_model.dart';
+import 'datetime_format_helpers.dart';
 
 class RequestAccessProvider extends ChangeNotifier {
   bool addingRequestAccess =  false;
@@ -16,13 +17,11 @@ class RequestAccessProvider extends ChangeNotifier {
   List<AccessRequestModel> _filteredAccessRequests  = [];
 
   final _requestsService = AccessRequestService.instance;
-  final List<String> _filters = ['All', 'Week', 'Month',];
-  String _selectedFilter = 'All';
+  DateTime? dateFrom;
+  DateTime? dateTo;
   List<AccessRequestModel> get allAccessRequests => _allAccessRequests;
   List<AccessRequestModel> get filteredAccessRequests => _filteredAccessRequests;
   List<AccessModel> get allAccessItems => _allAccessItems;
-  List<String> get filters => _filters;
-  String get selectedFilter => _selectedFilter;
   RequestAccessProvider(){
     _initRequests();
   }
@@ -46,6 +45,8 @@ class RequestAccessProvider extends ChangeNotifier {
         SocietyModel? society = await UserService.instance.getSocietyByID(societyID: user.societyID ?? '');
       AccessRequestModel accessRequest =  await _requestsService.createRequest(date: date, time: time, access: accessModel, society: society!,);
       _allAccessRequests.add(accessRequest);
+      _sortAccessRequests();
+      _applyDateFilter();
       }catch(e){
         debugPrint("Exception while creating access request");
       }
@@ -57,8 +58,8 @@ class RequestAccessProvider extends ChangeNotifier {
   Future<void> _initRequests() async {
     try {
       _allAccessRequests = await _requestsService.getAllRequests();
-      _filteredAccessRequests = List<AccessRequestModel>.from(_allAccessRequests);
-      notifyListeners();
+      _sortAccessRequests();
+      _applyDateFilter();
     } catch (e) {
       debugPrint('RequestAccessProvider: failed to fetch access items: $e');
     }
@@ -66,44 +67,32 @@ class RequestAccessProvider extends ChangeNotifier {
 
   Future<void> refreshRequests() async {
     await _initRequests();
-    onFilterUpdated(_selectedFilter);
   }
 
-  void onFilterUpdated(dynamic val){
-    _selectedFilter = val;
-    if(_selectedFilter == 'All'){
-      _filteredAccessRequests = _allAccessRequests;
-    }else if(_selectedFilter == 'Week'){
-      _filteredAccessRequests = _getComplaintsOfCurrentWeek();
-    }else{
-      _filteredAccessRequests = _getComplaintsOfCurrentMonth();
-    }
+  void setDateFrom(DateTime date){
+    dateFrom = date;
+    _applyDateFilter();
+  }
+
+  void setDateTo(DateTime date){
+    dateTo = date;
+    _applyDateFilter();
+  }
+
+  void clearDateRange(){
+    dateFrom = null;
+    dateTo = null;
+    _applyDateFilter();
+  }
+
+  void _sortAccessRequests() {
+    _allAccessRequests.sort((a, b)=> b.createdAt.compareTo(a.createdAt));
+  }
+
+  void _applyDateFilter(){
+    _filteredAccessRequests = _allAccessRequests.where((request) {
+      return DateTimeFormatHelpers.isDateInRange(request.createdAt, from: dateFrom, to: dateTo);
+    }).toList();
     notifyListeners();
-  }
-
-  List<AccessRequestModel> _getComplaintsOfCurrentWeek() {
-    final now = DateTime.now();
-    final end = DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
-    final start = end.subtract(const Duration(days: 7));
-
-    return _allAccessRequests.where((complaint) {
-      return complaint.createdAt.isAfter(start) &&
-          complaint.createdAt.isBefore(end);
-    }).toList();
-  }
-
-  List<AccessRequestModel> _getComplaintsOfCurrentMonth() {
-    final now = DateTime.now();
-
-    final start = DateTime(now.year, now.month, 1);
-
-    final end = (now.month < 12)
-        ? DateTime(now.year, now.month + 1, 1)
-        : DateTime(now.year + 1, 1, 1);
-
-    return _allAccessRequests.where((complaint) {
-      return complaint.createdAt.isAfter(start) &&
-          complaint.createdAt.isBefore(end);
-    }).toList();
   }
 }

@@ -337,6 +337,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get date => 'Date';
 
   @override
+  String get dateFrom => 'Date From';
+
+  @override
+  String get dateTo => 'Date To';
+
+  @override
   String hasBeenEditedMessage(Object name) {
     return '$name has been updated';
   }
@@ -478,4 +484,82 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get close => 'Close';
+
+  @override
+  String get fundManagement => 'Fund Management';
+
+  @override
+  String get createFundReport => 'Create Fund Report';
+
+  @override
+  String get reportTitle => 'Report Title';
+
+  @override
+  String get income => 'Income';
+
+  @override
+  String get expenses => 'Expenses';
+
+  @override
+  String get expenseLabel => 'Expense Label';
+
+  @override
+  String get addExpense => 'Add Expense';
+
+  @override
+  String get balance => 'Balance';
+
+  @override
+  String get note => 'Note';
+
+  @override
+  String get publishReport => 'Publish Report';
+
+  @override
+  String get saveAsDraft => 'Save as Draft';
+
+  @override
+  String get published => 'Published';
+
+  @override
+  String get draft => 'Draft';
+
+  @override
+  String get emptyFundReportsMsg => 'No fund reports yet';
+
+  @override
+  String get totalExpenses => 'Total Expenses';
+
+  @override
+  String get noExpenses => 'No expenses listed';
+
+  @override
+  String get emergencyCall => 'EMERGENCY CALL';
+
+  @override
+  String get removeContact => 'Remove Contact';
+
+  @override
+  String get selectEmergencyContacts => 'Select Emergency Contacts';
+
+  @override
+  String get saveContacts => 'Save';
+
+  @override
+  String get emergencyAlertSent => 'Emergency notification sent';
+
+  @override
+  String get emergencyAlertFailed => 'Failed to send emergency alert';
+
+  @override
+  String get addEmergencyContactsFirst => 'Add emergency contacts first';
+
+  @override
+  String get noResidentsFound => 'No residents found';
+
+  @override
+  String get noEmergencyContacts => 'No emergency contacts';
+
+  @override
+  String get holdToSendEmergency => 'Hold for 3 seconds to send';
 }

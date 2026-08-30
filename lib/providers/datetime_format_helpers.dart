@@ -42,4 +42,11 @@ class DateTimeFormatHelpers{
     DateFormat dateFormat = DateFormat("MMM dd");
     return '${dateFormat.format(createdAt)}, ${formatTime(eventTime)}';
   }
+
+  static bool isDateInRange(DateTime date, {DateTime? from, DateTime? to}) {
+    final day = DateTime(date.year, date.month, date.day);
+    if (from != null && day.isBefore(DateTime(from.year, from.month, from.day))) return false;
+    if (to != null && day.isAfter(DateTime(to.year, to.month, to.day))) return false;
+    return true;
+  }
 }

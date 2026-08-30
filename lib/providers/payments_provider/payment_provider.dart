@@ -5,6 +5,7 @@ import '../../core/models/user_model.dart' show UserModel;
 import '../../l10n/app_localizations.dart';
 import '../../services/payments_service/payments_service.dart';
 import '../../services/user_service/user_service.dart';
+import '../datetime_format_helpers.dart';
 
 class PaymentProvider extends ChangeNotifier{
   final _paymentsService = PaymentsService.instance;
@@ -21,17 +22,9 @@ class PaymentProvider extends ChangeNotifier{
     _initPayments();
   }
 
-  String selectedFilter = 'All';
+  DateTime? dateFrom;
+  DateTime? dateTo;
   String? selectedPaymentStatusFilter;
-
-  List<String> getFilterList(AppLocalizations localization){
-    return [
-      localization.all,
-      localization.week,
-      localization.month,
-      localization.year
-    ];
-  }
 
   List<String> getStatusList(AppLocalizations localization){
     return [
@@ -41,22 +34,17 @@ class PaymentProvider extends ChangeNotifier{
   }
 
   List<PaymentModel> getFilteredPayments(AppLocalizations l10n) {
-    DateTime? dateCutoff;
-    if (selectedFilter != null && selectedFilter != l10n.all) {
-      if (selectedFilter == l10n.week) {
-        dateCutoff = .now().subtract(const Duration(days: 7));
-      } else if (selectedFilter == l10n.month) dateCutoff = DateTime.now().subtract(const Duration(days: 30));
-      else if (selectedFilter == l10n.year) dateCutoff = DateTime.now().subtract(const Duration(days: 365));
-    }
     PaymentStatus? statusFilter;
     if (selectedPaymentStatusFilter == l10n.pending) {
       statusFilter = PaymentStatus.pending;
     } else if (selectedPaymentStatusFilter == l10n.received) statusFilter = PaymentStatus.received;
-    return _payments.where((p) {
-      if (dateCutoff != null && p.dateTime.isBefore(dateCutoff)) return false;
+    final filtered = _payments.where((p) {
+      if (!DateTimeFormatHelpers.isDateInRange(p.dateTime, from: dateFrom, to: dateTo)) return false;
       if (statusFilter != null && p.paymentStatus != statusFilter) return false;
       return true;
     }).toList();
+    filtered.sort((a, b)=> b.dateTime.compareTo(a.dateTime));
+    return filtered;
   }
 
   Future<void> _initPayments() async {
@@ -83,9 +71,19 @@ class PaymentProvider extends ChangeNotifier{
     await _initPayments();
   }
 
+  void setDateFrom(DateTime date){
+    dateFrom = date;
+    notifyListeners();
+  }
 
-  void onChangeFilterTap(String val){
-    selectedFilter = val;
+  void setDateTo(DateTime date){
+    dateTo = date;
+    notifyListeners();
+  }
+
+  void clearDateRange(){
+    dateFrom = null;
+    dateTo = null;
     notifyListeners();
   }
 

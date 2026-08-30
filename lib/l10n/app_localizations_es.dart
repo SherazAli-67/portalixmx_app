@@ -337,6 +337,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get date => 'Fecha';
 
   @override
+  String get dateFrom => 'Fecha desde';
+
+  @override
+  String get dateTo => 'Fecha hasta';
+
+  @override
   String hasBeenEditedMessage(Object name) {
     return '$name ha sido actualizado';
   }
@@ -484,4 +490,84 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get close => 'Cerrar';
+
+  @override
+  String get fundManagement => 'Gestión de Fondos';
+
+  @override
+  String get createFundReport => 'Crear Informe de Fondos';
+
+  @override
+  String get reportTitle => 'Título del Informe';
+
+  @override
+  String get income => 'Ingresos';
+
+  @override
+  String get expenses => 'Gastos';
+
+  @override
+  String get expenseLabel => 'Concepto del Gasto';
+
+  @override
+  String get addExpense => 'Agregar Gasto';
+
+  @override
+  String get balance => 'Saldo';
+
+  @override
+  String get note => 'Nota';
+
+  @override
+  String get publishReport => 'Publicar Informe';
+
+  @override
+  String get saveAsDraft => 'Guardar como Borrador';
+
+  @override
+  String get published => 'Publicado';
+
+  @override
+  String get draft => 'Borrador';
+
+  @override
+  String get emptyFundReportsMsg => 'Aún no hay informes de fondos';
+
+  @override
+  String get totalExpenses => 'Gastos Totales';
+
+  @override
+  String get noExpenses => 'No hay gastos registrados';
+
+  @override
+  String get emergencyCall => 'LLAMADA DE EMERGENCIA';
+
+  @override
+  String get removeContact => 'Eliminar contacto';
+
+  @override
+  String get selectEmergencyContacts => 'Seleccionar contactos de emergencia';
+
+  @override
+  String get saveContacts => 'Guardar';
+
+  @override
+  String get emergencyAlertSent => 'Notificación de emergencia enviada';
+
+  @override
+  String get emergencyAlertFailed =>
+      'No se pudo enviar la alerta de emergencia';
+
+  @override
+  String get addEmergencyContactsFirst =>
+      'Agrega contactos de emergencia primero';
+
+  @override
+  String get noResidentsFound => 'No se encontraron residentes';
+
+  @override
+  String get noEmergencyContacts => 'No hay contactos de emergencia';
+
+  @override
+  String get holdToSendEmergency => 'Mantén presionado 3 segundos para enviar';
 }

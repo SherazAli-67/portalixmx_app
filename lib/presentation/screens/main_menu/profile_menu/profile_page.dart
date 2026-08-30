@@ -19,6 +19,7 @@ class ProfileMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ProfileProvider>(context);
+    final localization = AppLocalizations.of(context)!;
     return Center(
       child: SingleChildScrollView(
         child: Column(
@@ -42,7 +43,7 @@ class ProfileMenu extends StatelessWidget {
                           onTap: () =>
                               context.push(NamedRoutes.editProfile.routeName),
                           child: Text(
-                            AppLocalizations.of(context)!.viewProfile,
+                            localization.viewProfile,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w400,
@@ -58,51 +59,62 @@ class ProfileMenu extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ProfileItemWidget(
-                  title: AppLocalizations.of(context)!.myAccessQr,
+                  title: localization.myAccessQr,
                   icon: AppIcons.icQRCode,
+                  isPng: true,
                   onTap: () => context.push(NamedRoutes.myAccessQr.routeName),
                 ),
                 ProfileItemWidget(
-                  title: AppLocalizations.of(context)!.directory,
+                  title: localization.directory,
                   icon: AppIcons.icDirectory,
                   onTap: () => _onDirectoryTap(context),
                 ),
                 ProfileItemWidget(
-                  title: AppLocalizations.of(context)!.communityCalendar,
+                  title: localization.communityCalendar,
                   icon: AppIcons.icCalendar,
                   onTap: () => _onCommunityCalendarTap(context),
                 ),
                 ProfileItemWidget(
-                  title: AppLocalizations.of(context)!.communityPolls,
+                  title: localization.communityPolls,
                   icon: AppIcons.icCommunityPolls,
                   onTap: () => _onCommunityPollsTap(context),
                 ),
                 ProfileItemWidget(
-                  title: AppLocalizations.of(context)!.guards,
+                  title: localization.communityPolls,
+                  icon: AppIcons.icCommunityPolls,
+                  onTap: () => _onCommunityPollsTap(context),
+                ),
+                ProfileItemWidget(
+                  title: localization.fundManagement,
+                  icon: AppIcons.icPaymentsMenu,
+                  onTap: () => _onReportsTap(context),
+                ),
+                ProfileItemWidget(
+                  title: localization.guards,
                   icon: AppIcons.icGuards,
                   onTap: () => _onGuardsTap(context),
                 ),
                 ProfileItemWidget(
-                  title: AppLocalizations.of(context)!.carPooling,
+                  title: localization.carPooling,
                   icon: AppIcons.icCarPooling,
                   onTap: () {},
                 ),
                 ProfileItemWidget(
-                  title: AppLocalizations.of(context)!.emergencyCalls,
+                  title: localization.emergencyCalls,
                   icon: AppIcons.icEmergencyCalls,
                   onTap: () => _onEmergencyTap(context),
                 ),
                 TextButton(
                   onPressed: () {},
                   child: Text(
-                    AppLocalizations.of(context)!.privacyPolicy,
+                    localization.privacyPolicy,
                     style: AppTextStyles.tileTitleTextStyle2,
                   ),
                 ),
                 TextButton(
                   onPressed: () => _onLogoutTap(context),
                   child: Text(
-                    AppLocalizations.of(context)!.logout,
+                    localization.logout,
                     style: AppTextStyles.tileTitleTextStyle2,
                   ),
                 ),
@@ -126,6 +138,9 @@ class ProfileMenu extends StatelessWidget {
     context.push(NamedRoutes.communityPolls.routeName);
   }
 
+  void _onReportsTap(BuildContext context) {
+    context.push(NamedRoutes.reports.routeName);
+  }
   void _onGuardsTap(BuildContext context) {
     context.push(NamedRoutes.profileGuard.routeName);
   }
@@ -149,19 +164,22 @@ class ProfileItemWidget extends StatelessWidget {
     required String title,
     required String icon,
     required VoidCallback onTap,
+    bool isPng = false
   }) : _title = title,
        _icon = icon,
-       _onTap = onTap;
+       _onTap = onTap,
+  _isPng = isPng;
 
   final String _title;
   final String _icon;
   final VoidCallback _onTap;
+  final bool _isPng;
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: _onTap,
       contentPadding: EdgeInsets.only(left: 15),
-      leading: SvgPicture.asset(
+      leading: _isPng ? ClipOval(child: Image.asset(_icon, height: 24,),) : SvgPicture.asset(
         _icon,
         colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
       ),

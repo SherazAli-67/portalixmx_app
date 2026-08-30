@@ -8,6 +8,7 @@ import '../core/models/complaints_model.dart';
 import '../core/models/society_model.dart';
 import '../core/models/user_model.dart';
 import '../services/user_service/user_service.dart';
+import 'datetime_format_helpers.dart';
 
 class MaintenanceProvider extends ChangeNotifier {
   bool addingComplaint =  false;
@@ -15,13 +16,11 @@ class MaintenanceProvider extends ChangeNotifier {
   List<ComplaintModel> _allComplaints  = [];
   List<ComplaintModel> _filteredComplaints  = [];
 
-  final List<String> _filters = ['All', 'Week', 'Month',];
-  String _selectedFilter = 'All';
+  DateTime? dateFrom;
+  DateTime? dateTo;
   final _complaintService = ComplaintsService.instance;
   List<ComplaintModel> get allComplaints => _allComplaints;
   List<ComplaintModel> get filteredComplaints => _filteredComplaints;
-  List<String> get filters => _filters;
-  String get selectedFilter => _selectedFilter;
   MaintenanceProvider(){
     _initComplaints();
   }
@@ -29,7 +28,7 @@ class MaintenanceProvider extends ChangeNotifier {
   Future<String?> deleteComplaintByID(String complaintID) async {
     try{
       _allComplaints.removeWhere((complaint) => complaint.id == complaintID);
-      notifyListeners();
+      _applyDateFilter();
       await _complaintService.deleteComplaintByID(complaintID);
       return null;
     }catch(e){
@@ -57,6 +56,8 @@ class MaintenanceProvider extends ChangeNotifier {
         ComplaintModel? complaint = await _complaintService.addComplaint(complaintText: complaintText, society: society!, images: imagesUrl);
         if(complaint != null){
           _allComplaints.add(complaint);
+          _sortComplaints();
+          _applyDateFilter();
         }
         addingComplaint = true;
         notifyListeners();
@@ -73,8 +74,8 @@ class MaintenanceProvider extends ChangeNotifier {
       notifyListeners();
 
       _allComplaints = await _complaintService.getAllComplaints();
-      _filteredComplaints = List<ComplaintModel>.from(_allComplaints);
-      notifyListeners();
+      _sortComplaints();
+      _applyDateFilter();
     }catch(e){
       debugPrint("Error while fetching complaints: ${e.toString()}");
     }
@@ -86,44 +87,32 @@ class MaintenanceProvider extends ChangeNotifier {
 
   Future<void> refreshComplaints() async {
     await _initComplaints();
-    onFilterUpdated(_selectedFilter);
   }
 
-  void onFilterUpdated(dynamic val){
-    _selectedFilter = val;
-    if(_selectedFilter == 'All'){
-      _filteredComplaints = _allComplaints;
-    }else if(_selectedFilter == 'Week'){
-      _filteredComplaints = _getComplaintsOfCurrentWeek();
-    }else{
-      _filteredComplaints = _getComplaintsOfCurrentMonth();
-    }
+  void setDateFrom(DateTime date){
+    dateFrom = date;
+    _applyDateFilter();
+  }
+
+  void setDateTo(DateTime date){
+    dateTo = date;
+    _applyDateFilter();
+  }
+
+  void clearDateRange(){
+    dateFrom = null;
+    dateTo = null;
+    _applyDateFilter();
+  }
+
+  void _sortComplaints() {
+    _allComplaints.sort((a, b)=> b.createdAt.compareTo(a.createdAt));
+  }
+
+  void _applyDateFilter(){
+    _filteredComplaints = _allComplaints.where((complaint) {
+      return DateTimeFormatHelpers.isDateInRange(complaint.createdAt, from: dateFrom, to: dateTo);
+    }).toList();
     notifyListeners();
-  }
-
-  List<ComplaintModel> _getComplaintsOfCurrentWeek() {
-    final now = DateTime.now();
-    final end = DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
-    final start = end.subtract(const Duration(days: 7));
-
-    return _allComplaints.where((complaint) {
-      return complaint.createdAt.isAfter(start) &&
-          complaint.createdAt.isBefore(end);
-    }).toList();
-  }
-
-  List<ComplaintModel> _getComplaintsOfCurrentMonth() {
-    final now = DateTime.now();
-
-    final start = DateTime(now.year, now.month, 1);
-
-    final end = (now.month < 12)
-        ? DateTime(now.year, now.month + 1, 1)
-        : DateTime(now.year + 1, 1, 1);
-
-    return _allComplaints.where((complaint) {
-      return complaint.createdAt.isAfter(start) &&
-          complaint.createdAt.isBefore(end);
-    }).toList();
   }
 }

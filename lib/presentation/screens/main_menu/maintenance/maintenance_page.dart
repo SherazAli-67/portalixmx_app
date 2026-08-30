@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/core/res/app_colors.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/presentation/widgets/bg_gradient_screen.dart';
+import 'package:portalixmx_app/presentation/widgets/date_range_filter_bar.dart';
 import 'package:portalixmx_app/presentation/widgets/loading_widget.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
 import 'package:portalixmx_app/providers/maintenance_provider.dart';
@@ -34,14 +35,12 @@ class MaintenanceMenu extends StatelessWidget{
                         padding: const .only(top: 35.0, bottom: 11),
                         child: Text(AppLocalizations.of(context)!.maintenance, textAlign: .center, style: AppTextStyles.headingTextStyle,),
                       )),
-                  Row(
-                    spacing: 20,
-                    children: List.generate(provider.filters.length, (index){
-                      bool isSelected = provider.selectedFilter == provider.filters[index];
-                      return ElevatedButton(
-                          style: ElevatedButton.styleFrom(backgroundColor: isSelected ? AppColors.btnColor: Colors.white),
-                          onPressed: ()=> provider.onFilterUpdated(provider.filters[index]), child: Text(provider.filters[index], style: AppTextStyles.tabsTextStyle.copyWith(color: isSelected ? Colors.white : AppColors.primaryColor),));
-                    })
+                  DateRangeFilterBar(
+                    dateFrom: provider.dateFrom,
+                    dateTo: provider.dateTo,
+                    onDateFromChanged: provider.setDateFrom,
+                    onDateToChanged: provider.setDateTo,
+                    onClear: provider.clearDateRange,
                   ),
                   Expanded(
                       child: provider.loadingComplaints
