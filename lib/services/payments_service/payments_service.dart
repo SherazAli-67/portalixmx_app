@@ -69,7 +69,7 @@ class PaymentsService {
     }
   }
 
-  Future<PaymentStatus> getPaymentStatus({required String paymentID,}) async {
+  Future<PaymentSubmittedModel?> getMySubmission({required String paymentID}) async {
     try{
       User? authUser = FirebaseAuth.instance.currentUser;
       if(authUser == null) throw Exception("User not found");
@@ -79,11 +79,18 @@ class PaymentsService {
           .collection(
           FirebaseConst.paymentsSubmittedCol)
           .doc(authUser.uid).get();
-      if(docSnap.exists){
-        Map<String, dynamic> map = docSnap.data() as Map<String, dynamic>;
-        return map['approvedOnDate'] != null ? PaymentStatus.received : PaymentStatus.submitted;
-      }
-      return PaymentStatus.pending;
+      if(!docSnap.exists) return null;
+      return PaymentSubmittedModel.fromMap(docSnap.data() as Map<String, dynamic>);
+    }catch(e){
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<PaymentStatus> getPaymentStatus({required String paymentID,}) async {
+    try{
+      final submission = await getMySubmission(paymentID: paymentID);
+      if(submission == null) return PaymentStatus.pending;
+      return submission.approvedOnDate != null ? PaymentStatus.received : PaymentStatus.submitted;
     }catch(e){
       throw Exception(e.toString());
     }
@@ -101,18 +108,6 @@ class PaymentsService {
       return imageUrl;
     }catch(e){
       throw Exception("Failed to upload image: ${e.toString()}");
-    }
-  }
-
-  Future<void> updatePayment({required PaymentModel payment}) async {
-    try{
-      User? authUser = FirebaseAuth.instance.currentUser;
-      if(authUser == null) throw Exception("User not found");
-      await _firestore
-          .collection(FirebaseConst.paymentsCol)
-          .doc(payment.paymentID).set(payment.toMap());
-    }catch(e){
-      throw Exception(e.toString());
     }
   }
 }

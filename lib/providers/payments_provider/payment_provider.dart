@@ -17,6 +17,7 @@ class PaymentProvider extends ChangeNotifier{
 
   List<PaymentModel> _payments = [];
   List<PaymentModel> get payments => _payments;
+  Map<String, PaymentStatus> _paymentStatuses = {};
 
   PaymentProvider(){
     _initPayments();
@@ -29,18 +30,23 @@ class PaymentProvider extends ChangeNotifier{
   List<String> getStatusList(AppLocalizations localization){
     return [
       localization.pending,
+      localization.submitted,
       localization.received,
     ];
   }
+
+  PaymentStatus statusFor(String paymentID) => _paymentStatuses[paymentID] ?? .pending;
 
   List<PaymentModel> getFilteredPayments(AppLocalizations l10n) {
     PaymentStatus? statusFilter;
     if (selectedPaymentStatusFilter == l10n.pending) {
       statusFilter = PaymentStatus.pending;
+    } else if (selectedPaymentStatusFilter == l10n.submitted) {
+      statusFilter = PaymentStatus.submitted;
     } else if (selectedPaymentStatusFilter == l10n.received) statusFilter = PaymentStatus.received;
     final filtered = _payments.where((p) {
       if (!DateTimeFormatHelpers.isDateInRange(p.dateTime, from: dateFrom, to: dateTo)) return false;
-      if (statusFilter != null && p.paymentStatus != statusFilter) return false;
+      if (statusFilter != null && statusFor(p.paymentID) != statusFilter) return false;
       return true;
     }).toList();
     filtered.sort((a, b)=> b.dateTime.compareTo(a.dateTime));
@@ -60,11 +66,20 @@ class PaymentProvider extends ChangeNotifier{
       }
       _payments = await _paymentsService.getPayments(user.societyID?? '');
       _payments.sort((a, b)=> b.dateTime.compareTo(a.dateTime));
+      await _loadPaymentStatuses();
     }catch(e){
       error = e.toString();
     }
     loadingPayments = false;
     notifyListeners();
+  }
+
+  Future<void> _loadPaymentStatuses() async {
+    final entries = await Future.wait(_payments.map((payment) async {
+      final status = await _paymentsService.getPaymentStatus(paymentID: payment.paymentID);
+      return MapEntry(payment.paymentID, status);
+    }));
+    _paymentStatuses = Map.fromEntries(entries);
   }
 
   Future<void> refreshPayments() async {
@@ -106,7 +121,7 @@ class PaymentProvider extends ChangeNotifier{
       await _paymentsService.submitPaymentToAdmin(paymentID: updatedPayment.paymentID, paymentSubmitted: paymentSubmitted);
       int index = _payments.indexWhere((payment) => payment.paymentID == updatedPayment.paymentID);
       _payments[index] = updatedPayment.copyWith(receipt: receipt);
-      await _paymentsService.updatePayment(payment: updatedPayment.copyWith(receipt: receipt));
+      _paymentStatuses[updatedPayment.paymentID] = .submitted;
       updatingPayment = false;
       notifyListeners();
       return null;
@@ -114,25 +129,6 @@ class PaymentProvider extends ChangeNotifier{
       updatingPayment = false;
       notifyListeners();
       return e.toString();
-    }
-  }
-
-  Future<PaymentStatus?> getPaymentStatus({required String paymentID}) async {
-    try{
-
-   return await _paymentsService.getPaymentStatus(paymentID: paymentID);
-    /* if(paymentSubmitted == null){
-       return PaymentStatus.pending;
-     }
-     if(paymentSubmitted.approvedOnDate == null){
-       return PaymentStatus.received;
-     }else{
-       return PaymentStatus.submitted;
-     }*/
-
-    }catch(e){
-      debugPrint("Failed to get payment: ${e.toString()}");
-      return null;
     }
   }
 }

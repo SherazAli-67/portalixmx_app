@@ -21,6 +21,7 @@
   "amount" : "Amount",
   "receipt" : "Payment Receipt",
   "received" :"Received",
+  "submitted" :"Submitted",
   "paymentDetail" : "Payment Details",
   "accessRequests": "Access Requests",
   "poolAccess": "Pool Access",

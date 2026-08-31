@@ -163,5 +163,6 @@
   "addEmergencyContactsFirst" : "Agrega contactos de emergencia primero",
   "noResidentsFound" : "No se encontraron residentes",
   "noEmergencyContacts" : "No hay contactos de emergencia",
-  "holdToSendEmergency" : "Mantén presionado 3 segundos para enviar"
+  "holdToSendEmergency" : "Mantén presionado 3 segundos para enviar",
+  "submitted" : "Enviado"
 }

@@ -7,6 +7,7 @@ import '../../../../core/res/app_textstyles.dart';
 import '../../../../providers/datetime_format_helpers.dart';
 import '../../../core/helpers/bottom_sheet_helper.dart';
 import '../../../core/models/payment_model.dart';
+import '../../../core/models/payment_submitted_model.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/payments_service/payments_service.dart';
 import '../../bottomsheets/submit_payment_to_admin_bottomsheet.dart';
@@ -51,42 +52,45 @@ class PaymentDetailPage extends StatelessWidget{
                   children: [
                     Text(localizations.paymentDetail, style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.btnColor),),
                     Expanded(
-                      child: Padding(
-                        padding: const .only(bottom: 16.0),
-                        child: Column(
-                          crossAxisAlignment: .start,
-                          children: [
-                            Row(
-                              spacing: 20,
+                      child: FutureBuilder<PaymentSubmittedModel?>(
+                        future: PaymentsService.instance.getMySubmission(paymentID: payment.paymentID),
+                        builder: (ctx, snapshot) {
+                          if(snapshot.connectionState == .waiting){
+                            return LoadingWidget(color: AppColors.primaryColor,);
+                          }
+                          final submission = snapshot.data;
+                          final status = submission == null
+                              ? PaymentStatus.pending
+                              : submission.approvedOnDate != null
+                                  ? PaymentStatus.received
+                                  : PaymentStatus.submitted;
+                          return Padding(
+                            padding: const .only(bottom: 16.0),
+                            child: Column(
+                              crossAxisAlignment: .start,
                               children: [
-                                Expanded(
-                                  child:VisitorInfoItemWidget(title: localizations.paymentFor, subTitle: payment.paymentForTitle,),
-
+                                Row(
+                                  spacing: 20,
+                                  children: [
+                                    Expanded(
+                                      child:VisitorInfoItemWidget(title: localizations.paymentFor, subTitle: payment.paymentForTitle,),
+                                    ),
+                                    Expanded(
+                                        child: VisitorInfoItemWidget(
+                                          title: localizations.status, subTitle: status.name.toUpperCase(),)
+                                    ),
+                                  ],
                                 ),
+                                VisitorInfoItemWidget(title: localizations.date, subTitle: DateTimeFormatHelpers.formatDateTime(payment.dateTime), showDivider: true ),
                                 Expanded(
-                                    child: VisitorInfoItemWidget(
-                                      title: localizations.status, subTitle: payment.paymentStatus.name.toUpperCase(),)
+                                  child: status == .pending
+                                      ? _buildSubmitPaymentBtn(localizations, context)
+                                      : _buildReceiptImage(localizations, receipt: submission?.receipt),
                                 ),
                               ],
                             ),
-                            VisitorInfoItemWidget(title: localizations.date, subTitle: DateTimeFormatHelpers.formatDateTime(payment.dateTime), showDivider: true ),
-                            Expanded(child: FutureBuilder(future: PaymentsService.instance.getPaymentStatus(paymentID: payment.paymentID), builder: (ctx, snapshot){
-                              if(snapshot.connectionState == .waiting){
-                                return LoadingWidget(color: AppColors.primaryColor,);
-                              }
-                              if(snapshot.data == null){
-                                return _buildSubmitPaymentBtn(localizations, context);
-                              }
-
-                              if(snapshot.data != null){
-                                // return _buildSubmitPaymentBtn(localizations, context);
-                                return snapshot.data! == .pending ? _buildSubmitPaymentBtn(localizations, context) : _buildReceiptImage(localizations, payment: payment);
-                              }
-
-                              return SizedBox();
-                            })),
-                          ],
-                        ),
+                          );
+                        },
                       ),
                     )
                   ],
@@ -109,7 +113,6 @@ class PaymentDetailPage extends StatelessWidget{
             child: PrimaryBtn(onTap: ()async{
               final result = await BottomSheetHelper.showDraggableBottomSheet(scaffoldKey: scaffoldKey, child: SubmitPaymentToAdminBottomSheet(payment: payment));
               if(result != null){
-                //Upload receipt and update paymentStatus to submitted
                 _updatePaymentStatus(context, result['receipt']);
               }
             }, btnText: localization.submit),
@@ -119,7 +122,7 @@ class PaymentDetailPage extends StatelessWidget{
     );
   }
 
-  _buildReceiptImage(AppLocalizations localizations,{required PaymentModel payment}) {
+  _buildReceiptImage(AppLocalizations localizations,{String? receipt}) {
     return Column(
       spacing: 10,
       crossAxisAlignment: .start,
@@ -128,7 +131,7 @@ class PaymentDetailPage extends StatelessWidget{
         Expanded(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
-            child: CachedNetworkImage(imageUrl: payment.receipt ?? AppConstants.dummyImageUrl, fit: .cover,),
+            child: CachedNetworkImage(imageUrl: receipt ?? AppConstants.dummyImageUrl, fit: .cover,),
           ),
         )
       ],

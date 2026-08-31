@@ -224,6 +224,12 @@ abstract class AppLocalizations {
   /// **'Received'**
   String get received;
 
+  /// No description provided for @submitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted'**
+  String get submitted;
+
   /// No description provided for @paymentDetail.
   ///
   /// In en, this message translates to:

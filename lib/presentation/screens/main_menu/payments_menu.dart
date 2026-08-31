@@ -106,16 +106,7 @@ class PaymentsMenu extends StatelessWidget{
                                                     spacing: 20,
                                                     children: [
                                                       Expanded(child: Text(payment.description, style: AppTextStyles.emergencyContactTitleTextStyle,)),
-                                                      FutureBuilder(future: provider.getPaymentStatus(paymentID: payment.paymentID), builder: (ctx, snapshot){
-                                                        if(snapshot.connectionState == .waiting){
-                                                          return LoadingWidget(color: AppColors.primaryColor,);
-                                                        }
-                                                        if(snapshot.data != null){
-                                                          return PaymentStatusWidget(status: snapshot.requireData ?? PaymentStatus.pending);
-                                                        }
-
-                                                        return SizedBox();
-                                                      })
+                                                      PaymentStatusWidget(status: provider.statusFor(payment.paymentID)),
                                                     ],
                                                   )
                                                 ],

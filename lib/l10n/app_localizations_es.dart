@@ -76,6 +76,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get received => 'Received';
 
   @override
+  String get submitted => 'Enviado';
+
+  @override
   String get paymentDetail => 'Payment Details';
 
   @override

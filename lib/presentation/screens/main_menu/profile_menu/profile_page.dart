@@ -79,11 +79,7 @@ class ProfileMenu extends StatelessWidget {
                   icon: AppIcons.icCommunityPolls,
                   onTap: () => _onCommunityPollsTap(context),
                 ),
-                ProfileItemWidget(
-                  title: localization.communityPolls,
-                  icon: AppIcons.icCommunityPolls,
-                  onTap: () => _onCommunityPollsTap(context),
-                ),
+
                 ProfileItemWidget(
                   title: localization.fundManagement,
                   icon: AppIcons.icPaymentsMenu,
