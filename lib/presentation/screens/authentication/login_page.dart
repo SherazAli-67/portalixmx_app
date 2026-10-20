@@ -2,8 +2,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/core/common_ui.dart';
+import 'package:portalixmx_app/core/helpers/auth_error_localizer.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/authentication_provider/authentication_provider.dart';
+import 'package:portalixmx_app/providers/home_provider.dart';
+import 'package:portalixmx_app/providers/profile_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../core/res/app_constants.dart';
 import '../../../core/res/app_textstyles.dart';
@@ -96,10 +99,17 @@ class _LoginPageState extends State<LoginPage> {
     if(email.isEmpty || password.isEmpty){
       return;
     }
-    String? result =  await context.read<AuthenticationProvider>().onSignInTap(email: email, password: password);
+    final authProvider = context.read<AuthenticationProvider>();
+    final profileProvider = context.read<ProfileProvider>();
+    final homeProvider = context.read<HomeProvider>();
+    String? result = await authProvider.onSignInTap(email: email, password: password);
+    if (!mounted) return;
     if(result != null){
-      CommonUI.showSnackBarMessage(context, isError: true, message: result);
+      CommonUI.showSnackBarMessage(context, isError: true, message: AuthErrorLocalizer.localize(AppLocalizations.of(context)!, result));
     }else{
+      await profileProvider.reloadProfile();
+      await homeProvider.reloadForCurrentUser();
+      if (!mounted) return;
       context.go(NamedRoutes.home.routeName);
     }
     /*

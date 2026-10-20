@@ -15,6 +15,10 @@ AccessRequestStatus _accessRequestStatusFromMap(dynamic raw) {
       orElse: () => AccessRequestStatus.pending,
     );
   }
+  final idx = raw is int ? raw : int.tryParse(raw.toString());
+  if (idx != null && idx >= 0 && idx < AccessRequestStatus.values.length) {
+    return AccessRequestStatus.values[idx];
+  }
   return AccessRequestStatus.pending;
 }
 

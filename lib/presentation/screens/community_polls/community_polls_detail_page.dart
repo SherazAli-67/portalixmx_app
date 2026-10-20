@@ -124,7 +124,7 @@ class _CommunityPollsDetailPageState extends State<CommunityPollsDetailPage> {
                           if (poll.imageUrl != null && poll.imageUrl!.isNotEmpty)
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: CachedNetworkImage(imageUrl: poll.imageUrl!, fit: BoxFit.cover),
+                              child: CachedNetworkImage(imageUrl: poll.imageUrl!, height: 200, width: .infinity, fit: .cover,),
                             ),
                           if (expired) Text(loc.pollEnded, style: TextStyle(color: AppColors.darkGreyColor2)),
                           if (hasVoted && !expired) Text(loc.pollAlreadyVoted, style: TextStyle(color: AppColors.darkGreyColor2)),

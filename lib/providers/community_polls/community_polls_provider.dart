@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../core/models/community_poll_model.dart';
@@ -9,13 +11,14 @@ class CommunityPollsProvider extends ChangeNotifier {
   bool loadingCommunityPolls = false;
   final _userService = UserService.instance;
   final _pollsService = CommunityPollsService.instance;
+  StreamSubscription? _pollsSub;
 
   List<CommunityPollModel> _communityPolls = [];
 
   List<CommunityPollModel> get communityPolls => _communityPolls;
 
   CommunityPollsProvider() {
-    _initCommunityPolls();
+    _listenCommunityPolls();
   }
 
   Future<UserModel?> getCurrentUser() async {
@@ -26,7 +29,7 @@ class CommunityPollsProvider extends ChangeNotifier {
     }
   }
 
-  void _initCommunityPolls() async {
+  Future<void> _listenCommunityPolls() async {
     try {
       loadingCommunityPolls = true;
       notifyListeners();
@@ -37,11 +40,20 @@ class CommunityPollsProvider extends ChangeNotifier {
       final sid = user.societyID;
       if (sid == null || sid.isEmpty) {
         _communityPolls = [];
-      } else {
-        _communityPolls = await _pollsService.getPolls(sid);
+        loadingCommunityPolls = false;
+        notifyListeners();
+        return;
       }
-      loadingCommunityPolls = false;
-      notifyListeners();
+      _pollsSub?.cancel();
+      _pollsSub = _pollsService.watchPolls(sid).listen((polls) {
+        _communityPolls = polls;
+        loadingCommunityPolls = false;
+        notifyListeners();
+      }, onError: (e) {
+        loadingCommunityPolls = false;
+        notifyListeners();
+        debugPrint('Error loading polls: $e');
+      });
     } catch (e) {
       loadingCommunityPolls = false;
       notifyListeners();
@@ -49,5 +61,9 @@ class CommunityPollsProvider extends ChangeNotifier {
     }
   }
 
-
+  @override
+  void dispose() {
+    _pollsSub?.cancel();
+    super.dispose();
+  }
 }

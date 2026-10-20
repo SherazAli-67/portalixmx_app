@@ -140,11 +140,23 @@ abstract class AppLocalizations {
   /// **'Select Society'**
   String get selectSociety;
 
+  /// No description provided for @failedToLoadSocieties.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load societies. Please try again.'**
+  String get failedToLoadSocieties;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
   /// No description provided for @accountRequestPending.
   ///
   /// In en, this message translates to:
-  /// **'Your admin request for {societyName} is pending. You will be notified as the admin update your request'**
-  String accountRequestPending(Object societyName);
+  /// **'Your resident request for {societyName} is pending. You will be notified as the admin update your request'**
+  String accountRequestPending(String societyName);
 
   /// No description provided for @welcomeMessage.
   ///
@@ -529,6 +541,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Privacy Policy'**
   String get privacyPolicy;
+
+  /// No description provided for @termsOfService.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get termsOfService;
 
   /// No description provided for @logout.
   ///
@@ -1159,6 +1177,378 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hold for 3 seconds to send'**
   String get holdToSendEmergency;
+
+  /// No description provided for @refresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get refresh;
+
+  /// No description provided for @society.
+  ///
+  /// In en, this message translates to:
+  /// **'Society'**
+  String get society;
+
+  /// No description provided for @accountStillPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is still pending approval'**
+  String get accountStillPending;
+
+  /// No description provided for @unableToRefreshStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to refresh status. Please try again.'**
+  String get unableToRefreshStatus;
+
+  /// No description provided for @guestsDirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'Guests Directory'**
+  String get guestsDirectory;
+
+  /// No description provided for @noVisitorFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No visitor found'**
+  String get noVisitorFound;
+
+  /// No description provided for @addNewGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Guest'**
+  String get addNewGuest;
+
+  /// No description provided for @signupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Signup failed'**
+  String get signupFailed;
+
+  /// No description provided for @resetPasswordLinkSent.
+  ///
+  /// In en, this message translates to:
+  /// **'A reset password link has been sent to your email address. You can update your password from there.'**
+  String get resetPasswordLinkSent;
+
+  /// No description provided for @noPollsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No polls yet'**
+  String get noPollsYet;
+
+  /// No description provided for @noEventsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No events yet'**
+  String get noEventsYet;
+
+  /// No description provided for @noPaymentRequestsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No payment requests found'**
+  String get noPaymentRequestsFound;
+
+  /// No description provided for @receiptSubmittedToAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Your receipt has been submitted to the admin'**
+  String get receiptSubmittedToAdmin;
+
+  /// No description provided for @accessTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{title} Access'**
+  String accessTitleLabel(String title);
+
+  /// No description provided for @photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get photos;
+
+  /// No description provided for @visitorType.
+  ///
+  /// In en, this message translates to:
+  /// **'Visitor Type'**
+  String get visitorType;
+
+  /// No description provided for @phoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get phoneNumber;
+
+  /// No description provided for @vehicleNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. ALTO'**
+  String get vehicleNameHint;
+
+  /// No description provided for @colorHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Black'**
+  String get colorHint;
+
+  /// No description provided for @licenseNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'License Number'**
+  String get licenseNumberHint;
+
+  /// No description provided for @receiptUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt unavailable'**
+  String get receiptUnavailable;
+
+  /// No description provided for @select.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get select;
+
+  /// No description provided for @informationUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Information unavailable'**
+  String get informationUnavailable;
+
+  /// No description provided for @contact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get contact;
+
+  /// No description provided for @guardInfoUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Guard information is unavailable'**
+  String get guardInfoUnavailable;
+
+  /// No description provided for @selectDateForAccessRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a date for the access request'**
+  String get selectDateForAccessRequest;
+
+  /// No description provided for @selectTimeForAccessRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a time for the access request'**
+  String get selectTimeForAccessRequest;
+
+  /// No description provided for @selectAccessForRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Select access for the request'**
+  String get selectAccessForRequest;
+
+  /// No description provided for @pleaseUploadReceipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Please upload a receipt before submitting'**
+  String get pleaseUploadReceipt;
+
+  /// No description provided for @visitorDeletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Visitor deleted successfully'**
+  String get visitorDeletedSuccessfully;
+
+  /// No description provided for @failedToDeleteVisitor.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete visitor. Please try again.'**
+  String get failedToDeleteVisitor;
+
+  /// No description provided for @loginFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Login failed. Please try again.'**
+  String get loginFailed;
+
+  /// No description provided for @pleaseEnterVehicleName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter vehicle name'**
+  String get pleaseEnterVehicleName;
+
+  /// No description provided for @pleaseEnterVehicleColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter vehicle color'**
+  String get pleaseEnterVehicleColor;
+
+  /// No description provided for @pleaseEnterLicensePlate.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter vehicle license plate number'**
+  String get pleaseEnterLicensePlate;
+
+  /// No description provided for @pleaseEnterRegistrationNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter vehicle registration number'**
+  String get pleaseEnterRegistrationNumber;
+
+  /// No description provided for @nameCannotBeEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Name cannot be empty. Please enter your name'**
+  String get nameCannotBeEmpty;
+
+  /// No description provided for @portalixAccessQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Portalix access QR'**
+  String get portalixAccessQr;
+
+  /// No description provided for @emailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get emailRequired;
+
+  /// No description provided for @pleaseEnterValidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address'**
+  String get pleaseEnterValidEmail;
+
+  /// No description provided for @passwordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get passwordRequired;
+
+  /// No description provided for @fullNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name is required'**
+  String get fullNameRequired;
+
+  /// No description provided for @fullNameMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name must be at least 2 characters'**
+  String get fullNameMinLength;
+
+  /// No description provided for @appointmentDateRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointment date is required'**
+  String get appointmentDateRequired;
+
+  /// No description provided for @dayMustBeBetween.
+  ///
+  /// In en, this message translates to:
+  /// **'Day must be between 1 and 31'**
+  String get dayMustBeBetween;
+
+  /// No description provided for @pleaseUploadProfilePicture.
+  ///
+  /// In en, this message translates to:
+  /// **'Please upload your profile picture'**
+  String get pleaseUploadProfilePicture;
+
+  /// No description provided for @userNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'User not found'**
+  String get userNotFound;
+
+  /// No description provided for @userNotFoundLoginAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'User not found. Please log in again'**
+  String get userNotFoundLoginAgain;
+
+  /// No description provided for @accountMustBeApprovedForQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Account must be approved before generating access QR'**
+  String get accountMustBeApprovedForQr;
+
+  /// No description provided for @inProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress'**
+  String get inProgress;
+
+  /// No description provided for @resolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolved'**
+  String get resolved;
+
+  /// No description provided for @rejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get rejected;
+
+  /// No description provided for @authInvalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'The email address is not valid.'**
+  String get authInvalidEmail;
+
+  /// No description provided for @authUserDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This user account has been disabled.'**
+  String get authUserDisabled;
+
+  /// No description provided for @authUserNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No user found for that email.'**
+  String get authUserNotFound;
+
+  /// No description provided for @authWrongPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong password provided for that user.'**
+  String get authWrongPassword;
+
+  /// No description provided for @authEmailAlreadyInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'The email address is already in use by another account.'**
+  String get authEmailAlreadyInUse;
+
+  /// No description provided for @authOperationNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Email/password accounts are not enabled.'**
+  String get authOperationNotAllowed;
+
+  /// No description provided for @authWeakPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'The password provided is too weak.'**
+  String get authWeakPassword;
+
+  /// No description provided for @authInvalidCredential.
+  ///
+  /// In en, this message translates to:
+  /// **'The provided email or password is invalid.'**
+  String get authInvalidCredential;
+
+  /// No description provided for @authUnknownError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occurred.'**
+  String get authUnknownError;
+
+  /// No description provided for @zkbioAccessFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Door access failed'**
+  String get zkbioAccessFailed;
 }
 
 class _AppLocalizationsDelegate

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:portalixmx_app/core/helpers/status_display_helper.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import '../../core/models/payment_model.dart';
 import '../../core/res/app_colors.dart';
 import '../../core/res/app_textstyles.dart';
@@ -11,6 +13,7 @@ class PaymentStatusWidget extends StatelessWidget {
   final PaymentStatus status;
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(99),
@@ -18,7 +21,7 @@ class PaymentStatusWidget extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Text(
-       status.name.toUpperCase(),
+       StatusDisplayHelper.label(status, l10n),
         style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: getColorByStatus(status)),
       ),
     );

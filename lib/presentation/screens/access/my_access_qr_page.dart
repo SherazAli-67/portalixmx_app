@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portalixmx_app/core/helpers/auth_error_localizer.dart';
 import 'package:portalixmx_app/core/models/user_model.dart';
 import 'package:portalixmx_app/core/models/zkbio_qr_model.dart';
 import 'package:portalixmx_app/core/res/app_textstyles.dart';
@@ -116,7 +117,7 @@ class _MyAccessQrPageState extends State<MyAccessQrPage> {
           spacing: 16,
           children: [
             Text(
-              _error!,
+              AuthErrorLocalizer.localize(l10n, _error!),
               textAlign: TextAlign.center,
               style: AppTextStyles.subHeadingTextStyle.copyWith(color: Colors.red),
             ),

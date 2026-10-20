@@ -30,8 +30,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectSociety => 'Select Society';
 
   @override
-  String accountRequestPending(Object societyName) {
-    return 'Your admin request for $societyName is pending. You will be notified as the admin update your request';
+  String get failedToLoadSocieties =>
+      'Unable to load societies. Please try again.';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String accountRequestPending(String societyName) {
+    return 'Your resident request for $societyName is pending. You will be notified as the admin update your request';
   }
 
   @override
@@ -230,6 +237,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get termsOfService => 'Terms of Service';
 
   @override
   String get logout => 'Logout';
@@ -565,4 +575,205 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get holdToSendEmergency => 'Hold for 3 seconds to send';
+
+  @override
+  String get refresh => 'Refresh';
+
+  @override
+  String get society => 'Society';
+
+  @override
+  String get accountStillPending => 'Your account is still pending approval';
+
+  @override
+  String get unableToRefreshStatus =>
+      'Unable to refresh status. Please try again.';
+
+  @override
+  String get guestsDirectory => 'Guests Directory';
+
+  @override
+  String get noVisitorFound => 'No visitor found';
+
+  @override
+  String get addNewGuest => 'Add New Guest';
+
+  @override
+  String get signupFailed => 'Signup failed';
+
+  @override
+  String get resetPasswordLinkSent =>
+      'A reset password link has been sent to your email address. You can update your password from there.';
+
+  @override
+  String get noPollsYet => 'No polls yet';
+
+  @override
+  String get noEventsYet => 'No events yet';
+
+  @override
+  String get noPaymentRequestsFound => 'No payment requests found';
+
+  @override
+  String get receiptSubmittedToAdmin =>
+      'Your receipt has been submitted to the admin';
+
+  @override
+  String accessTitleLabel(String title) {
+    return '$title Access';
+  }
+
+  @override
+  String get photos => 'Photos';
+
+  @override
+  String get visitorType => 'Visitor Type';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get vehicleNameHint => 'e.g. ALTO';
+
+  @override
+  String get colorHint => 'e.g. Black';
+
+  @override
+  String get licenseNumberHint => 'License Number';
+
+  @override
+  String get receiptUnavailable => 'Receipt unavailable';
+
+  @override
+  String get select => 'Select';
+
+  @override
+  String get informationUnavailable => 'Information unavailable';
+
+  @override
+  String get contact => 'Contact';
+
+  @override
+  String get guardInfoUnavailable => 'Guard information is unavailable';
+
+  @override
+  String get selectDateForAccessRequest =>
+      'Select a date for the access request';
+
+  @override
+  String get selectTimeForAccessRequest =>
+      'Select a time for the access request';
+
+  @override
+  String get selectAccessForRequest => 'Select access for the request';
+
+  @override
+  String get pleaseUploadReceipt => 'Please upload a receipt before submitting';
+
+  @override
+  String get visitorDeletedSuccessfully => 'Visitor deleted successfully';
+
+  @override
+  String get failedToDeleteVisitor =>
+      'Failed to delete visitor. Please try again.';
+
+  @override
+  String get loginFailed => 'Login failed. Please try again.';
+
+  @override
+  String get pleaseEnterVehicleName => 'Please enter vehicle name';
+
+  @override
+  String get pleaseEnterVehicleColor => 'Please enter vehicle color';
+
+  @override
+  String get pleaseEnterLicensePlate =>
+      'Please enter vehicle license plate number';
+
+  @override
+  String get pleaseEnterRegistrationNumber =>
+      'Please enter vehicle registration number';
+
+  @override
+  String get nameCannotBeEmpty =>
+      'Name cannot be empty. Please enter your name';
+
+  @override
+  String get portalixAccessQr => 'Portalix access QR';
+
+  @override
+  String get emailRequired => 'Email is required';
+
+  @override
+  String get pleaseEnterValidEmail => 'Please enter a valid email address';
+
+  @override
+  String get passwordRequired => 'Password is required';
+
+  @override
+  String get fullNameRequired => 'Full name is required';
+
+  @override
+  String get fullNameMinLength => 'Full name must be at least 2 characters';
+
+  @override
+  String get appointmentDateRequired => 'Appointment date is required';
+
+  @override
+  String get dayMustBeBetween => 'Day must be between 1 and 31';
+
+  @override
+  String get pleaseUploadProfilePicture => 'Please upload your profile picture';
+
+  @override
+  String get userNotFound => 'User not found';
+
+  @override
+  String get userNotFoundLoginAgain => 'User not found. Please log in again';
+
+  @override
+  String get accountMustBeApprovedForQr =>
+      'Account must be approved before generating access QR';
+
+  @override
+  String get inProgress => 'In Progress';
+
+  @override
+  String get resolved => 'Resolved';
+
+  @override
+  String get rejected => 'Rejected';
+
+  @override
+  String get authInvalidEmail => 'The email address is not valid.';
+
+  @override
+  String get authUserDisabled => 'This user account has been disabled.';
+
+  @override
+  String get authUserNotFound => 'No user found for that email.';
+
+  @override
+  String get authWrongPassword => 'Wrong password provided for that user.';
+
+  @override
+  String get authEmailAlreadyInUse =>
+      'The email address is already in use by another account.';
+
+  @override
+  String get authOperationNotAllowed =>
+      'Email/password accounts are not enabled.';
+
+  @override
+  String get authWeakPassword => 'The password provided is too weak.';
+
+  @override
+  String get authInvalidCredential =>
+      'The provided email or password is invalid.';
+
+  @override
+  String get authUnknownError => 'An unknown error occurred.';
+
+  @override
+  String get zkbioAccessFailed => 'Door access failed';
 }

@@ -27,11 +27,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get forgetPassword => 'Olvida tu contraseña';
 
   @override
-  String get selectSociety => 'Select Society';
+  String get selectSociety => 'Seleccionar comunidad';
 
   @override
-  String accountRequestPending(Object societyName) {
-    return 'Your admin request for $societyName is pending. You will be notified as the admin update your request';
+  String get failedToLoadSocieties =>
+      'No se pudieron cargar las comunidades. Inténtalo de nuevo.';
+
+  @override
+  String get retry => 'Reintentar';
+
+  @override
+  String accountRequestPending(String societyName) {
+    return 'Tu solicitud de residente para $societyName está pendiente. Se te notificará cuando el administrador actualice tu solicitud';
   }
 
   @override
@@ -46,40 +53,40 @@ class AppLocalizationsEs extends AppLocalizations {
   String get guest => 'Invitado';
 
   @override
-  String get year => 'Year';
+  String get year => 'Año';
 
   @override
-  String get pending => 'Pending';
+  String get pending => 'Pendiente';
 
   @override
-  String get approved => 'Approved';
+  String get approved => 'Aprobado';
 
   @override
-  String get paymentDetails => 'Payment Details';
+  String get paymentDetails => 'Detalles del pago';
 
   @override
-  String get paymentFor => 'Payment for';
+  String get paymentFor => 'Pago por';
 
   @override
-  String get status => 'Status';
+  String get status => 'Estado';
 
   @override
-  String get description => 'Description';
+  String get description => 'Descripción';
 
   @override
-  String get amount => 'Amount';
+  String get amount => 'Monto';
 
   @override
-  String get receipt => 'Payment Receipt';
+  String get receipt => 'Recibo de pago';
 
   @override
-  String get received => 'Received';
+  String get received => 'Recibido';
 
   @override
   String get submitted => 'Enviado';
 
   @override
-  String get paymentDetail => 'Payment Details';
+  String get paymentDetail => 'Detalles del pago';
 
   @override
   String get accessRequests => 'Solicitudes de Acceso';
@@ -232,6 +239,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyPolicy => 'Política de Privacidad';
 
   @override
+  String get termsOfService => 'Términos de Servicio';
+
+  @override
   String get logout => 'Cerrar sesión';
 
   @override
@@ -366,27 +376,27 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'Crear cuenta';
 
   @override
   String get createAccountDescription =>
-      'Create account with Portalixmx and get started with the society management';
+      'Crea una cuenta con Portalixmx y comienza con la gestión de la comunidad';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account? ';
+  String get alreadyHaveAnAccount => '¿Ya tienes una cuenta? ';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account? ';
+  String get dontHaveAnAccount => '¿No tienes una cuenta? ';
 
   @override
-  String get completeProfile => 'Complete Profile';
+  String get completeProfile => 'Completar perfil';
 
   @override
   String get completeProfileDescription =>
-      'Please provide the rest information to complete your profile';
+      'Proporciona el resto de la información para completar tu perfil';
 
   @override
-  String get additionalDetails => 'Additional Details';
+  String get additionalDetails => 'Detalles adicionales';
 
   @override
   String get pleaseEnterName => 'Por favor ingrese el nombre';
@@ -435,19 +445,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get error => 'Error';
 
   @override
-  String get all => 'All';
+  String get all => 'Todos';
 
   @override
-  String get week => 'Week';
+  String get week => 'Semana';
 
   @override
-  String get month => 'Month';
+  String get month => 'Mes';
 
   @override
-  String get automaticVisitorCode => 'Visitor Code';
+  String get automaticVisitorCode => 'Código de visitante';
 
   @override
-  String get generateAccessCode => 'Generate Access Code';
+  String get generateAccessCode => 'Generar código de acceso';
 
   @override
   String get myAccessQr => 'Mi código QR de acceso';
@@ -573,4 +583,216 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get holdToSendEmergency => 'Mantén presionado 3 segundos para enviar';
+
+  @override
+  String get refresh => 'Actualizar';
+
+  @override
+  String get society => 'Comunidad';
+
+  @override
+  String get accountStillPending =>
+      'Tu cuenta aún está pendiente de aprobación';
+
+  @override
+  String get unableToRefreshStatus =>
+      'No se pudo actualizar el estado. Inténtalo de nuevo.';
+
+  @override
+  String get guestsDirectory => 'Directorio de invitados';
+
+  @override
+  String get noVisitorFound => 'No se encontró visitante';
+
+  @override
+  String get addNewGuest => 'Agregar nuevo invitado';
+
+  @override
+  String get signupFailed => 'Registro fallido';
+
+  @override
+  String get resetPasswordLinkSent =>
+      'Se ha enviado un enlace para restablecer la contraseña a tu correo electrónico. Puedes actualizar tu contraseña desde allí.';
+
+  @override
+  String get noPollsYet => 'Aún no hay encuestas';
+
+  @override
+  String get noEventsYet => 'Aún no hay eventos';
+
+  @override
+  String get noPaymentRequestsFound => 'No se encontraron solicitudes de pago';
+
+  @override
+  String get receiptSubmittedToAdmin =>
+      'Tu recibo ha sido enviado al administrador';
+
+  @override
+  String accessTitleLabel(String title) {
+    return 'Acceso a $title';
+  }
+
+  @override
+  String get photos => 'Fotos';
+
+  @override
+  String get visitorType => 'Tipo de visitante';
+
+  @override
+  String get phoneNumber => 'Número de teléfono';
+
+  @override
+  String get vehicleNameHint => 'ej. ALTO';
+
+  @override
+  String get colorHint => 'ej. Negro';
+
+  @override
+  String get licenseNumberHint => 'Número de licencia';
+
+  @override
+  String get receiptUnavailable => 'Recibo no disponible';
+
+  @override
+  String get select => 'Seleccionar';
+
+  @override
+  String get informationUnavailable => 'Información no disponible';
+
+  @override
+  String get contact => 'Contacto';
+
+  @override
+  String get guardInfoUnavailable =>
+      'La información del guardia no está disponible';
+
+  @override
+  String get selectDateForAccessRequest =>
+      'Selecciona una fecha para la solicitud de acceso';
+
+  @override
+  String get selectTimeForAccessRequest =>
+      'Selecciona una hora para la solicitud de acceso';
+
+  @override
+  String get selectAccessForRequest => 'Selecciona el acceso para la solicitud';
+
+  @override
+  String get pleaseUploadReceipt => 'Sube un recibo antes de enviar';
+
+  @override
+  String get visitorDeletedSuccessfully => 'Visitante eliminado exitosamente';
+
+  @override
+  String get failedToDeleteVisitor =>
+      'No se pudo eliminar el visitante. Inténtalo de nuevo.';
+
+  @override
+  String get loginFailed => 'Inicio de sesión fallido. Inténtalo de nuevo.';
+
+  @override
+  String get pleaseEnterVehicleName =>
+      'Por favor ingresa el nombre del vehículo';
+
+  @override
+  String get pleaseEnterVehicleColor =>
+      'Por favor ingresa el color del vehículo';
+
+  @override
+  String get pleaseEnterLicensePlate =>
+      'Por favor ingresa el número de placa del vehículo';
+
+  @override
+  String get pleaseEnterRegistrationNumber =>
+      'Por favor ingresa el número de registro del vehículo';
+
+  @override
+  String get nameCannotBeEmpty =>
+      'El nombre no puede estar vacío. Por favor ingresa tu nombre';
+
+  @override
+  String get portalixAccessQr => 'QR de acceso Portalix';
+
+  @override
+  String get emailRequired => 'El correo electrónico es obligatorio';
+
+  @override
+  String get pleaseEnterValidEmail =>
+      'Por favor ingresa un correo electrónico válido';
+
+  @override
+  String get passwordRequired => 'La contraseña es obligatoria';
+
+  @override
+  String get fullNameRequired => 'El nombre completo es obligatorio';
+
+  @override
+  String get fullNameMinLength =>
+      'El nombre completo debe tener al menos 2 caracteres';
+
+  @override
+  String get appointmentDateRequired => 'La fecha de la cita es obligatoria';
+
+  @override
+  String get dayMustBeBetween => 'El día debe estar entre 1 y 31';
+
+  @override
+  String get pleaseUploadProfilePicture => 'Por favor sube tu foto de perfil';
+
+  @override
+  String get userNotFound => 'Usuario no encontrado';
+
+  @override
+  String get userNotFoundLoginAgain =>
+      'Usuario no encontrado. Inicia sesión de nuevo';
+
+  @override
+  String get accountMustBeApprovedForQr =>
+      'La cuenta debe estar aprobada antes de generar el QR de acceso';
+
+  @override
+  String get inProgress => 'En progreso';
+
+  @override
+  String get resolved => 'Resuelto';
+
+  @override
+  String get rejected => 'Rechazado';
+
+  @override
+  String get authInvalidEmail =>
+      'La dirección de correo electrónico no es válida.';
+
+  @override
+  String get authUserDisabled =>
+      'Esta cuenta de usuario ha sido deshabilitada.';
+
+  @override
+  String get authUserNotFound =>
+      'No se encontró ningún usuario con ese correo.';
+
+  @override
+  String get authWrongPassword => 'Contraseña incorrecta para ese usuario.';
+
+  @override
+  String get authEmailAlreadyInUse =>
+      'La dirección de correo ya está en uso por otra cuenta.';
+
+  @override
+  String get authOperationNotAllowed =>
+      'Las cuentas de correo/contraseña no están habilitadas.';
+
+  @override
+  String get authWeakPassword =>
+      'La contraseña proporcionada es demasiado débil.';
+
+  @override
+  String get authInvalidCredential =>
+      'El correo o la contraseña proporcionados no son válidos.';
+
+  @override
+  String get authUnknownError => 'Ocurrió un error desconocido.';
+
+  @override
+  String get zkbioAccessFailed => 'Falló el acceso a la puerta';
 }

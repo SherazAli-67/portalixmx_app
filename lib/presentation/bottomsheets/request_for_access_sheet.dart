@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/presentation/widgets/loading_widget.dart';
 import 'package:portalixmx_app/services/access_requests_service/access_request_service.dart';
+import 'package:portalixmx_app/services/user_service/user_service.dart';
 import '../../core/models/access_model.dart';
 import '../../core/res/app_colors.dart';
 import '../../core/res/app_textstyles.dart';
@@ -30,7 +31,6 @@ class _RequestForAccessSheetState extends State<RequestForAccessSheet> {
   @override
   void initState() {
     _initAccessList();
-
     super.initState();
   }
   @override
@@ -87,12 +87,11 @@ class _RequestForAccessSheetState extends State<RequestForAccessSheet> {
                                   ),
                                 ],
                               ),
-                              padding: const EdgeInsets.all(15),
+                              padding: .all(4),
                               child: access.image.isNotEmpty
-                                  ? CachedNetworkImage(
-                                imageUrl: access.image,
-                                height: 78,
-                                width: 78,
+                                  ? CircleAvatar(
+                                backgroundImage: CachedNetworkImageProvider(access.image),
+                                radius: 35,
                               )
                                   : const Icon(Icons.lock_outline, size: 48),
                             ),
@@ -145,26 +144,32 @@ class _RequestForAccessSheetState extends State<RequestForAccessSheet> {
   void _initAccessList() async{
     setState(()=> _loading = true);
     try{
-      _accessList = await AccessRequestService.instance.fetchAllAccess();
+      final user = await UserService.instance.getCurrentUser();
+      final societyID = user?.societyID ?? '';
+      if (societyID.isEmpty) {
+        _accessList = [];
+      } else {
+        _accessList = await AccessRequestService.instance.fetchAllAccess(societyID: societyID);
+      }
     }catch(e){
       debugPrint("Failed to fetch accessList: ${e.toString()}");
     }
     setState(()=> _loading = false);
-
   }
   void _onSubmitTap() {
+    final localization = AppLocalizations.of(context)!;
     if(_selectedDate == null){
-      Fluttertoast.showToast(msg: 'Select date for the access request');
+      Fluttertoast.showToast(msg: localization.selectDateForAccessRequest);
       return;
     }
 
     if(_selectedTime == null){
-      Fluttertoast.showToast(msg: 'Select time for the access request');
+      Fluttertoast.showToast(msg: localization.selectTimeForAccessRequest);
       return;
     }
 
     if(_selectedAccess == null){
-      Fluttertoast.showToast(msg: 'Select access for the request');
+      Fluttertoast.showToast(msg: localization.selectAccessForRequest);
       return;
     }
 

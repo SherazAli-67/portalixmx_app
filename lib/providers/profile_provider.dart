@@ -20,57 +20,62 @@ class ProfileProvider extends ChangeNotifier{
     _initProfile();
   }
 
-  _initProfile()async{
+  Future<void> _initProfile() async {
     _loadingProfile = true;
     notifyListeners();
-    try{
-    _user = await _profileService.getCurrentUser();
-    }catch(e){
+    try {
+      _user = await _profileService.getCurrentUser();
+    } catch (e) {
       debugPrint("Error while fetching user: ${e.toString()}");
     }
     _loadingProfile = false;
     notifyListeners();
   }
 
+  void clearUserState() {
+    _user = null;
+    _pickedImage = null;
+    _loadingProfile = false;
+    _updatingProfile = false;
+    notifyListeners();
+  }
 
-  void onPickImageTap()async{
+  Future<void> reloadProfile() async => _initProfile();
+
+  void onPickImageTap() async {
     ImagePicker imagePicker = ImagePicker();
-    XFile? selectedImage = await imagePicker.pickImage(source: ImageSource.gallery);
-    if(selectedImage != null){
+    XFile? selectedImage = await imagePicker.pickImage(source: .gallery);
+    if (selectedImage != null) {
       _pickedImage = selectedImage;
       notifyListeners();
     }
   }
 
-
   Future<String?> onUpdateTap({required String name, required String phoneNum, required String vehicleName, required String color, required String licensePlateNum, required String registrationNum}) async {
-
     String? errorMessage;
-    if(user != null){
+    if (user != null) {
       _updatingProfile = true;
       notifyListeners();
-      try{
-        //Profile image will be added later
+      try {
         String? imageUrl = user!.profileImg;
-        if(_pickedImage != null){
+        if (_pickedImage != null) {
           imageUrl = await AuthService.instance.updateProfilePicture(_pickedImage!);
         }
         final updatedUser = user!.copyWith(
           userName: name,
           phoneNum: phoneNum.isNotEmpty ? phoneNum : null,
           vehicleInformation: user!.vehicleInformation!.copyWith(name: vehicleName, color: color, licensePlateNumber: licensePlateNum, registrationNumber: registrationNum),
-          profileImg: imageUrl
+          profileImg: imageUrl,
         );
         _user = updatedUser;
         notifyListeners();
-        await  _profileService.updateUser(user: updatedUser);
-      }catch(e){
-        errorMessage= e.toString();
+        await _profileService.updateUser(user: updatedUser);
+      } catch (e) {
+        errorMessage = e.toString();
       }
-    }else{
-      errorMessage = 'User not found';
+    } else {
+      errorMessage = 'user_not_found';
     }
-
     _updatingProfile = false;
     notifyListeners();
     return errorMessage;

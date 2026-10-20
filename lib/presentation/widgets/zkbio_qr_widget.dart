@@ -74,6 +74,7 @@ class _ZkbioQrWidgetState extends State<ZkbioQrWidget> {
   }
 
   Future<void> _shareQr() async {
+    final shareText = widget.shareLabel ?? AppLocalizations.of(context)!.portalixAccessQr;
     final controller = ScreenshotController();
     final bytes = await controller.captureFromWidget(
       _buildQrCard(forScreenshot: true),
@@ -85,7 +86,7 @@ class _ZkbioQrWidgetState extends State<ZkbioQrWidget> {
     await SharePlus.instance.share(
       ShareParams(
         files: [XFile(imagePath)],
-        text: widget.shareLabel ?? 'Portalix access QR',
+        text: shareText,
       ),
     );
   }

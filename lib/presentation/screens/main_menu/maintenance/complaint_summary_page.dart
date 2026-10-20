@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portalixmx_app/core/helpers/status_display_helper.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/router/app_router.dart';
 import '../../../../core/helpers/image_url_helper.dart';
 import '../../../../core/models/complaints_model.dart';
@@ -14,6 +16,7 @@ class ComplaintSummaryPage extends StatelessWidget{
   final ComplaintModel complaint;
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return BgGradientScreen(child: Column(
       spacing: 20,
       children: [
@@ -46,17 +49,17 @@ class ComplaintSummaryPage extends StatelessWidget{
                     children: [
                       Expanded(
                         child: VisitorInfoItemWidget(
-                          title: 'Date', subTitle: DateTimeFormatHelpers.formatDateTime(complaint.createdAt), ),
+                          title: localization.date, subTitle: DateTimeFormatHelpers.formatDateTime(complaint.createdAt), ),
                       ),
                       Expanded(
                           child: VisitorInfoItemWidget(
-                            title: 'Status', subTitle: complaint.status.name.toUpperCase(),)
+                            title: localization.status, subTitle: StatusDisplayHelper.label(complaint.status, localization),)
                       ),
                     ],
                   ),
                   Divider(),
-                  VisitorInfoItemWidget(title: 'Complaint', subTitle: complaint.complaint, showDivider: true),
-                  Text("Photos", style: AppTextStyles.visitorDetailTitleTextStyle,),
+                  VisitorInfoItemWidget(title: localization.complaint, subTitle: complaint.complaint, showDivider: true),
+                  Text(localization.photos, style: AppTextStyles.visitorDetailTitleTextStyle,),
                   Expanded(child: GridView.builder(
                       itemCount: complaint.images.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,   mainAxisSpacing: 10, crossAxisSpacing: 10), itemBuilder: (ctx, index){

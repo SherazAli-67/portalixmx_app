@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import '../../../../core/app_data/app_data.dart';
 import '../../../../core/res/app_colors.dart';
 import '../../../../core/res/app_icons.dart';
@@ -13,6 +14,7 @@ class VisitorAddedSummaryPage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return BgGradientScreen(child: Column(
         spacing: 20,
         children: [
@@ -23,8 +25,8 @@ class VisitorAddedSummaryPage extends StatelessWidget{
                 BackButton(color: Colors.white,),
                 Column(
                   children: [
-                    Text("Name", style: AppTextStyles.regularTextStyle,),
-                    Text("Visitor TYpe", style: AppTextStyles.tileSubtitleTextStyle,)
+                    Text(localization.name, style: AppTextStyles.regularTextStyle,),
+                    Text(localization.visitorType, style: AppTextStyles.tileSubtitleTextStyle,)
                   ],
                 ),
                 IconButton(onPressed: ()=> _showEditBottomSheet(context), icon: Icon(Icons.more_vert_rounded, color: Colors.white,))
@@ -42,7 +44,7 @@ class VisitorAddedSummaryPage extends StatelessWidget{
               ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 36.0, left: 18, right: 18),
-                child: _buildRegularVisitorWidget(context),
+                child: _buildRegularVisitorWidget(context, localization),
               ),
             ),
           )
@@ -50,7 +52,7 @@ class VisitorAddedSummaryPage extends StatelessWidget{
       ),);
   }
 
-  Widget _buildRegularVisitorWidget(BuildContext context) {
+  Widget _buildRegularVisitorWidget(BuildContext context, AppLocalizations localization) {
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -59,11 +61,11 @@ class VisitorAddedSummaryPage extends StatelessWidget{
             children: [
               Expanded(
                 child: VisitorInfoItemWidget(
-                    title: 'REQUESTED TIME', subTitle: 'Sep 20, 2024', showDivider: true),
+                    title: localization.requestedTime, subTitle: 'Sep 20, 2024', showDivider: true),
               ),
               Expanded(
-                  child: VisitorInfoItemWidget(title: 'ACCESS FOR',
-                      subTitle: 'Teacher',
+                  child: VisitorInfoItemWidget(title: localization.accessFor,
+                      subTitle: localization.teacher,
                       showDivider: true)
               ),
             ],
@@ -74,11 +76,11 @@ class VisitorAddedSummaryPage extends StatelessWidget{
             children: [
               Expanded(
                 child: VisitorInfoItemWidget(
-                  title: 'ACCESS APPROVED DATE', subTitle: 'Sep 20, 2024',),
+                  title: localization.accessApprovedDate, subTitle: 'Sep 20, 2024',),
               ),
               Expanded(
                   child: VisitorInfoItemWidget(
-                    title: 'CONTACT NO', subTitle: '+91 12345678',)
+                    title: localization.contactNum, subTitle: '+91 12345678',)
               ),
             ],
           ),
@@ -107,14 +109,14 @@ class VisitorAddedSummaryPage extends StatelessWidget{
               })
           ),
           const SizedBox(height: 20,),
-          Text("QR CODE", style: AppTextStyles.visitorDetailTitleTextStyle,),
+          Text(localization.qrCode, style: AppTextStyles.visitorDetailTitleTextStyle,),
           Image.asset(AppIcons.icQRCode),
           Container(
             height: 50,
             margin: EdgeInsets.only(bottom: 40),
             width: double.infinity,
             child: PrimaryBtn(
-              onTap: () {}, btnText: "Share Key", bgColor: AppColors.primaryColor,),
+              onTap: () {}, btnText: localization.shareKey, bgColor: AppColors.primaryColor,),
           )
         ],
       ),
@@ -122,6 +124,7 @@ class VisitorAddedSummaryPage extends StatelessWidget{
   }
 
   void _showEditBottomSheet(BuildContext context){
+    final localization = AppLocalizations.of(context)!;
     showModalBottomSheet(
         backgroundColor: Colors.white,
         context: context, builder: (ctx){
@@ -131,8 +134,8 @@ class VisitorAddedSummaryPage extends StatelessWidget{
           mainAxisSize: MainAxisSize.min,
           spacing: 10,
           children: [
-            _buildEditDeleteItem(icon: AppIcons.icEdit, text: "Edit", onTap: (){}),
-            _buildEditDeleteItem(icon: AppIcons.icDelete, text: "Delete", onTap: (){}),
+            _buildEditDeleteItem(icon: AppIcons.icEdit, text: localization.edit, onTap: (){}),
+            _buildEditDeleteItem(icon: AppIcons.icDelete, text: localization.delete, onTap: (){}),
 
           ],
         ),

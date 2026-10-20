@@ -1,12 +1,14 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:portalixmx_app/core/models/society_model.dart';
 import 'package:portalixmx_app/core/res/firebase_constant.dart';
+import 'package:portalixmx_app/firebase_options.dart';
 
 import '../../core/models/user_model.dart';
 
@@ -15,19 +17,53 @@ class AuthService {
   AuthService._();
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+  final _functions = FirebaseFunctions.instanceFor(region: 'us-central1');
 
-  Future<User?> signup({required String name, required String email, required String password, required String societyID, required XFile profilePicture})async{
+  FirebaseStorage get _storage {
+    final bucket = DefaultFirebaseOptions.currentPlatform.storageBucket;
+    return FirebaseStorage.instanceFor(
+      app: Firebase.app(),
+      bucket: 'gs://$bucket',
+    );
+  }
+
+  Future<User?> signup({required String name, required String email, required String password, required String societyID, XFile? image}) async {
     try{
-     final userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-     if(userCredential.user != null){
-       User authUser = userCredential.user!;
-       String? image = await updateProfilePicture(profilePicture);
-       debugPrint("ImageUrl: $image");
-       UserModel user = UserModel(userID: authUser.uid, userName: name, email: email, createdAt: DateTime.now().toUtc(), societyID: societyID, profileImg: image);
-       await _firestore.collection(FirebaseConst.residentsCol).doc(user.userID).set(user.toMap());
-       return authUser;
-     }
-     return null;
+      final userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      var authUser = userCredential.user;
+      if (authUser == null) return null;
+
+      await authUser.reload();
+      authUser = _auth.currentUser ?? authUser;
+      await authUser.getIdToken(true);
+
+      final user = UserModel(
+        userID: authUser.uid,
+        userName: name,
+        email: email,
+        createdAt: DateTime.now().toUtc(),
+        societyID: societyID,
+      );
+      final userMap = user.toMap();
+      try {
+        final fcmToken = await FirebaseMessaging.instance.getToken();
+        if (fcmToken != null) {
+          userMap['token'] = fcmToken;
+        }
+      } catch (_) {}
+      await _firestore.collection(FirebaseConst.residentsCol).doc(user.userID).set(userMap);
+
+      if (image != null) {
+        await _auth.signInWithEmailAndPassword(email: email, password: password);
+        await _auth.currentUser!.getIdToken(true);
+        final profilePicture = await updateProfilePicture(image);
+        await _firestore.collection(FirebaseConst.residentsCol).doc(user.userID).set(
+          {'profileImg': profilePicture},
+          SetOptions(merge: true),
+        );
+      }
+
+      return _auth.currentUser ?? authUser;
     }on FirebaseAuthException catch (e) {
       throw _handleFirebaseAuthError(e);
     } catch (e) {
@@ -50,27 +86,20 @@ class AuthService {
   }
 
   String _handleFirebaseAuthError(FirebaseAuthException e) {
+    // Return Firebase error codes; localize at the UI layer via AuthErrorLocalizer.
     switch (e.code) {
       case 'invalid-email':
-        return 'The email address is not valid.';
       case 'user-disabled':
-        return 'The user corresponding to the given email has been disabled.';
       case 'user-not-found':
-        return 'No user found for that email.';
       case 'wrong-password':
-        return 'Wrong password provided for that user.';
       case 'email-already-in-use':
-        return 'The email address is already in use by another account.';
       case 'operation-not-allowed':
-        return 'Email/password accounts are not enabled.';
       case 'weak-password':
-        return 'The password provided is too weak.';
       case 'invalid-credential':
-        return 'The provided email or password is invalid.';
       case 'requires-recent-login':
-        return 'requires-recent-login';
+        return e.code;
       default:
-        return e.message ?? 'An unknown error occurred.';
+        return e.code.isNotEmpty ? e.code : 'unknown';
     }
   }
 
@@ -133,19 +162,34 @@ class AuthService {
   Future<String?> updateUser({required UserModel user}) async{
     try{
       String currentUID = FirebaseAuth.instance.currentUser!.uid;
-       await _firestore.collection(FirebaseConst.residentsCol).doc(currentUID).set(user.toMap());
+       await _firestore.collection(FirebaseConst.residentsCol).doc(currentUID).set(user.toMap(), SetOptions(merge: true));
        return null;
     } catch (e) {
       throw 'Failed to get user: $e';
     }
   }
 
-  Future<List<SocietyModel>> getSocieties()async {
-    try{
-      final querySnap = await _firestore.collection(FirebaseConst.societiesCol).get();
-      return querySnap.docs.map((doc)=> SocietyModel.fromMap( doc.data())).toList();
+  Future<List<SocietyModel>> getSocieties() async {
+    try {
+      final callable = _functions.httpsCallable('listSocietiesForSignup');
+      final result = await callable.call();
+      final data = result.data;
+      final rawList = data is Map ? data['societies'] : null;
+      if (rawList is! List) {
+        throw 'Failed to load societies';
+      }
+      final societies = rawList.map((item) {
+        final map = Map<String, dynamic>.from(item as Map);
+        return SocietyModel.fromMap(map);
+      }).toList();
+      if (societies.isEmpty) {
+        throw 'Failed to load societies';
+      }
+      return societies;
+    } on FirebaseFunctionsException catch (e) {
+      throw e.message ?? 'Failed to load societies';
     } catch (e) {
-      throw 'Failed to get user: $e';
+      throw 'Failed to load societies: $e';
     }
   }
 
@@ -162,13 +206,26 @@ class AuthService {
 
   Future<String?> updateProfilePicture(XFile image) async {
     try{
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child("residents/profile_pictures/${_auth.currentUser!.uid}/${image.name}");
-      TaskSnapshot task = await storageRef.putFile(File(image.path));
-      String imageUrl = await task.ref.getDownloadURL();
-      return imageUrl;
+      final user = _auth.currentUser;
+      if (user == null) {
+        throw Exception('User is not authenticated');
+      }
+      final token = await user.getIdToken(true);
+      if (token == null || token.isEmpty) {
+        throw Exception('Auth token missing for Storage upload');
+      }
+
+      final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final storageRef = _storage.ref().child('residents/profile_pictures/${user.uid}/$fileName');
+      final bytes = await image.readAsBytes();
+      debugPrint('Storage upload uid=${user.uid} path=${storageRef.fullPath} bytes=${bytes.length}');
+      final task = await storageRef.putData(
+        bytes,
+        SettableMetadata(contentType: image.mimeType ?? 'image/jpeg'),
+      );
+      return await task.ref.getDownloadURL();
     }catch(e){
+      debugPrint("Error while uploading image: ${e.toString()}");
       throw Exception("Failed to upload image: ${e.toString()}");
     }
   }

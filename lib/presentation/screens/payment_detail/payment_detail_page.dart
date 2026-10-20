@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:portalixmx_app/core/helpers/status_display_helper.dart';
 import '../../../../core/res/app_colors.dart';
-import '../../../../core/res/app_constants.dart';
 import '../../../../core/res/app_textstyles.dart';
 import '../../../../providers/datetime_format_helpers.dart';
 import '../../../core/helpers/bottom_sheet_helper.dart';
@@ -77,7 +77,7 @@ class PaymentDetailPage extends StatelessWidget{
                                     ),
                                     Expanded(
                                         child: VisitorInfoItemWidget(
-                                          title: localizations.status, subTitle: status.name.toUpperCase(),)
+                                          title: localizations.status, subTitle: StatusDisplayHelper.label(status, localizations),)
                                     ),
                                   ],
                                 ),
@@ -111,7 +111,10 @@ class PaymentDetailPage extends StatelessWidget{
           SizedBox(
             width: .infinity,
             child: PrimaryBtn(onTap: ()async{
-              final result = await BottomSheetHelper.showDraggableBottomSheet(scaffoldKey: scaffoldKey, child: SubmitPaymentToAdminBottomSheet(payment: payment));
+              final result = await BottomSheetHelper.showDraggableBottomSheet(
+                  scaffoldKey: scaffoldKey,
+                  initialHeight: .6,
+                  child: SubmitPaymentToAdminBottomSheet(payment: payment));
               if(result != null){
                 _updatePaymentStatus(context, result['receipt']);
               }
@@ -128,11 +131,11 @@ class PaymentDetailPage extends StatelessWidget{
       crossAxisAlignment: .start,
       children: [
         Text(localizations.receipt, style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.btnColor)),
-        Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: CachedNetworkImage(imageUrl: receipt ?? AppConstants.dummyImageUrl, fit: .cover,),
-          ),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: receipt == null || receipt.isEmpty
+              ? Center(child: Text(localizations.receiptUnavailable, style: AppTextStyles.tileSubtitleTextStyle))
+              : CachedNetworkImage(imageUrl: receipt, fit: .cover, height: 200, width: .infinity),
         )
       ],
     );

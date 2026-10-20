@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/core/res/app_textstyles.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import '../../core/res/app_colors.dart';
 
 class AppDropdownWidget<T> extends StatelessWidget {
@@ -48,7 +49,7 @@ class AppDropdownWidget<T> extends StatelessWidget {
             borderRadius: .circular(10),
             style: AppTextStyles.hintTextStyle,
             underline: const SizedBox(),
-            hint: Text('Select',),
+            hint: Text(AppLocalizations.of(context)!.select),
             onChanged: isResident ? onChanged : null,
             items: list.map<DropdownMenuItem<dynamic>>((dynamic value) {
               return DropdownMenuItem(

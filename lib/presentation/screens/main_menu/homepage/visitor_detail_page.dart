@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:portalixmx_app/core/helpers/auth_error_localizer.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
 import 'package:portalixmx_app/core/models/zkbio_qr_model.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
@@ -199,7 +200,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                     isScrollControlled: true,
                     builder: (context) {
                       return FractionallySizedBox(
-                        heightFactor: 0.82,
+                        heightFactor: 0.9,
                         child: Padding(
                           padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -224,12 +225,12 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                   if (!context.mounted) return;
 
                   if (result) {
-                    Fluttertoast.showToast(msg: "Visitor deleted successfully");
+                    Fluttertoast.showToast(msg: AppLocalizations.of(context)!.visitorDeletedSuccessfully);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   } else {
                     Fluttertoast.showToast(
-                        msg: "Failed to delete visitor, Try again");
+                        msg: AppLocalizations.of(context)!.failedToDeleteVisitor);
                     Navigator.of(context).pop();
                   }
                 },
@@ -348,7 +349,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
       return Column(
         spacing: 8,
         children: [
-          Text(_qrError!, textAlign: TextAlign.center),
+          Text(AuthErrorLocalizer.localize(localization, _qrError!), textAlign: TextAlign.center),
           TextButton(onPressed: _loadGuestQr, child: Text(localization.tryAgain)),
         ],
       );

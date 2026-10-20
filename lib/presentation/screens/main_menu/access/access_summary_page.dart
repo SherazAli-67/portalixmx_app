@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:portalixmx_app/core/helpers/status_display_helper.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
 import '../../../../core/models/access_request_model.dart';
-import '../../../../core/res/app_colors.dart';
-import '../../../../core/res/app_icons.dart';
 import '../../../../core/res/app_textstyles.dart';
 import '../../../widgets/bg_gradient_screen.dart';
-import '../../../widgets/primary_btn.dart';
 import '../homepage//widgets/vistor_info_item_widget.dart';
 
 class AccessSummaryPage extends StatelessWidget{
@@ -13,6 +12,10 @@ class AccessSummaryPage extends StatelessWidget{
   final AccessRequestModel access;
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    final approvedDate = access.zkAccessGrantedAt != null
+        ? DateTimeFormatHelpers.formatDateTime(access.zkAccessGrantedAt!)
+        : '—';
     return BgGradientScreen(child: Column(
       spacing: 20,
       children: [
@@ -21,12 +24,11 @@ class AccessSummaryPage extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               BackButton(color: Colors.white,),
-              Text('${access.requestedAccessTitle} Access', style: AppTextStyles.regularTextStyle,),
+              Text(localization.accessTitleLabel(access.requestedAccessTitle), style: AppTextStyles.regularTextStyle,),
               const SizedBox(width: 20)
             ],
           ),
         ),
-
         Expanded(
           child: Card(
             color: Colors.white,
@@ -36,7 +38,7 @@ class AccessSummaryPage extends StatelessWidget{
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30))
             ),
             child: Padding(
-                padding: const EdgeInsets.only(top: 36.0, left: 18, right: 18),
+                padding: const EdgeInsets.only(top: 36.0, left: 18, right: 18, bottom: 24),
                 child: Column(
                   spacing: 15,
                   children: [
@@ -45,11 +47,11 @@ class AccessSummaryPage extends StatelessWidget{
                       children: [
                         Expanded(
                           child: VisitorInfoItemWidget(
-                            title: 'Date', subTitle: DateTimeFormatHelpers.formatDateTime(access.createdAt),showDivider: true,),
+                            title: localization.date, subTitle: DateTimeFormatHelpers.formatDateTime(access.createdAt),showDivider: true,),
                         ),
                         Expanded(
                             child: VisitorInfoItemWidget(
-                              title: 'Time', subTitle: DateTimeFormatHelpers.formatTime(access.requestedForTime),showDivider: true,)
+                              title: localization.time, subTitle: DateTimeFormatHelpers.formatTime(access.requestedForTime),showDivider: true,)
                         ),
                       ],
                     ),
@@ -58,25 +60,19 @@ class AccessSummaryPage extends StatelessWidget{
                       children: [
                         Expanded(
                           child: VisitorInfoItemWidget(
-                            title: 'Requested Time', subTitle: DateTimeFormatHelpers.formatDateTime(access.requestedForDate),),
+                            title: localization.requestedTime, subTitle: DateTimeFormatHelpers.formatDateTime(access.requestedForDate),),
                         ),
                         Expanded(
                             child: VisitorInfoItemWidget(
-                              title: 'Access Approved Date', subTitle: '',)
+                              title: localization.accessApprovedDate, subTitle: approvedDate,)
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20,),
-                    Text("QR CODE", style: AppTextStyles.visitorDetailTitleTextStyle,),
-                    Image.asset(AppIcons.icQRCode),
-                    const Spacer(),
-                    Container(
-                      height: 50,
-                      margin: EdgeInsets.only(bottom: 40),
-                      width: double.infinity,
-                      child: PrimaryBtn(
-                        onTap: () {}, btnText: "Share Key", bgColor: AppColors.primaryColor,),
-                    )
+                    VisitorInfoItemWidget(
+                      title: localization.status,
+                      subTitle: StatusDisplayHelper.label(access.status, localization),
+                      showDivider: true,
+                    ),
                   ],
                 )
             ),

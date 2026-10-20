@@ -20,6 +20,7 @@ class AppTextField extends StatefulWidget {
     TextStyle? titleTextStyle,
     bool isDense = false,
     this.validator,
+    TextInputAction? textInputAction
   })
       : _textController = controller,
         _hintText = hintText,
@@ -31,6 +32,7 @@ class AppTextField extends StatefulWidget {
         _capitalization = capitalization,
         _titleTextStyle = titleTextStyle,
         _maxLines = maxLines,
+        _textInputAction = textInputAction,
         _isDense = isDense;
 
   final TextEditingController? _textController;
@@ -46,6 +48,7 @@ class AppTextField extends StatefulWidget {
   final TextStyle? _titleTextStyle;
   final TextCapitalization? _capitalization;
   final bool _isDense;
+  final TextInputAction? _textInputAction;
 
   final String? Function(String?)? validator;
   @override
@@ -72,6 +75,7 @@ class _AppTextFieldState extends State<AppTextField> {
           onTapOutside: (_)=>  FocusManager.instance.primaryFocus?.unfocus(),
           maxLines: widget.isPassword ? 1: widget._maxLines,
           validator: widget.validator,
+          textInputAction: widget._textInputAction ?? .done,
           decoration: InputDecoration(
               hintText: widget._hintText,
               isDense: widget._isDense,

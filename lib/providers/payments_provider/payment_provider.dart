@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/core/models/payment_submitted_model.dart';
 import '../../core/models/payment_model.dart';
@@ -14,13 +16,14 @@ class PaymentProvider extends ChangeNotifier{
   String? error;
   int selectedFilterTab = 0;
   bool updatingPayment = false;
+  StreamSubscription? _paymentsSub;
 
   List<PaymentModel> _payments = [];
   List<PaymentModel> get payments => _payments;
   Map<String, PaymentStatus> _paymentStatuses = {};
 
   PaymentProvider(){
-    _initPayments();
+    _listenPayments();
   }
 
   DateTime? dateFrom;
@@ -53,25 +56,34 @@ class PaymentProvider extends ChangeNotifier{
     return filtered;
   }
 
-  Future<void> _initPayments() async {
+  Future<void> _listenPayments() async {
     loadingPayments = true;
     notifyListeners();
     try{
       UserModel? user=  await UserService.instance.getCurrentUser();
       if(user == null){
-        error = "User not found";
+        error = "user_not_found";
         loadingPayments = false;
         notifyListeners();
         return;
       }
-      _payments = await _paymentsService.getPayments(user.societyID?? '');
-      _payments.sort((a, b)=> b.dateTime.compareTo(a.dateTime));
-      await _loadPaymentStatuses();
+      _paymentsSub?.cancel();
+      _paymentsSub = _paymentsService.watchPayments(user.societyID?? '').listen((payments) async {
+        _payments = payments;
+        _payments.sort((a, b)=> b.dateTime.compareTo(a.dateTime));
+        await _loadPaymentStatuses();
+        loadingPayments = false;
+        notifyListeners();
+      }, onError: (e) {
+        error = e.toString().replaceFirst('Exception: ', '');
+        loadingPayments = false;
+        notifyListeners();
+      });
     }catch(e){
-      error = e.toString();
+      error = e.toString().replaceFirst('Exception: ', '');
+      loadingPayments = false;
+      notifyListeners();
     }
-    loadingPayments = false;
-    notifyListeners();
   }
 
   Future<void> _loadPaymentStatuses() async {
@@ -83,7 +95,7 @@ class PaymentProvider extends ChangeNotifier{
   }
 
   Future<void> refreshPayments() async {
-    await _initPayments();
+    await _listenPayments();
   }
 
   void setDateFrom(DateTime date){
@@ -113,14 +125,12 @@ class PaymentProvider extends ChangeNotifier{
     try{
       UserModel? user=  await UserService.instance.getCurrentUser();
       if(user == null) {
-       return 'User not found';
+       return 'user_not_found';
       }
 
       String receipt = await _paymentsService.uploadPaymentReceipt(receipt: updatedPayment.receipt!);
       PaymentSubmittedModel paymentSubmitted = PaymentSubmittedModel(paymentByUID: user.userID, submittedOnDate: DateTime.now().toUtc(), receipt: receipt);
       await _paymentsService.submitPaymentToAdmin(paymentID: updatedPayment.paymentID, paymentSubmitted: paymentSubmitted);
-      int index = _payments.indexWhere((payment) => payment.paymentID == updatedPayment.paymentID);
-      _payments[index] = updatedPayment.copyWith(receipt: receipt);
       _paymentStatuses[updatedPayment.paymentID] = .submitted;
       updatingPayment = false;
       notifyListeners();
@@ -128,7 +138,13 @@ class PaymentProvider extends ChangeNotifier{
     }catch(e){
       updatingPayment = false;
       notifyListeners();
-      return e.toString();
+      return e.toString().replaceFirst('Exception: ', '');
     }
+  }
+
+  @override
+  void dispose() {
+    _paymentsSub?.cancel();
+    super.dispose();
   }
 }

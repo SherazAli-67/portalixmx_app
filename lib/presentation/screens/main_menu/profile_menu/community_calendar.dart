@@ -8,7 +8,6 @@ import 'package:portalixmx_app/providers/community_calendar_provider.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/res/app_colors.dart';
-import '../../../../core/res/app_icons.dart';
 import '../../../../core/res/app_textstyles.dart';
 import '../../../../router/app_router.dart';
 import '../../../widgets/bg_gradient_screen.dart';
@@ -61,7 +60,7 @@ class _CommunityCalendarPageState extends State<CommunityCalendarPage> {
                         builder: (ctx, provider, child){
                           return provider.loadingCommunityEvents
                               ? LoadingWidget(color: AppColors.primaryColor,)
-                              : provider.communityEvents.isEmpty ? Center(child: Text("No Events yet",),)
+                              : provider.communityEvents.isEmpty ? Center(child: Text(AppLocalizations.of(context)!.noEventsYet),)
                               : ListView.builder(
                               itemCount: provider.communityEvents.length,
                               itemBuilder: (ctx, index){
@@ -79,16 +78,16 @@ class _CommunityCalendarPageState extends State<CommunityCalendarPage> {
                                         crossAxisAlignment: .start,
                                         children: [
                                           Text(event.eventTitle, style: AppTextStyles.tileTitleTextStyle,),
-                                          Text(DateTimeFormatHelpers.getCommunityDateTime(event.createdAt, event.eventTime), style: AppTextStyles.tileSubtitleTextStyle,)
+                                          Text(DateTimeFormatHelpers.getCommunityDateTime(event.eventDate, event.eventTime), style: AppTextStyles.tileSubtitleTextStyle,)
                                         ],
                                       ),
-                                      trailing: SizedBox(
+                                      trailing: event.imageUrl != null && event.imageUrl!.isNotEmpty ? SizedBox(
                                         height: 60,
                                         width: 60,
                                         child: ClipRRect(
                                             borderRadius: BorderRadius.circular(10),
-                                            child: CachedNetworkImage(imageUrl: AppIcons.icComplaintImageUrl, fit: BoxFit.cover,)),
-                                      ),
+                                            child: CachedNetworkImage(imageUrl:  event.imageUrl! ,fit: BoxFit.cover,)),
+                                      ) : const SizedBox(),
                                     ),
                                   ),
                                 );

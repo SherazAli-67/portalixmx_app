@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:portalixmx_app/core/models/community_event_model.dart';
 import 'package:portalixmx_app/core/models/user_model.dart';
@@ -8,42 +10,53 @@ class CommunityCalendarProvider extends ChangeNotifier {
   bool loadingCommunityEvents = false;
   final _userService = UserService.instance;
   final _directoryService = CommunityService.instance;
+  StreamSubscription? _eventsSub;
 
   List<CommunityEventModel> _communityEvents = [];
 
   List<CommunityEventModel> get communityEvents => _communityEvents;
 
-
   CommunityCalendarProvider() {
-    _initCommunityEvents();
+    _listenCommunityEvents();
   }
 
   Future<UserModel?> getCurrentUser() async {
     try {
-      UserModel? user = await _userService.getCurrentUser();
-      return user;
+      return await _userService.getCurrentUser();
     } catch (e) {
       return null;
     }
   }
 
-  void _initCommunityEvents() async {
+  Future<void> _listenCommunityEvents() async {
     try {
       loadingCommunityEvents = true;
       notifyListeners();
-
       final user = await getCurrentUser();
       if (user == null) {
         throw Exception('User not found');
       }
-
-      _communityEvents = await _directoryService.initCommunityEvents(user.societyID ?? '1');
-      loadingCommunityEvents = false;
-      notifyListeners();
+      final societyID = user.societyID ?? '';
+      _eventsSub?.cancel();
+      _eventsSub = _directoryService.watchCommunityEvents(societyID).listen((events) {
+        _communityEvents = events;
+        loadingCommunityEvents = false;
+        notifyListeners();
+      }, onError: (e) {
+        loadingCommunityEvents = false;
+        notifyListeners();
+        debugPrint('Error loading events: $e');
+      });
     } catch (e) {
       loadingCommunityEvents = false;
       notifyListeners();
-      debugPrint('Error loading visitors: $e');
+      debugPrint('Error loading events: $e');
     }
+  }
+
+  @override
+  void dispose() {
+    _eventsSub?.cancel();
+    super.dispose();
   }
 }

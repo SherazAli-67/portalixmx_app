@@ -47,8 +47,19 @@ class ComplaintsService {
           .map((doc) => ComplaintModel.fromMap(doc.data()! as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      throw Exception('Failed to get visitors: $e');
+      throw Exception('Failed to get complaints');
     }
+  }
+
+  Stream<List<ComplaintModel>> watchAllComplaints() {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return Stream.value([]);
+    return _getComplaintsCollection
+        .where('complaintBy', isEqualTo: uid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => ComplaintModel.fromMap(doc.data()! as Map<String, dynamic>))
+            .toList());
   }
 
   Future<void> deleteComplaintByID(String complaintID) async{

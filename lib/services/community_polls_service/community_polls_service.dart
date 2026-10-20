@@ -47,8 +47,16 @@ class CommunityPollsService {
           .get();
       return snapshot.docs.map((doc) => _pollFromSnapshot(doc)).toList();
     } catch (e) {
-      throw Exception('Failed to get polls: $e');
+      throw Exception('Failed to get polls');
     }
+  }
+
+  Stream<List<CommunityPollModel>> watchPolls(String societyID) {
+    if (societyID.isEmpty) return Stream.value([]);
+    return _getPollsCollection()
+        .where('societyID', isEqualTo: societyID)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => _pollFromSnapshot(doc)).toList());
   }
 
   Stream<CommunityPollModel> watchPoll(String pollId) {

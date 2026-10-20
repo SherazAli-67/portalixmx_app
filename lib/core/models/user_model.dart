@@ -4,6 +4,12 @@ enum UserStatus {
 }
 UserStatus _userStatusFromMap(dynamic raw) {
   if (raw == null) return UserStatus.pending;
+  if (raw is String) {
+    return UserStatus.values.firstWhere(
+      (e) => e.name == raw,
+      orElse: () => UserStatus.pending,
+    );
+  }
   final idx = raw is int ? raw : int.tryParse(raw.toString());
   if (idx == null || idx < 0 || idx >= UserStatus.values.length) {
     return UserStatus.pending;

@@ -60,13 +60,14 @@ class PushNotificationService {
   Future<void> removeTokenForSignOut() async {
     try {
       final uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid == null) return;
-      await FirebaseFirestore.instance
-          .collection(FirebaseConst.residentsCol)
-          .doc(uid)
-          .set({'token': FieldValue.delete()}, SetOptions(merge: true));
+      if (uid != null) {
+        await FirebaseFirestore.instance
+            .collection(FirebaseConst.residentsCol)
+            .doc(uid)
+            .set({'token': FieldValue.delete()}, SetOptions(merge: true));
+      }
+      await FirebaseMessaging.instance.deleteToken();
     } catch (_) {}
-    // _currentToken = null;
   }
 
   Future<void> _handleInitialMessage() async {
@@ -121,7 +122,6 @@ class PushNotificationService {
   }
 
   Future<void> _onTokenRefresh(String token) async {
-    // _currentToken = token;
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
     await FirebaseFirestore.instance
@@ -133,9 +133,7 @@ class PushNotificationService {
   Future<void> _syncToken(String uid) async {
     try {
       final token = await FirebaseMessaging.instance.getToken();
-      // debugPrint("Token: $token");
       if (token == null) return;
-      // _currentToken = token;
       await FirebaseFirestore.instance
           .collection(FirebaseConst.residentsCol)
           .doc(uid)

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../core/models/fund_report_model.dart';
 import '../core/models/user_model.dart';
@@ -8,13 +10,14 @@ class FundReportsProvider extends ChangeNotifier {
   bool loadingFundReports = false;
   final _userService = UserService.instance;
   final _fundReportsService = FundReportsService.instance;
+  StreamSubscription? _reportsSub;
 
   List<FundReportModel> _fundReports = [];
 
   List<FundReportModel> get fundReports => _fundReports;
 
   FundReportsProvider() {
-    _initFundReports();
+    _listenFundReports();
   }
 
   Future<UserModel?> getCurrentUser() async {
@@ -25,7 +28,7 @@ class FundReportsProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _initFundReports() async {
+  Future<void> _listenFundReports() async {
     try {
       loadingFundReports = true;
       notifyListeners();
@@ -33,10 +36,17 @@ class FundReportsProvider extends ChangeNotifier {
       if (user == null) {
         throw Exception('User not found');
       }
-      _fundReports = await _fundReportsService.getReports(user.societyID!);
-      _fundReports.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      loadingFundReports = false;
-      notifyListeners();
+      _reportsSub?.cancel();
+      _reportsSub = _fundReportsService.watchReports(user.societyID ?? '').listen((reports) {
+        _fundReports = reports;
+        _fundReports.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        loadingFundReports = false;
+        notifyListeners();
+      }, onError: (e) {
+        loadingFundReports = false;
+        notifyListeners();
+        debugPrint('Error loading fund reports: $e');
+      });
     } catch (e) {
       loadingFundReports = false;
       notifyListeners();
@@ -44,6 +54,11 @@ class FundReportsProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> refresh() => _initFundReports();
+  Future<void> refresh() => _listenFundReports();
 
+  @override
+  void dispose() {
+    _reportsSub?.cancel();
+    super.dispose();
+  }
 }

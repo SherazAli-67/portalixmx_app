@@ -43,7 +43,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   void _onForgetPasswordClick() async{
     try{
       await FirebaseAuth.instance.sendPasswordResetEmail(email: _emailController.text.trim());
-      CommonUI.showSnackBarMessage(context, isSuccess: true, message: 'A reset password link is sent to your email address, you can update your password from there');
+      CommonUI.showSnackBarMessage(context, isSuccess: true, message: AppLocalizations.of(context)!.resetPasswordLinkSent);
       Navigator.pop(context);
     }catch(e){
       CommonUI.showSnackBarMessage(context, isError: true, message: e.toString());

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portalixmx_app/core/helpers/status_display_helper.dart';
 import 'package:portalixmx_app/presentation/widgets/date_range_filter_bar.dart';
 import 'package:portalixmx_app/presentation/widgets/loading_widget.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
@@ -26,25 +27,24 @@ class AccessMenu extends StatelessWidget{
         return  Consumer<RequestAccessProvider>(
           builder: (ctx, provider, _){
             return BgGradientScreen(
-                paddingFromTop: 50,
+              paddingFromTop: 20,
                 child: Stack(
                   children: [
                     Padding(
                       padding: const .symmetric(horizontal: 10.0),
                       child: Column(
-                        spacing: 10,
+                        spacing: 20,
                         children: [
                           Row(
                             mainAxisAlignment: .spaceBetween,
                             children: [
                               const SizedBox(width: 40,),
-                              Text(localization.accessRequests, style: AppTextStyles.regularTextStyle,),
+                              Text(localization.access, textAlign: .center, style: AppTextStyles.headingTextStyle,),
                               IconButton(
                                   style: ElevatedButton.styleFrom(backgroundColor: AppColors.btnColor),
                                   onPressed: ()=> provider.onAddRequestTap(), icon: Icon(Icons.add, color: Colors.white,)),
                             ],
                           ),
-                          const SizedBox(height: 10,),
                           DateRangeFilterBar(
                             dateFrom: provider.dateFrom,
                             dateTo: provider.dateTo,
@@ -64,11 +64,11 @@ class AccessMenu extends StatelessWidget{
                                         margin: EdgeInsets.only(bottom: 10),
                                         child: ListTile(
                                           onTap: ()=> context.push(NamedRoutes.accessRequestDetail.routeName, extra: access),
-                                          contentPadding: EdgeInsets.only(left: 15),
+                                          contentPadding: .symmetric(horizontal: 15),
                                           leading: SvgPicture.asset(AppIcons.icGame, colorFilter: ColorFilter.mode(AppColors.primaryColor, BlendMode.srcIn),),
                                           title: Text(access.requestedAccessTitle, style: AppTextStyles.tileTitleTextStyle),
-                                          subtitle: Text(DateTimeFormatHelpers.formatDateTime(access.createdAt), style: AppTextStyles.tileSubtitleTextStyle,),
-                                          trailing: IconButton(onPressed: (){}, icon: Icon(Icons.more_vert_rounded)),
+                                          subtitle: Text('${DateTimeFormatHelpers.formatDateTime(access.createdAt)} · ${StatusDisplayHelper.label(access.status, localization)}', style: AppTextStyles.tileSubtitleTextStyle,),
+                                          trailing: Icon(Icons.chevron_right_rounded, color: AppColors.primaryColor),
                                         ),
                                       );
                                     }),

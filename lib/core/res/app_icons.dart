@@ -24,8 +24,4 @@ class AppIcons {
   static const icMap = 'assets/icons/ic_map.png';
   static const icMyLocation = 'assets/icons/ic_my_location.png';
   static const accountPending = 'assets/icons/account_pending.png';
-
-
-  static const icUserImageUrl = 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTJ8fFVzZXJ8ZW58MHx8MHx8fDA%3D';
-  static const icComplaintImageUrl = 'https://images.unsplash.com/photo-1554224155-1696413565d3?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 }

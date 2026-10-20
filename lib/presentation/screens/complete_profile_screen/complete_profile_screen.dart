@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portalixmx_app/core/helpers/auth_error_localizer.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/authentication_provider/authentication_provider.dart';
 import 'package:portalixmx_app/router/app_router.dart';
@@ -123,7 +124,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     String? isError = await provider.onCompleteProfileTap(phoneNum: phoneNum, vehicleName: vehicleName, vehicleColor: color, licensePlateNum: licensePlateNum, registrationNum: registrationNum, emergencyContact: emergencyContact);
     if(isError != null){
       // print("Error: $isError");
-      CommonUI.showSnackBarMessage(context, isError: true, message: isError, title: "Signup failed");
+      CommonUI.showSnackBarMessage(context, isError: true, message: AuthErrorLocalizer.localize(AppLocalizations.of(context)!, isError), title: AppLocalizations.of(context)!.signupFailed);
     }else{
       context.go(NamedRoutes.home.routeName);
     }

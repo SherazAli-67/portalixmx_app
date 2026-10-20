@@ -86,10 +86,10 @@ GoRouter appRouter = GoRouter(
     GoRoute(path: NamedRoutes.complaintSummary.routeName, builder: (ctx, state)=> ComplaintSummaryPage(complaint: state.extra as ComplaintModel,)),
       GoRoute(path: NamedRoutes.editProfile.routeName, builder: (ctx, state)=> EditProfilePage()),
       GoRoute(path: NamedRoutes.userDirectory.routeName, builder: (ctx, state)=> DirectoryPage()),
-    GoRoute(path: NamedRoutes.directoryDetail.routeName, builder: (ctx, state)=> DirectoryDetailPage()),
+    GoRoute(path: NamedRoutes.directoryDetail.routeName, builder: (ctx, state)=> DirectoryDetailPage(visitor: state.extra as BaseVisitor?)),
 
     GoRoute(path: NamedRoutes.communityCalendar.routeName, builder: (ctx, state)=> CommunityCalendarPage()),
-    GoRoute(path: NamedRoutes.communityCalendarDetail.routeName, builder: (ctx, state)=> CommunityDetailPage(event: state.extra as CommunityEventModel,)),
+    GoRoute(path: NamedRoutes.communityCalendarDetail.routeName, builder: (ctx, state)=> CommunityCalendarDetailPage(event: state.extra as CommunityEventModel,)),
 
     GoRoute(path: NamedRoutes.communityPolls.routeName, builder: (ctx, state)=> CommunityPollsPage()),
     GoRoute(path: NamedRoutes.communityPollsDetail.routeName, builder: (ctx, state)=> CommunityPollsDetailPage(poll: state.extra as CommunityPollModel,)),
@@ -100,7 +100,6 @@ GoRouter appRouter = GoRouter(
       GoRoute(path: NamedRoutes.emergencyCalls.routeName, builder: (ctx, state)=> EmergencyCallsPage()),
     GoRoute(path: NamedRoutes.guardTracking.routeName, builder: (ctx, state)=> GuardTrackingMapPage()),
 
-    GoRoute(path: NamedRoutes.privacyPolicy.routeName, builder: (ctx, state)=> Center(child: Text("Privacy Policy Page"),)),
     GoRoute(path: NamedRoutes.verifyOtp.routeName, builder: (ctx, state)=> VerifyOTPPage()),
     GoRoute(path: NamedRoutes.previewImage.routeName, builder: (ctx, state){
       final map = state.extra as Map<String, dynamic>;
@@ -142,15 +141,15 @@ GoRouter appRouter = GoRouter(
     }
 
     if (profile == null) {
-      if (!isOnCompleteProfilePage) {
-        return NamedRoutes.completeProfile.routeName;
+      if (isOnSignupPage || isOnCompleteProfilePage) {
+        return null;
       }
-      return null;
+      return NamedRoutes.completeProfile.routeName;
     }
 
     // debugPrint("User ${profile.userID}, Name: ${profile.userName}");
    if (profile.status == UserStatus.pending) {
-      if (isOnAccountPendingPage || isOnCompleteProfilePage) {
+      if (isOnAccountPendingPage || isOnCompleteProfilePage || isOnSignupPage) {
         return null;
       }
       return NamedRoutes.accountPending.routeName;
@@ -187,7 +186,6 @@ enum NamedRoutes {
   guardTracking('/guard-tracking'),
   carPooling('/car-pooling'),
   emergencyCalls('/emergency-calls'),
-  privacyPolicy('/privacy-policy'),
   completeProfile('/complete-profile'),
   verifyOtp('/verify-otp'),
   accountPending('/account-pending'),

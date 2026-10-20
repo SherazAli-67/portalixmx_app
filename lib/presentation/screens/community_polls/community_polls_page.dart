@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../core/res/app_colors.dart';
-import '../../../core/res/app_constants.dart';
 import '../../../core/res/app_textstyles.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../providers/community_polls/community_polls_provider.dart';
@@ -45,12 +44,13 @@ class CommunityPollsPage extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
                     ),
-                    child: Padding(
+                    child: Container(
+                      width: .infinity,
                       padding: const EdgeInsets.only(left: 18, right: 18),
                       child: provider.loadingCommunityPolls
                           ? LoadingWidget(color: AppColors.primaryColor)
                           : provider.communityPolls.isEmpty
-                          ? const Center(child: Text('No polls yet'))
+                          ? Center(child: Text(localization.noPollsYet))
                           : ListView.builder(
                         itemCount: provider.communityPolls.length,
                         itemBuilder: (ctx, index) {
@@ -73,11 +73,11 @@ class CommunityPollsPage extends StatelessWidget {
                                     Text(DateTimeFormatHelpers.formatDateTime(poll.createdAt)),
                                   ],
                                 ),
-                                // if (poll.imageUrl != null && poll.imageUrl!.isNotEmpty)
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: CachedNetworkImage(imageUrl: AppConstants.dummyImageUrl),
-                                ),
+                                if (poll.imageUrl != null && poll.imageUrl!.isNotEmpty)
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: CachedNetworkImage(imageUrl: poll.imageUrl!, height: 200, width: .infinity, fit: .cover,),
+                                  ),
                                 Text(poll.question, style: AppTextStyles.tileTitleTextStyle,),
                                 const Divider(),
                               ],

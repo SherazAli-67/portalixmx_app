@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
 import 'package:portalixmx_app/core/res/app_colors.dart';
 import 'package:portalixmx_app/core/res/app_textstyles.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/presentation/widgets/guest_item_widget.dart';
 import 'package:portalixmx_app/presentation/widgets/primary_btn.dart';
 import 'package:portalixmx_app/presentation/widgets/regular_visitor_item_widget.dart';
@@ -15,6 +16,7 @@ class DirectoryGuestsSheet extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     final provider= Provider.of<HomeProvider>(context);
+    final localization = AppLocalizations.of(context)!;
     return Material(
       color: Colors.white,
       child: Padding(
@@ -23,8 +25,8 @@ class DirectoryGuestsSheet extends StatelessWidget{
           crossAxisAlignment: .start,
           spacing: 10,
           children: [
-            Text("Guests Directory", style: AppTextStyles.btnTextStyle.copyWith(color: AppColors.primaryColor),),
-            Expanded(child: provider.directoryGuests.isEmpty ? Center(child: Text("No Visitor found!"),) : ListView.separated(itemBuilder: (ctx, index){
+            Text(localization.guestsDirectory, style: AppTextStyles.btnTextStyle.copyWith(color: AppColors.primaryColor),),
+            Expanded(child: provider.directoryGuests.isEmpty ? Center(child: Text(localization.noVisitorFound),) : ListView.separated(itemBuilder: (ctx, index){
               BaseVisitor visitor = provider.directoryGuests[index];
               return visitor is GuestVisitor
                   ? GuestItemWidget(guest: visitor, onDeleteTap: (val) {}, onTap: ()=> Navigator.pop(context, {'visitor' : visitor}),)
@@ -33,7 +35,7 @@ class DirectoryGuestsSheet extends StatelessWidget{
 
             SizedBox(
                 width: .infinity,
-                child: PrimaryBtn(onTap: ()=> Navigator.pop(context, {'addNewGuest' : true}), btnText: 'Add New Guest'))
+                child: PrimaryBtn(onTap: ()=> Navigator.pop(context, {'addNewGuest' : true}), btnText: localization.addNewGuest))
           ],
         ),
       )

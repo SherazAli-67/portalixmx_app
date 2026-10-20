@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:portalixmx_app/core/helpers/auth_error_localizer.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/presentation/widgets/profile_image_widget.dart';
 import 'package:portalixmx_app/providers/profile_provider.dart';
@@ -96,19 +97,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 Column(
                                   spacing: 10,
                                   children: [
-                                    AppTextField(title: 'Name', hintText: 'Name', controller: _nameController,titleTextStyle: AppTextStyles.editProfileHeadingTextStyle, isDense: true, borderColor: AppColors.lightGreyBackgroundColor,),
-                                    AppTextField(title: 'Phone', hintText: 'Phone Number', controller: _phoneNumController,titleTextStyle: AppTextStyles.editProfileHeadingTextStyle, textInputType: .number, isDense: true, borderColor: AppColors.lightGreyBackgroundColor,),
+                                    AppTextField(title: AppLocalizations.of(context)!.name, hintText: AppLocalizations.of(context)!.name, controller: _nameController,titleTextStyle: AppTextStyles.editProfileHeadingTextStyle, isDense: true, borderColor: AppColors.lightGreyBackgroundColor,),
+                                    AppTextField(title: AppLocalizations.of(context)!.phone, hintText: AppLocalizations.of(context)!.phoneNumber, controller: _phoneNumController,titleTextStyle: AppTextStyles.editProfileHeadingTextStyle, textInputType: .number, isDense: true, borderColor: AppColors.lightGreyBackgroundColor,),
                                   ],
                                 ),
                                 Column(
                                   crossAxisAlignment: .start,
                                   spacing: 10,
                                   children: [
-                                    Text('Vehicle Information', style:AppTextStyles.btnTextStyle.copyWith(color: AppColors.primaryColor)),
-                                    AppTextField(title: 'Vehicle Name', hintText: 'ie.  ALTO', controller: _vehicleNameController,titleTextStyle: AppTextStyles.editProfileHeadingTextStyle,isDense: true,  borderColor: AppColors.lightGreyBackgroundColor,),
-                                    AppTextField(title: 'Color',hintText: 'ie Black', controller: _phoneNumController,titleTextStyle: AppTextStyles.editProfileHeadingTextStyle,isDense: true, borderColor: AppColors.lightGreyBackgroundColor,),
-                                    AppTextField(title: 'License Plate Number', hintText: 'License Number', controller: _licensePlateNumController,titleTextStyle: AppTextStyles.editProfileHeadingTextStyle,isDense: true,borderColor: AppColors.lightGreyBackgroundColor,),
-                                    AppTextField(title: 'Registration Number',hintText: 'Registration Number', controller: _registrationNumController,titleTextStyle: AppTextStyles.editProfileHeadingTextStyle, isDense: true, borderColor: AppColors.lightGreyBackgroundColor,),
+                                    Text(AppLocalizations.of(context)!.vehicleInformation, style:AppTextStyles.btnTextStyle.copyWith(color: AppColors.primaryColor)),
+                                    AppTextField(title: AppLocalizations.of(context)!.vehicleName, hintText: AppLocalizations.of(context)!.vehicleNameHint, controller: _vehicleNameController,titleTextStyle: AppTextStyles.editProfileHeadingTextStyle,isDense: true,  borderColor: AppColors.lightGreyBackgroundColor,),
+                                    AppTextField(title: AppLocalizations.of(context)!.color,hintText: AppLocalizations.of(context)!.colorHint, controller: _vehicleColorController,titleTextStyle: AppTextStyles.editProfileHeadingTextStyle,isDense: true, borderColor: AppColors.lightGreyBackgroundColor,),
+                                    AppTextField(title: AppLocalizations.of(context)!.licensePlateNumber, hintText: AppLocalizations.of(context)!.licenseNumberHint, controller: _licensePlateNumController,titleTextStyle: AppTextStyles.editProfileHeadingTextStyle,isDense: true,borderColor: AppColors.lightGreyBackgroundColor,),
+                                    AppTextField(title: AppLocalizations.of(context)!.registrationNumber,hintText: AppLocalizations.of(context)!.registrationNumber, controller: _registrationNumController,titleTextStyle: AppTextStyles.editProfileHeadingTextStyle, isDense: true, borderColor: AppColors.lightGreyBackgroundColor,),
                                   ],
                                 ),
                               Padding(
@@ -151,30 +152,31 @@ class _EditProfilePageState extends State<EditProfilePage> {
     String licensePlateNum = _licensePlateNumController.text.trim();
     String registrationNum = _registrationNumController.text.trim();
 
+    final localization = AppLocalizations.of(context)!;
     if(name.isEmpty){
-      Fluttertoast.showToast(msg: "Name cannot be empty, Please enter your name");
+      Fluttertoast.showToast(msg: localization.nameCannotBeEmpty);
       return;
     }
     if(vehicleName.isEmpty){
-      Fluttertoast.showToast(msg: "Please enter vehicle name");
+      Fluttertoast.showToast(msg: localization.pleaseEnterVehicleName);
       return;
     }
     if(color.isEmpty){
-      Fluttertoast.showToast(msg: "Please enter vehicle Color");
+      Fluttertoast.showToast(msg: localization.pleaseEnterVehicleColor);
       return;
     }
     if(licensePlateNum.isEmpty){
-      Fluttertoast.showToast(msg: "Please enter vehicle license plate number");
+      Fluttertoast.showToast(msg: localization.pleaseEnterLicensePlate);
       return;
     }
     if(registrationNum.isEmpty){
-      Fluttertoast.showToast(msg: "Please enter vehicle registration number");
+      Fluttertoast.showToast(msg: localization.pleaseEnterRegistrationNumber);
       return;
     }
 
     String? isError = await provider.onUpdateTap(name: name, phoneNum: phone, vehicleName: vehicleName, color: color, licensePlateNum: licensePlateNum, registrationNum: registrationNum);
     if(isError != null){
-      Fluttertoast.showToast(msg: isError);
+      Fluttertoast.showToast(msg: AuthErrorLocalizer.localize(localization, isError));
       return;
     }
 

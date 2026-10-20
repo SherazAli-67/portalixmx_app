@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:portalixmx_app/core/helpers/bottom_sheet_helper.dart';
@@ -15,6 +17,7 @@ class MaintenanceProvider extends ChangeNotifier {
   bool loadingComplaints = false;
   List<ComplaintModel> _allComplaints  = [];
   List<ComplaintModel> _filteredComplaints  = [];
+  StreamSubscription? _complaintsSub;
 
   DateTime? dateFrom;
   DateTime? dateTo;
@@ -22,22 +25,39 @@ class MaintenanceProvider extends ChangeNotifier {
   List<ComplaintModel> get allComplaints => _allComplaints;
   List<ComplaintModel> get filteredComplaints => _filteredComplaints;
   MaintenanceProvider(){
-    _initComplaints();
+    _listenComplaints();
+  }
+
+  void _listenComplaints() {
+    loadingComplaints = true;
+    notifyListeners();
+    _complaintsSub?.cancel();
+    _complaintsSub = _complaintService.watchAllComplaints().listen((complaints) {
+      _allComplaints = complaints;
+      _sortComplaints();
+      _applyDateFilter();
+      loadingComplaints = false;
+      notifyListeners();
+    }, onError: (e) {
+      loadingComplaints = false;
+      notifyListeners();
+      debugPrint("Error while watching complaints: ${e.toString()}");
+    });
   }
 
   Future<String?> deleteComplaintByID(String complaintID) async {
     try{
-      _allComplaints.removeWhere((complaint) => complaint.id == complaintID);
-      _applyDateFilter();
       await _complaintService.deleteComplaintByID(complaintID);
       return null;
     }catch(e){
-      return e.toString();
+      return e.toString().replaceFirst('Exception: ', '');
     }
   }
 
   Future<String?> onAddComplaintTap()async{
-    final result = await BottomSheetHelper.showDraggableBottomSheet(scaffoldKey: scaffoldKey, child: AddComplaintBottomSheet(),);
+    final result = await BottomSheetHelper.showDraggableBottomSheet(
+      initialHeight: 0.6,
+      scaffoldKey: scaffoldKey, child: AddComplaintBottomSheet(),);
     if(result != null){
       addingComplaint = true;
       notifyListeners();
@@ -45,7 +65,7 @@ class MaintenanceProvider extends ChangeNotifier {
       List<XFile> complaintFiles = result['files'];
 
       UserModel? user = await UserService.instance.getCurrentUser();
-      if(user  == null) return 'User not found, Login again';
+      if(user  == null) return 'user_not_found_login_again';
       List<String>? imagesUrl;
       if(complaintFiles.isNotEmpty){
         imagesUrl = await _complaintService.uploadComplaintImages(files: complaintFiles);
@@ -53,40 +73,20 @@ class MaintenanceProvider extends ChangeNotifier {
 
       SocietyModel? society = await UserService.instance.getSocietyByID(societyID: user.societyID ?? '');
       try{
-        ComplaintModel? complaint = await _complaintService.addComplaint(complaintText: complaintText, society: society!, images: imagesUrl);
-        if(complaint != null){
-          _allComplaints.add(complaint);
-          _sortComplaints();
-          _applyDateFilter();
-        }
-        addingComplaint = true;
-        notifyListeners();
+        await _complaintService.addComplaint(complaintText: complaintText, society: society!, images: imagesUrl);
       }catch(e){
-        return e.toString();
+        addingComplaint = false;
+        notifyListeners();
+        return e.toString().replaceFirst('Exception: ', '');
       }
+      addingComplaint = false;
+      notifyListeners();
     }
     return null;
   }
 
-  Future<void> _initComplaints() async {
-    try{
-      loadingComplaints = true;
-      notifyListeners();
-
-      _allComplaints = await _complaintService.getAllComplaints();
-      _sortComplaints();
-      _applyDateFilter();
-    }catch(e){
-      debugPrint("Error while fetching complaints: ${e.toString()}");
-    }
-
-    loadingComplaints = false;
-    notifyListeners();
-
-  }
-
   Future<void> refreshComplaints() async {
-    await _initComplaints();
+    _listenComplaints();
   }
 
   void setDateFrom(DateTime date){
@@ -114,5 +114,11 @@ class MaintenanceProvider extends ChangeNotifier {
       return DateTimeFormatHelpers.isDateInRange(complaint.createdAt, from: dateFrom, to: dateTo);
     }).toList();
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _complaintsSub?.cancel();
+    super.dispose();
   }
 }

@@ -13,7 +13,7 @@ class EmergencyService {
 
   String mapFirebaseError(Object error) {
     if (error is FirebaseFunctionsException) {
-      return error.message ?? 'Emergency alert failed';
+      return error.message ?? 'emergency_alert_failed';
     }
     return error.toString();
   }

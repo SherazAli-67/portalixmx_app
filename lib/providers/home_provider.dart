@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:portalixmx_app/core/models/user_model.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/presentation/bottomsheets/add_update_guest_bottomsheet.dart';
 import 'package:portalixmx_app/presentation/bottomsheets/directory_guests_sheet.dart';
 import 'package:portalixmx_app/presentation/dialogs/guest_zk_qr_dialog.dart';
 import 'package:portalixmx_app/services/user_service/user_service.dart';
 import 'package:portalixmx_app/services/visitor_service/visitor_service.dart';
 import 'package:portalixmx_app/services/zkbio_access_service/zkbio_access_service.dart';
+import '../core/helpers/auth_error_localizer.dart';
 import '../core/helpers/bottom_sheet_helper.dart';
 import '../presentation/screens/main_menu/main_menu.dart';
 
@@ -179,7 +181,7 @@ class HomeProvider extends ChangeNotifier {
       final user = await getCurrentUser();
       if (user == null) throw Exception('User not found');
       if (!user.isApproved) {
-        Fluttertoast.showToast(msg: 'Account must be approved before generating access QR');
+        Fluttertoast.showToast(msg: AppLocalizations.of(context)!.accountMustBeApprovedForQr);
         return;
       }
 
@@ -201,7 +203,12 @@ class HomeProvider extends ChangeNotifier {
         ),
       );
     } catch (e) {
-      Fluttertoast.showToast(msg: _zkbioService.mapFirebaseError(e));
+      final msg = _zkbioService.mapFirebaseError(e);
+      Fluttertoast.showToast(
+        msg: context.mounted
+            ? AuthErrorLocalizer.localize(AppLocalizations.of(context)!, msg)
+            : msg,
+      );
     } finally {
       loading = false;
       notifyListeners();
@@ -223,7 +230,7 @@ class HomeProvider extends ChangeNotifier {
       if (result['visitor'] != null) {
         await BottomSheetHelper.showDraggableBottomSheet<dynamic>(
           scaffoldKey: scaffoldKey,
-          initialHeight: 0.7,
+          initialHeight: 0.9,
           child: AddUpdateGuestBottomSheet(
             visitor: result['visitor'],
             comingFromGuestDirectory: true,
@@ -232,7 +239,7 @@ class HomeProvider extends ChangeNotifier {
       } else if (result['addNewGuest'] != null) {
         await BottomSheetHelper.showDraggableBottomSheet<dynamic>(
           scaffoldKey: scaffoldKey,
-          initialHeight: 0.7,
+          initialHeight: 0.9,
           child: const AddUpdateGuestBottomSheet(),
         );
       }
@@ -242,7 +249,7 @@ class HomeProvider extends ChangeNotifier {
   Future<dynamic> onEditVisitorTap(BaseVisitor visitor) async {
     await BottomSheetHelper.showDraggableBottomSheet<dynamic>(
       scaffoldKey: scaffoldKey,
-      initialHeight: 0.7,
+      initialHeight: 0.9,
       child: AddUpdateGuestBottomSheet(
         visitor: visitor,
         isEdit: true,
@@ -279,5 +286,20 @@ class HomeProvider extends ChangeNotifier {
       debugPrint('Error adding visitor: $e');
       return false;
     }
+  }
+
+  void clearUserState() {
+    _visitors = [];
+    _directoryGuests = [];
+    _selectedTab = 0;
+    addingGuestVisitor = false;
+    loadingVisitors = false;
+    loadingDirectoryGuests = false;
+    loading = false;
+    notifyListeners();
+  }
+
+  Future<void> reloadForCurrentUser() async {
+    await refreshVisitorsAndGuests();
   }
 }

@@ -22,7 +22,17 @@ class CommunityService {
           .map((doc) => CommunityEventModel.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      throw Exception('Failed to get visitors: $e');
+      throw Exception('Failed to get community events');
     }
+  }
+
+  Stream<List<CommunityEventModel>> watchCommunityEvents(String societyID) {
+    if (societyID.isEmpty) return Stream.value([]);
+    return _getCommunityEventsCollection()
+        .where('societyID', isEqualTo: societyID)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => CommunityEventModel.fromMap(doc.data() as Map<String, dynamic>))
+            .toList());
   }
 }

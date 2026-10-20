@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/core/models/society_model.dart';
+import 'package:portalixmx_app/core/helpers/auth_error_localizer.dart';
 import 'package:portalixmx_app/core/validators/validators.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/presentation/widgets/app_dropdown_widget.dart';
@@ -95,10 +96,38 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           ),
                         ),
                       ),
-                      AppTextField(title: localization.name, controller: _nameController, hintText: localization.name,validator: Validators.validateFullName,),
-                      AppTextField(title: localization.email, controller: _emailController, hintText: localization.email,textInputType: TextInputType.emailAddress, validator: Validators.validateEmail,),
-                      AppTextField(title: localization.password, controller: _passwordController, hintText: localization.password, isPassword: true, validator: Validators.validatePassword,),
-                      AppDropdownWidget<SocietyModel>(title: localization.selectSociety, list: _provider.societies, value: _provider.selectedSociety, onChanged: (val)=> _provider.onSelectSocietyTap(val), getTitle: (item) => item.name)
+                      AppTextField(title: localization.name, controller: _nameController, hintText: localization.name,validator: Validators.validateFullName(localization),),
+                      AppTextField(title: localization.email, controller: _emailController, hintText: localization.email,textInputType: TextInputType.emailAddress, validator: Validators.validateEmail(localization),),
+                      AppTextField(title: localization.password, controller: _passwordController, hintText: localization.password, isPassword: true, validator: Validators.validatePassword(localization),),
+                      if (_provider.loadingSocieties)
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Center(child: CircularProgressIndicator()),
+                        )
+                      else if (_provider.societiesError != null)
+                        Column(
+                          crossAxisAlignment: .start,
+                          spacing: 8,
+                          children: [
+                            Text(
+                              localization.failedToLoadSocieties,
+                              style: AppTextStyles.regularTextStyle.copyWith(color: Colors.red),
+                            ),
+                            TextButton(
+                              onPressed: _provider.loadSocieties,
+                              child: Text(localization.retry),
+                            ),
+                          ],
+                        )
+                      else
+                        AppDropdownWidget<SocietyModel>(
+                          title: localization.selectSociety,
+                          list: _provider.societies,
+                          value: _provider.selectedSociety,
+                          onChanged: (val) => _provider.onSelectSocietyTap(val),
+                          getTitle: (item) => item.name,
+                        ),
+                      // AppDropdownWidget<SocietyModel>(title: localization.selectSociety, list: _provider.societies, value: _provider.selectedSociety, onChanged: (val)=> _provider.onSelectSocietyTap(val), getTitle: (item) => item.name)
 
                     ],
                   ),
@@ -136,7 +165,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       String? isError = await _provider.onCreateAccountTap(name: name, email: email, password: password);
       if (!mounted) return;
       if(isError != null){
-        CommonUI.showSnackBarMessage(context, isError: true, message: isError, title: "Signup failed");
+        CommonUI.showSnackBarMessage(context, isError: true, message: AuthErrorLocalizer.localize(AppLocalizations.of(context)!, isError), title: AppLocalizations.of(context)!.signupFailed);
       }else{
         if (!mounted) return;
         if(mounted) {

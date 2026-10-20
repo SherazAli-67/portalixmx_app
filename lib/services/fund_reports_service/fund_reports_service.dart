@@ -24,8 +24,19 @@ class FundReportsService {
               FundReportModel.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      throw Exception('Failed to get fund reports: $e');
+      throw Exception('Failed to get fund reports');
     }
+  }
+
+  Stream<List<FundReportModel>> watchReports(String societyID) {
+    if (societyID.isEmpty) return Stream.value([]);
+    return _getReportsCollection()
+        .where('societyID', isEqualTo: societyID)
+        .where('showToResidents', isEqualTo: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => FundReportModel.fromMap(doc.data() as Map<String, dynamic>))
+            .toList());
   }
 
   Future<void> createReport(FundReportModel report) async {

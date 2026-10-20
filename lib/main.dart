@@ -1,5 +1,7 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/firebase_messaging_background.dart';
 import 'package:portalixmx_app/firebase_options.dart';
@@ -16,10 +18,31 @@ import 'providers/language_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseAppCheck.instance.activate(
+    providerAndroid: kDebugMode
+        ? const AndroidDebugProvider()
+        : const AndroidPlayIntegrityProvider(),
+    providerApple: kDebugMode
+        ? const AppleDebugProvider()
+        : const AppleAppAttestProvider(),
+  );
+  if (kDebugMode) {
+    try {
+      final token = await FirebaseAppCheck.instance.getToken(true);
+      debugPrint('App Check token acquired: ${token != null}');
+    } catch (e) {
+      debugPrint(
+        'App Check failed for resident app (com.portalixmx.app). '
+        'Register this device debug token under Firebase Console → App Check → '
+        'Apps → com.portalixmx.app (not the admin app). '
+        'Check Logcat/Xcode for "Firebase App Check Debug Token". Error: $e',
+      );
+    }
+  }
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await PushNotificationService.instance.initialize(router: appRouter);
-
   runApp(
     MultiProvider(
       providers: [

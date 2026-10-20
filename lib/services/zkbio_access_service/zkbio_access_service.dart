@@ -33,9 +33,9 @@ class ZkbioAccessService {
     });
   }
 
-  String mapFirebaseError(Object error) {
+  String mapFirebaseError(Object error, {String fallback = 'zkbio_access_failed'}) {
     if (error is FirebaseFunctionsException) {
-      return error.message ?? 'ZKBio access failed';
+      return error.message ?? fallback;
     }
     return error.toString();
   }

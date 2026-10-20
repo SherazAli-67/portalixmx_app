@@ -7,6 +7,21 @@ enum ComplaintStatus {
   rejected,
 }
 
+ComplaintStatus _complaintStatusFromMap(dynamic raw) {
+  if (raw == null) return ComplaintStatus.pending;
+  if (raw is String) {
+    return ComplaintStatus.values.firstWhere(
+      (e) => e.name == raw,
+      orElse: () => ComplaintStatus.pending,
+    );
+  }
+  final idx = raw is int ? raw : int.tryParse(raw.toString());
+  if (idx != null && idx >= 0 && idx < ComplaintStatus.values.length) {
+    return ComplaintStatus.values[idx];
+  }
+  return ComplaintStatus.pending;
+}
+
 class ComplaintModel {
   final String id;
   final String complaint;
@@ -56,10 +71,7 @@ class ComplaintModel {
       complaintBy: map["complaintBy"] ?? '',
       residentAdminID: map["residentAdminID"] ?? '',
       societyID: map["societyID"] ?? '',
-      status: ComplaintStatus.values.firstWhere(
-            (e) => e.name == map["status"],
-        orElse: () => ComplaintStatus.pending,
-      ),
+      status: _complaintStatusFromMap(map["status"]),
       createdAt: (map["createdAt"] as Timestamp).toDate(),
       updatedAt: (map["updatedAt"] as Timestamp).toDate(),
     );

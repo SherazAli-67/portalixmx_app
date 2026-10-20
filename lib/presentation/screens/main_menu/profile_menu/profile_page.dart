@@ -1,14 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/presentation/widgets/profile_image_widget.dart';
+import 'package:portalixmx_app/providers/authentication_provider/authentication_provider.dart';
+import 'package:portalixmx_app/providers/home_provider.dart';
 import 'package:portalixmx_app/providers/profile_provider.dart';
 import 'package:portalixmx_app/router/app_router.dart';
-import 'package:portalixmx_app/services/push_notification_service/push_notification_service.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../../core/res/app_constants.dart';
 import '../../../../core/res/app_icons.dart';
 import '../../../../core/res/app_textstyles.dart';
 import '../../../widgets/loading_widget.dart';
@@ -91,19 +92,21 @@ class ProfileMenu extends StatelessWidget {
                   onTap: () => _onGuardsTap(context),
                 ),
                 ProfileItemWidget(
-                  title: localization.carPooling,
-                  icon: AppIcons.icCarPooling,
-                  onTap: () {},
-                ),
-                ProfileItemWidget(
                   title: localization.emergencyCalls,
                   icon: AppIcons.icEmergencyCalls,
                   onTap: () => _onEmergencyTap(context),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () => _onPrivacyPolicyTap(),
                   child: Text(
                     localization.privacyPolicy,
+                    style: AppTextStyles.tileTitleTextStyle2,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => _onTermsOfServiceTap(),
+                  child: Text(
+                    localization.termsOfService,
                     style: AppTextStyles.tileTitleTextStyle2,
                   ),
                 ),
@@ -145,11 +148,28 @@ class ProfileMenu extends StatelessWidget {
     context.push(NamedRoutes.emergencyCalls.routeName);
   }
 
-  void _onLogoutTap(BuildContext context) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.clear();
-    await PushNotificationService.instance.removeTokenForSignOut();
-    await FirebaseAuth.instance.signOut();
+  Future<void> _onPrivacyPolicyTap() async {
+    final uri = Uri.parse(AppConstants.privacyPolicyUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: .externalApplication);
+    }
+  }
+
+  Future<void> _onTermsOfServiceTap() async {
+    final uri = Uri.parse(AppConstants.termsOfServiceUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: .externalApplication);
+    }
+  }
+
+  Future<void> _onLogoutTap(BuildContext context) async {
+    final authProvider = context.read<AuthenticationProvider>();
+    final homeProvider = context.read<HomeProvider>();
+    final profileProvider = context.read<ProfileProvider>();
+    await authProvider.logout();
+    homeProvider.clearUserState();
+    profileProvider.clearUserState();
+    if (!context.mounted) return;
     context.go(NamedRoutes.login.routeName);
   }
 }

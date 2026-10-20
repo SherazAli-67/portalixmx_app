@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:portalixmx_app/core/helpers/bottom_sheet_helper.dart';
 import 'package:portalixmx_app/core/models/access_model.dart';
@@ -15,6 +17,7 @@ class RequestAccessProvider extends ChangeNotifier {
   final List<AccessModel> _allAccessItems = [];
   List<AccessRequestModel> _allAccessRequests  = [];
   List<AccessRequestModel> _filteredAccessRequests  = [];
+  StreamSubscription? _requestsSub;
 
   final _requestsService = AccessRequestService.instance;
   DateTime? dateFrom;
@@ -23,7 +26,18 @@ class RequestAccessProvider extends ChangeNotifier {
   List<AccessRequestModel> get filteredAccessRequests => _filteredAccessRequests;
   List<AccessModel> get allAccessItems => _allAccessItems;
   RequestAccessProvider(){
-    _initRequests();
+    _listenRequests();
+  }
+
+  void _listenRequests() {
+    _requestsSub?.cancel();
+    _requestsSub = _requestsService.watchAllRequests().listen((requests) {
+      _allAccessRequests = requests;
+      _sortAccessRequests();
+      _applyDateFilter();
+    }, onError: (e) {
+      debugPrint('RequestAccessProvider: failed to watch access requests: $e');
+    });
   }
 
   void onAddRequestTap() async{
@@ -43,10 +57,7 @@ class RequestAccessProvider extends ChangeNotifier {
         if(user  == null) return;
 
         SocietyModel? society = await UserService.instance.getSocietyByID(societyID: user.societyID ?? '');
-      AccessRequestModel accessRequest =  await _requestsService.createRequest(date: date, time: time, access: accessModel, society: society!,);
-      _allAccessRequests.add(accessRequest);
-      _sortAccessRequests();
-      _applyDateFilter();
+      await _requestsService.createRequest(date: date, time: time, access: accessModel, society: society!,);
       }catch(e){
         debugPrint("Exception while creating access request");
       }
@@ -55,18 +66,8 @@ class RequestAccessProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _initRequests() async {
-    try {
-      _allAccessRequests = await _requestsService.getAllRequests();
-      _sortAccessRequests();
-      _applyDateFilter();
-    } catch (e) {
-      debugPrint('RequestAccessProvider: failed to fetch access items: $e');
-    }
-  }
-
   Future<void> refreshRequests() async {
-    await _initRequests();
+    _listenRequests();
   }
 
   void setDateFrom(DateTime date){
@@ -94,5 +95,11 @@ class RequestAccessProvider extends ChangeNotifier {
       return DateTimeFormatHelpers.isDateInRange(request.createdAt, from: dateFrom, to: dateTo);
     }).toList();
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _requestsSub?.cancel();
+    super.dispose();
   }
 }

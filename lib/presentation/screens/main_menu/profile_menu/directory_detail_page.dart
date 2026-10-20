@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:portalixmx_app/core/models/visitor_model.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import '../../../../core/res/app_textstyles.dart';
 import '../../../widgets/bg_gradient_screen.dart';
 import '../homepage//widgets/vistor_info_item_widget.dart';
 
 class DirectoryDetailPage extends StatelessWidget{
-  const DirectoryDetailPage({super.key});
+  const DirectoryDetailPage({super.key, this.visitor});
+  final BaseVisitor? visitor;
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    final name = visitor?.name ?? localization.directory;
+    final contact = visitor?.contact;
+    final accessFor = visitor?.accessFor;
     return BgGradientScreen(child: Column(
       spacing: 20,
       children: [
@@ -16,12 +23,11 @@ class DirectoryDetailPage extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               BackButton(color: Colors.white,),
-              Text("Name", style: AppTextStyles.regularTextStyle,),
+              Text(name, style: AppTextStyles.regularTextStyle,),
               const SizedBox(width: 20)
             ],
           ),
         ),
-
         Expanded(
           child: Card(
             color: Colors.white,
@@ -36,9 +42,13 @@ class DirectoryDetailPage extends StatelessWidget{
                   spacing: 15,
                   children: [
                     VisitorInfoItemWidget(
-                      title: 'Apart No.', subTitle: '1223',showDivider: true,),
+                      title: localization.accessFor,
+                      subTitle: (accessFor == null || accessFor.isEmpty) ? localization.informationUnavailable : accessFor,
+                      showDivider: true,),
                     VisitorInfoItemWidget(
-                      title: 'Contact', subTitle: '+92 307 2215500',showDivider: true,)
+                      title: localization.contact,
+                      subTitle: (contact == null || contact.isEmpty) ? localization.informationUnavailable : contact,
+                      showDivider: true,)
                   ],
                 )
             ),
@@ -47,5 +57,4 @@ class DirectoryDetailPage extends StatelessWidget{
       ],
     ),);
   }
-
 }

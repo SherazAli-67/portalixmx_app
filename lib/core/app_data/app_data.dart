@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
-import '../models/emergency_contact_model.dart';
 
 class AppData {
   static  List<String> getDays(BuildContext context) {
@@ -34,13 +33,5 @@ class AppData {
       default:
         return AppLocalizations.of(context)!.monday;
     }
-  }
-
-  static List<EmergencyContactModel> get emergencyContacts {
-    return [
-      EmergencyContactModel(id: 1, name: "Isela Trujillo", phoneNumber: "+92 3072215500"),
-      EmergencyContactModel(id: 1, name: "Sheraz Ali", phoneNumber: "+92 3072215500"),
-
-    ];
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portalixmx_app/core/helpers/auth_error_localizer.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/presentation/widgets/payment_status_widget.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +65,7 @@ class PaymentsMenu extends StatelessWidget{
                                 SizedBox(
                                   height: 200,
                                   child: Center(
-                                    child: Text("No payment requests found", style: AppTextStyles.regularTextStyle,),
+                                    child: Text(localization.noPaymentRequestsFound, style: AppTextStyles.regularTextStyle,),
                                   ),
                                 ),
                               ],
@@ -137,9 +138,9 @@ class PaymentsMenu extends StatelessWidget{
     if(updatedPayment != null){
       String? error = await provider.updatePayment(updatedPayment);
       if(error != null){
-        CommonUI.showSnackBarMessage(context, isError: true, message: error);
+        CommonUI.showSnackBarMessage(context, isError: true, message: AuthErrorLocalizer.localize(AppLocalizations.of(context)!, error));
       }else{
-        CommonUI.showSnackBarMessage(context, isSuccess: true, message: "Your receipt is submitted to the admin");
+        CommonUI.showSnackBarMessage(context, isSuccess: true, message: AppLocalizations.of(context)!.receiptSubmittedToAdmin);
       }
     }
   }

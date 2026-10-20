@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:portalixmx_app/core/helpers/status_display_helper.dart';
 import '../../core/models/payment_model.dart';
 import '../../core/res/app_colors.dart';
 import '../../core/res/app_icons.dart';
@@ -27,21 +29,20 @@ class _SubmitPaymentToAdminBottomSheetState extends State<SubmitPaymentToAdminBo
     return Material(
       color: Colors.white,
       child: Padding(
-        padding: const .symmetric(horizontal: 16.0, vertical: 25),
+        padding: const .symmetric(horizontal: 16.0, vertical: 8),
         child: Column(
           spacing: 15,
           children: [
             Text(localizations.paymentDetails, style: AppTextStyles.bottomSheetHeadingTextStyle,),
-            const SizedBox(height: 10,),
             Column(
               crossAxisAlignment: .start,
+              spacing: 10,
               children: [
                 Row(
                   spacing: 20,
                   children: [
                     Expanded(
                       child:VisitorInfoItemWidget(title: localizations.paymentFor, subTitle: widget.payment.paymentForTitle,),
-
                     ),
                     Expanded(
                         child: VisitorInfoItemWidget(
@@ -54,7 +55,7 @@ class _SubmitPaymentToAdminBottomSheetState extends State<SubmitPaymentToAdminBo
                     Expanded(child: VisitorInfoItemWidget(title: localizations.date, subTitle: DateTimeFormatHelpers.formatDateTime( widget.payment.dateTime), showDivider:  widget.payment.paymentStatus ==.received ),),
                     Expanded(
                         child: VisitorInfoItemWidget(
-                          title: localizations.status, subTitle: widget.payment.paymentStatus.name.toUpperCase(),)
+                          title: localizations.status, subTitle: StatusDisplayHelper.label(widget.payment.paymentStatus, localizations),)
                     ),
                   ],
                 ),
@@ -63,7 +64,6 @@ class _SubmitPaymentToAdminBottomSheetState extends State<SubmitPaymentToAdminBo
             Align(
                 alignment: .topLeft,
                 child: Text(localizations.receipt, style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.primaryColor),)),
-
             Row(
               spacing: 20,
               children: [
@@ -75,15 +75,11 @@ class _SubmitPaymentToAdminBottomSheetState extends State<SubmitPaymentToAdminBo
               Row(
                 children: [
                   Expanded(child: Text(image!.path.split('/').last, style: AppTextStyles.tileTitleTextStyle.copyWith(color: AppColors.primaryColor),)),
-                  IconButton(onPressed: (){
-                    image = null;
-                    setState(() {});
-                  }, icon: Icon(Icons.delete))
+                  IconButton(onPressed: ()=> setState(() => image = null), icon: Icon(Icons.delete))
                 ],
               ),
-
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 18.0),
+              padding: const EdgeInsets.only(top: 8.0, bottom: 18.0),
               child: SizedBox(
                 height: 50,
                 width: double.infinity,
@@ -92,7 +88,7 @@ class _SubmitPaymentToAdminBottomSheetState extends State<SubmitPaymentToAdminBo
             )
           ],
         ),
-      ),
+      )
     );
   }
 
@@ -134,9 +130,9 @@ class _SubmitPaymentToAdminBottomSheetState extends State<SubmitPaymentToAdminBo
 
   void _onSubmitTap()async{
     if(image == null){
-      Navigator.pop(context);
-    }else{
-      Navigator.pop(context, {'receipt' : image,});
+      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.pleaseUploadReceipt);
+      return;
     }
+    Navigator.pop(context, {'receipt' : image,});
   }
 }

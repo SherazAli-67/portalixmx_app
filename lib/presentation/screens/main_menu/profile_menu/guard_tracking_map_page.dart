@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portalixmx_app/l10n/app_localizations.dart';
 import '../../../../core/res/app_colors.dart';
 import '../../../../core/res/app_icons.dart';
 import '../../../../core/res/app_textstyles.dart';
@@ -20,7 +21,7 @@ class GuardTrackingMapPage extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   BackButton(color: Colors.white),
-                  Text("Guard Tracking", style: AppTextStyles.regularTextStyle),
+                  Text(AppLocalizations.of(context)!.guardTracking, style: AppTextStyles.regularTextStyle),
                   const SizedBox(width: 40),
                 ],
               ),

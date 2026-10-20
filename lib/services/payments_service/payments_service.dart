@@ -36,8 +36,17 @@ class PaymentsService {
           .get();
       return snapshot.docs.map((doc)=> PaymentModel.fromMap(doc.data())).toList();
     } catch (e) {
-      throw Exception(e.toString());
+      throw Exception('Failed to load payments');
     }
+  }
+
+  Stream<List<PaymentModel>> watchPayments(String societyID) {
+    if (societyID.isEmpty) return Stream.value([]);
+    return _firestore
+        .collection(FirebaseConst.paymentsCol)
+        .where('societyID', isEqualTo: societyID)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc)=> PaymentModel.fromMap(doc.data())).toList());
   }
 
 
