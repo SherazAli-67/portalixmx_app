@@ -80,24 +80,4 @@ class MainMenuPage extends StatelessWidget{
           child: SvgPicture.asset(icon, height: 25, ),
         ) : SvgPicture.asset(icon, height: 25, ), label: isSelected ? '': label,);
 
-
-
-/* Widget _buildResidentMenuItem(int currentIndex) {
-    switch(currentIndex){
-      case 0:
-        return HomePage();
-
-      case 1:
-        return MaintenanceMenu();
-
-      case 2:
-        return AccessMenu();
-
-      case 3:
-        return ProfileMenu();
-
-      default:
-        return HomePage();
-    }
-  }*/
 }

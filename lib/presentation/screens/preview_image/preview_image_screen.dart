@@ -12,11 +12,11 @@ class PreviewImageScreen extends StatelessWidget{
     return BgGradientScreen(child: Column(
       spacing: 20,
       children: [
-        Padding(padding: EdgeInsets.only(top: 65),
+        Padding(padding: const EdgeInsets.only(top: 65),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              BackButton(color: Colors.white,),
+              const BackButton(color: Colors.white,),
               Text(title, style: AppTextStyles.regularTextStyle,),
               const SizedBox(width: 20)
             ],
@@ -28,15 +28,18 @@ class PreviewImageScreen extends StatelessWidget{
             color: Colors.white,
             elevation: 0,
             margin: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30))
             ),
             child: SizedBox(
-              width: .infinity,
-                // padding: const EdgeInsets.only(top: 36.0, left: 18, right: 18),
+              width: double.infinity,
                 child: ClipRRect(
-                    borderRadius:BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-                    child: InteractiveViewer(child: CachedNetworkImage(imageUrl: imageUrl, fit: .cover,)))
+                    borderRadius:const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+                    child: InteractiveViewer(
+                      minScale: 0.8,
+                      maxScale: 4,
+                      child: CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.contain,),
+                    ))
             ),
           ),
         )

@@ -50,13 +50,14 @@ class AuthenticationProvider extends ChangeNotifier{
     }
   }
 
-  Future<String?> onCreateAccountTap({required String email, required String name, required String password})async{
+  Future<String?> onCreateAccountTap({required String email, required String name, required String password, required String houseNumber, required String address})async{
     _isSigningUp = true;
     notifyListeners();
     try{
       if(pickedImage == null) return 'please_upload_profile_picture';
+      if(selectedSociety == null) return 'failed_to_load_societies';
       await _authService.signup(name: name, email: email, password: password,
-          societyID: selectedSociety!.id, image: pickedImage!);
+          societyID: selectedSociety!.id, houseNumber: houseNumber, address: address, image: pickedImage!);
       return null;
     }catch(e){
       return e.toString();
@@ -72,14 +73,14 @@ class AuthenticationProvider extends ChangeNotifier{
     required String vehicleColor,
     required String licensePlateNum,
     required String registrationNum,
-    required String emergencyContact}) async {
+    required String personalEmergencyPhone}) async {
     _isCompletingProfile = true;
     notifyListeners();
     try{
       UserModel? user = await _authService.getCurrentUser();
       if(user == null) return 'user_not_found';
       VehicleInformation vehicleInformation = VehicleInformation(name: vehicleName, color: vehicleColor, registrationNumber: registrationNum, licensePlateNumber: licensePlateNum);
-      final updatedUser = user.copyWith(vehicleInformation: vehicleInformation, emergencyContacts: [emergencyContact], phoneNum: phoneNum);
+      final updatedUser = user.copyWith(vehicleInformation: vehicleInformation, personalEmergencyPhone: personalEmergencyPhone, phoneNum: phoneNum);
       return await _authService.updateUser(user: updatedUser);
     }catch(e){
       return e.toString();

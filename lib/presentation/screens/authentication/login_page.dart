@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/core/common_ui.dart';
 import 'package:portalixmx_app/core/helpers/auth_error_localizer.dart';
+import 'package:portalixmx_app/core/validators/validators.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/providers/authentication_provider/authentication_provider.dart';
 import 'package:portalixmx_app/providers/home_provider.dart';
@@ -24,10 +25,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  final TextEditingController _emailController = .new();
-  final TextEditingController _passwordController = .new();
-
-  // bool _isLogging = false;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -42,63 +42,79 @@ class _LoginPageState extends State<LoginPage> {
     final localization = AppLocalizations.of(context)!;
     return ScreenWithBgLogo(
       child: Padding(
-        padding: .symmetric(horizontal: 16, vertical: 10.0),
-        child: Column(
-          spacing: 16,
-          children: [
-            Text(localization.residentLogin, style: AppTextStyles.headingTextStyle),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: .only(top: 16),
-                child: Column(
-                  crossAxisAlignment: .start,
-                  spacing: 16,
-                  children: [
-                    AppTextField(
-                      title: localization.email,
-                      controller: _emailController, hintText: localization.email,textInputType: TextInputType.emailAddress,),
-                    AppTextField(title: localization.password,controller: _passwordController, hintText: localization.password, isPassword: true,),
-                    Align(
-                      alignment: .topRight,
-                      child: TextButton(onPressed: ()=> context.push(NamedRoutes.forgetPassword.routeName), child: Text(localization.forgetPassword, style: AppTextStyles.btnTextStyle,)),
-                    ),
-                  ],
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            spacing: 16,
+            children: [
+              Text(localization.residentLogin, style: AppTextStyles.headingTextStyle),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 16,
+                    children: [
+                      AppTextField(
+                        title: localization.email,
+                        controller: _emailController,
+                        hintText: localization.email,
+                        textInputType: TextInputType.emailAddress,
+                        validator: Validators.validateEmail(localization),
+                      ),
+                      AppTextField(
+                        title: localization.password,
+                        controller: _passwordController,
+                        hintText: localization.password,
+                        isPassword: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return localization.passwordRequired;
+                          }
+                          return null;
+                        },
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: TextButton(onPressed: ()=> context.push(NamedRoutes.forgetPassword.routeName), child: Text(localization.forgetPassword, style: AppTextStyles.btnTextStyle,)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            Consumer<AuthenticationProvider>(
-              builder: (ctx, provider, child){
-                return SizedBox(
-                  height: 50,
-                  width: .infinity,
-                  child: PrimaryBtn(onTap: _onLoginTap, btnText: localization.login, isLoading: provider.isSigningIn,),);
-              },
-            ),
-            RichText(text: TextSpan(
-              text: localization.dontHaveAnAccount,
-              style: AppTextStyles.subHeadingTextStyle.copyWith(fontFamily: AppConstants.appFontFamily),
-              children: [
-                TextSpan(
-                  text: localization.createAccount,
-                  recognizer: TapGestureRecognizer()..onTap = ()=> context.go(NamedRoutes.createAccount.routeName),
-                  style: AppTextStyles.subHeadingTextStyle.copyWith(fontFamily: AppConstants.appFontFamily, fontWeight: .w600)
-                )
-              ]
-            ))
-          ],
+              Consumer<AuthenticationProvider>(
+                builder: (ctx, provider, child){
+                  return SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: PrimaryBtn(onTap: _onLoginTap, btnText: localization.login, isLoading: provider.isSigningIn,),);
+                },
+              ),
+              RichText(text: TextSpan(
+                text: localization.dontHaveAnAccount,
+                style: AppTextStyles.subHeadingTextStyle.copyWith(fontFamily: AppConstants.appFontFamily),
+                children: [
+                  TextSpan(
+                    text: localization.createAccount,
+                    recognizer: TapGestureRecognizer()..onTap = ()=> context.go(NamedRoutes.createAccount.routeName),
+                    style: AppTextStyles.subHeadingTextStyle.copyWith(fontFamily: AppConstants.appFontFamily, fontWeight: FontWeight.w600)
+                  )
+                ]
+              ))
+            ],
+          ),
         ),
       ),
     );
   }
 
   void _onLoginTap()async{
+    if (!(_formKey.currentState?.validate() ?? false)) return;
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
 
-    if(email.isEmpty || password.isEmpty){
-      return;
-    }
     final authProvider = context.read<AuthenticationProvider>();
     final profileProvider = context.read<ProfileProvider>();
     final homeProvider = context.read<HomeProvider>();
@@ -112,61 +128,5 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
       context.go(NamedRoutes.home.routeName);
     }
-    /*
-    FocusManager.instance.primaryFocus?.unfocus();
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-
-    if(email.isEmpty || password.isEmpty){
-      return;
-    }
-
-    setState(()=> _isLogging = true);
-    final authRepo = AuthRepository();
-
-    try {
-      final response = await authRepo.loginUser(email: email, password: password);
-      final responseMap = jsonDecode(response.body);
-      
-      if(responseMap['status']){
-        String token = responseMap['data']['token']!['token'];
-        String userID = responseMap['data']['token']!['userId'];
-        String name = responseMap['data']['token']!['name'];
-        // bool isResidentAdmin = responseMap['data']['token']!['role'] == 'admin';
-        bool isResidentAdmin = true;
-        // Calculate token expiry (24 hours from now)
-        final tokenExpiry = DateTime.now().add(Duration(hours: 24));
-
-        if (mounted) {
-          setState(()=> _isLogging = false);
-          final provider = Provider.of<UserInfoProvider>(context,listen: false);
-          await provider.setUserInfo(
-              token: token,
-              name: name,
-              userID: userID,
-              email: email,
-              isResidentAdmin: isResidentAdmin,
-              expiry: tokenExpiry
-          );
-
-          if (mounted) {
-            context.push(NamedRoutes.verifyOtp.routeName);
-          }
-        }
-      } else {
-        if (mounted) {
-          Fluttertoast.showToast(msg: responseMap['message']);
-        }
-      }
-    } catch(e) {
-      debugPrint("Error while login user: ${e.toString()}");
-      if (mounted) {
-        Fluttertoast.showToast(msg: "Login failed. Please try again.");
-      }
-    }
-    
-    if (mounted) {
-      setState(()=> _isLogging = false);
-    }*/
   }
 }

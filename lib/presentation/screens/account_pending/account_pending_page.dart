@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:portalixmx_app/core/common_ui.dart';
 import 'package:portalixmx_app/core/models/user_model.dart';
 import 'package:portalixmx_app/providers/authentication_provider/authentication_provider.dart';
 import 'package:portalixmx_app/providers/home_provider.dart';
@@ -79,9 +79,9 @@ class _PendingRequestPageState extends State<PendingRequestPage> {
         context.go(NamedRoutes.home.routeName);
         return;
       }
-      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.accountStillPending);
+      CommonUI.showSnackBarMessage(context, message: AppLocalizations.of(context)!.accountStillPending);
     } catch (_) {
-      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.unableToRefreshStatus);
+      CommonUI.showSnackBarMessage(context, isError: true, message: AppLocalizations.of(context)!.unableToRefreshStatus);
     } finally {
       if (mounted) setState(() => _refreshing = false);
     }

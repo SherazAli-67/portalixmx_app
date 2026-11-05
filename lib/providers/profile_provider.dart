@@ -51,7 +51,17 @@ class ProfileProvider extends ChangeNotifier{
     }
   }
 
-  Future<String?> onUpdateTap({required String name, required String phoneNum, required String vehicleName, required String color, required String licensePlateNum, required String registrationNum}) async {
+  Future<String?> onUpdateTap({
+    required String name,
+    required String phoneNum,
+    required String vehicleName,
+    required String color,
+    required String licensePlateNum,
+    required String registrationNum,
+    required String houseNumber,
+    required String address,
+    required String personalEmergencyPhone,
+  }) async {
     String? errorMessage;
     if (user != null) {
       _updatingProfile = true;
@@ -61,10 +71,15 @@ class ProfileProvider extends ChangeNotifier{
         if (_pickedImage != null) {
           imageUrl = await AuthService.instance.updateProfilePicture(_pickedImage!);
         }
+        final vehicle = user!.vehicleInformation ??
+            VehicleInformation(name: '', color: '', registrationNumber: '', licensePlateNumber: '');
         final updatedUser = user!.copyWith(
           userName: name,
           phoneNum: phoneNum.isNotEmpty ? phoneNum : null,
-          vehicleInformation: user!.vehicleInformation!.copyWith(name: vehicleName, color: color, licensePlateNumber: licensePlateNum, registrationNumber: registrationNum),
+          houseNumber: houseNumber,
+          address: address,
+          personalEmergencyPhone: personalEmergencyPhone,
+          vehicleInformation: vehicle.copyWith(name: vehicleName, color: color, licensePlateNumber: licensePlateNum, registrationNumber: registrationNum),
           profileImg: imageUrl,
         );
         _user = updatedUser;

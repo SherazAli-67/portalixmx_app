@@ -35,10 +35,11 @@ class PaymentProvider extends ChangeNotifier{
       localization.pending,
       localization.submitted,
       localization.received,
+      localization.rejected,
     ];
   }
 
-  PaymentStatus statusFor(String paymentID) => _paymentStatuses[paymentID] ?? .pending;
+  PaymentStatus statusFor(String paymentID) => _paymentStatuses[paymentID] ?? PaymentStatus.pending;
 
   List<PaymentModel> getFilteredPayments(AppLocalizations l10n) {
     PaymentStatus? statusFilter;
@@ -46,7 +47,11 @@ class PaymentProvider extends ChangeNotifier{
       statusFilter = PaymentStatus.pending;
     } else if (selectedPaymentStatusFilter == l10n.submitted) {
       statusFilter = PaymentStatus.submitted;
-    } else if (selectedPaymentStatusFilter == l10n.received) statusFilter = PaymentStatus.received;
+    } else if (selectedPaymentStatusFilter == l10n.received) {
+      statusFilter = PaymentStatus.received;
+    } else if (selectedPaymentStatusFilter == l10n.rejected) {
+      statusFilter = PaymentStatus.rejected;
+    }
     final filtered = _payments.where((p) {
       if (!DateTimeFormatHelpers.isDateInRange(p.dateTime, from: dateFrom, to: dateTo)) return false;
       if (statusFilter != null && statusFor(p.paymentID) != statusFilter) return false;
@@ -129,9 +134,14 @@ class PaymentProvider extends ChangeNotifier{
       }
 
       String receipt = await _paymentsService.uploadPaymentReceipt(receipt: updatedPayment.receipt!);
-      PaymentSubmittedModel paymentSubmitted = PaymentSubmittedModel(paymentByUID: user.userID, submittedOnDate: DateTime.now().toUtc(), receipt: receipt);
+      PaymentSubmittedModel paymentSubmitted = PaymentSubmittedModel(
+        paymentByUID: user.userID,
+        submittedOnDate: DateTime.now().toUtc(),
+        receipt: receipt,
+        status: 'submitted',
+      );
       await _paymentsService.submitPaymentToAdmin(paymentID: updatedPayment.paymentID, paymentSubmitted: paymentSubmitted);
-      _paymentStatuses[updatedPayment.paymentID] = .submitted;
+      _paymentStatuses[updatedPayment.paymentID] = PaymentStatus.submitted;
       updatingPayment = false;
       notifyListeners();
       return null;

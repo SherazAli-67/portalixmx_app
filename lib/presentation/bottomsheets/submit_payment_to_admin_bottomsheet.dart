@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:portalixmx_app/core/common_ui.dart';
 import 'package:portalixmx_app/core/helpers/status_display_helper.dart';
 import '../../core/models/payment_model.dart';
 import '../../core/res/app_colors.dart';
@@ -22,6 +23,7 @@ class SubmitPaymentToAdminBottomSheet extends StatefulWidget{
 class _SubmitPaymentToAdminBottomSheetState extends State<SubmitPaymentToAdminBottomSheet> {
 
   XFile? image;
+  bool _isSubmitting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,61 +31,69 @@ class _SubmitPaymentToAdminBottomSheetState extends State<SubmitPaymentToAdminBo
     return Material(
       color: Colors.white,
       child: Padding(
-        padding: const .symmetric(horizontal: 16.0, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
         child: Column(
-          spacing: 15,
           children: [
-            Text(localizations.paymentDetails, style: AppTextStyles.bottomSheetHeadingTextStyle,),
-            Column(
-              crossAxisAlignment: .start,
-              spacing: 10,
-              children: [
-                Row(
-                  spacing: 20,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  spacing: 15,
                   children: [
-                    Expanded(
-                      child:VisitorInfoItemWidget(title: localizations.paymentFor, subTitle: widget.payment.paymentForTitle,),
+                    Text(localizations.paymentDetails, style: AppTextStyles.bottomSheetHeadingTextStyle,),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 10,
+                      children: [
+                        Row(
+                          spacing: 20,
+                          children: [
+                            Expanded(
+                              child:VisitorInfoItemWidget(title: localizations.paymentFor, subTitle: widget.payment.paymentForTitle,),
+                            ),
+                            Expanded(
+                                child: VisitorInfoItemWidget(
+                                    title: localizations.amount, subTitle: NumberFormat.currency(symbol: '\$', decimalDigits: 2).format(widget.payment.amount))
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(child: VisitorInfoItemWidget(title: localizations.date, subTitle: DateTimeFormatHelpers.formatDateTime( widget.payment.dateTime), showDivider:  widget.payment.paymentStatus == PaymentStatus.received ),),
+                            Expanded(
+                                child: VisitorInfoItemWidget(
+                                  title: localizations.status, subTitle: StatusDisplayHelper.label(widget.payment.paymentStatus, localizations),)
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    Expanded(
-                        child: VisitorInfoItemWidget(
-                            title: localizations.amount, subTitle: '${ widget.payment.amount}')
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(localizations.receipt, style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.primaryColor),)),
+                    Row(
+                      spacing: 20,
+                      children: [
+                        Expanded(child: _buildUploadPicturesWidget(title: localizations.uploadPhotos, icon: AppIcons.icUploadPhotos, onTap: _onUploadPhotosTap)),
+                        Expanded(child: _buildUploadPicturesWidget(title: localizations.openCamera, icon: AppIcons.icCamera, onTap: _onOpenCameraTap)),
+                      ],
                     ),
+                    if(image != null)
+                      Row(
+                        children: [
+                          Expanded(child: Text(image!.path.split('/').last, style: AppTextStyles.tileTitleTextStyle.copyWith(color: AppColors.primaryColor),)),
+                          IconButton(onPressed: ()=> setState(() => image = null), icon: const Icon(Icons.delete))
+                        ],
+                      ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Expanded(child: VisitorInfoItemWidget(title: localizations.date, subTitle: DateTimeFormatHelpers.formatDateTime( widget.payment.dateTime), showDivider:  widget.payment.paymentStatus ==.received ),),
-                    Expanded(
-                        child: VisitorInfoItemWidget(
-                          title: localizations.status, subTitle: StatusDisplayHelper.label(widget.payment.paymentStatus, localizations),)
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Align(
-                alignment: .topLeft,
-                child: Text(localizations.receipt, style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.primaryColor),)),
-            Row(
-              spacing: 20,
-              children: [
-                Expanded(child: _buildUploadPicturesWidget(title: localizations.uploadPhotos, icon: AppIcons.icUploadPhotos, onTap: _onUploadPhotosTap)),
-                Expanded(child: _buildUploadPicturesWidget(title: localizations.openCamera, icon: AppIcons.icCamera, onTap: _onOpenCameraTap)),
-              ],
-            ),
-            if(image != null)
-              Row(
-                children: [
-                  Expanded(child: Text(image!.path.split('/').last, style: AppTextStyles.tileTitleTextStyle.copyWith(color: AppColors.primaryColor),)),
-                  IconButton(onPressed: ()=> setState(() => image = null), icon: Icon(Icons.delete))
-                ],
               ),
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0, bottom: 18.0),
               child: SizedBox(
                 height: 50,
                 width: double.infinity,
-                child: PrimaryBtn(onTap: _onSubmitTap, btnText: localizations.submit,),
+                child: PrimaryBtn(onTap: _onSubmitTap, btnText: localizations.submit, isLoading: _isSubmitting,),
               ),
             )
           ],
@@ -97,7 +107,7 @@ class _SubmitPaymentToAdminBottomSheetState extends State<SubmitPaymentToAdminBo
         style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.fillColorGrey,
             elevation: 0,
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             )
@@ -107,14 +117,14 @@ class _SubmitPaymentToAdminBottomSheetState extends State<SubmitPaymentToAdminBo
       children: [
         SvgPicture.asset(icon),
         Text(title, style: AppTextStyles.hintTextStyle.copyWith(
-            fontWeight: FontWeight.w400, color: Color(0xff777777)),)
+            fontWeight: FontWeight.w400, color: const Color(0xff777777)),)
       ],
     ));
   }
 
   void _onUploadPhotosTap()async{
     final imagePicker = ImagePicker();
-    image = await imagePicker.pickImage(source: .gallery);
+    image = await imagePicker.pickImage(source: ImageSource.gallery);
     if(image != null){
       setState(() {});
     }
@@ -122,7 +132,7 @@ class _SubmitPaymentToAdminBottomSheetState extends State<SubmitPaymentToAdminBo
 
   void _onOpenCameraTap()async{
     final imagePicker = ImagePicker();
-    image = await imagePicker.pickImage(source: .camera);
+    image = await imagePicker.pickImage(source: ImageSource.camera);
     if(image != null){
       setState(() {});
     }
@@ -130,9 +140,10 @@ class _SubmitPaymentToAdminBottomSheetState extends State<SubmitPaymentToAdminBo
 
   void _onSubmitTap()async{
     if(image == null){
-      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.pleaseUploadReceipt);
+      CommonUI.showSnackBarMessage(context, isError: true, message: AppLocalizations.of(context)!.pleaseUploadReceipt);
       return;
     }
+    setState(() => _isSubmitting = true);
     Navigator.pop(context, {'receipt' : image,});
   }
 }

@@ -213,9 +213,8 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet>
             Expanded(
               child: _useScrollableBuilder
                   ? widget.scrollableBuilder!(_scrollController!, _scrollPhysics)
-                  : SingleChildScrollView(
+                  : KeyedSubtree(
                       key: _contentKey,
-                      physics: _scrollPhysics,
                       child: widget.child!,
                     ),
             ),

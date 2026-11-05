@@ -1424,6 +1424,12 @@ abstract class AppLocalizations {
   /// **'Password is required'**
   String get passwordRequired;
 
+  /// No description provided for @passwordMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get passwordMinLength;
+
   /// No description provided for @fullNameRequired.
   ///
   /// In en, this message translates to:
@@ -1436,6 +1442,102 @@ abstract class AppLocalizations {
   /// **'Full name must be at least 2 characters'**
   String get fullNameMinLength;
 
+  /// No description provided for @phoneRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number is required'**
+  String get phoneRequired;
+
+  /// No description provided for @phoneMustBe10Digits.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number must be exactly 10 digits'**
+  String get phoneMustBe10Digits;
+
+  /// No description provided for @plateMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'License plate must be at least 3 characters'**
+  String get plateMinLength;
+
+  /// No description provided for @pleaseEnterValidPlate.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid license plate'**
+  String get pleaseEnterValidPlate;
+
+  /// No description provided for @houseNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'House Number'**
+  String get houseNumber;
+
+  /// No description provided for @houseNumberRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'House number is required'**
+  String get houseNumberRequired;
+
+  /// No description provided for @address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get address;
+
+  /// No description provided for @addressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Address is required'**
+  String get addressRequired;
+
+  /// No description provided for @addressMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Address must be at least 3 characters'**
+  String get addressMinLength;
+
+  /// No description provided for @personalEmergencyPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Emergency Phone'**
+  String get personalEmergencyPhone;
+
+  /// No description provided for @otpRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP is required'**
+  String get otpRequired;
+
+  /// No description provided for @otpMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP must be at least 4 digits'**
+  String get otpMinLength;
+
+  /// No description provided for @complaintRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a complaint'**
+  String get complaintRequired;
+
+  /// No description provided for @maxPhotosReached.
+  ///
+  /// In en, this message translates to:
+  /// **'You can attach up to {count} photos'**
+  String maxPhotosReached(int count);
+
+  /// No description provided for @vehicleNameMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle name must be at least 2 characters'**
+  String get vehicleNameMinLength;
+
+  /// No description provided for @colorMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Color must be at least 2 characters'**
+  String get colorMinLength;
+
   /// No description provided for @appointmentDateRequired.
   ///
   /// In en, this message translates to:
@@ -1447,6 +1549,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Day must be between 1 and 31'**
   String get dayMustBeBetween;
+
+  /// No description provided for @visitDurationMustBePositive.
+  ///
+  /// In en, this message translates to:
+  /// **'Visit end time must be after start time'**
+  String get visitDurationMustBePositive;
 
   /// No description provided for @pleaseUploadProfilePicture.
   ///
@@ -1489,6 +1597,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rejected'**
   String get rejected;
+
+  /// No description provided for @resubmitReceipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Resubmit Receipt'**
+  String get resubmitReceipt;
+
+  /// No description provided for @paymentRejectedResubmitHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your receipt was rejected. Please upload a new receipt and resubmit.'**
+  String get paymentRejectedResubmitHint;
+
+  /// No description provided for @photoTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Each photo must be {maxMb} MB or smaller'**
+  String photoTooLarge(int maxMb);
+
+  /// No description provided for @noComplaintsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No maintenance complaints yet'**
+  String get noComplaintsYet;
 
   /// No description provided for @authInvalidEmail.
   ///

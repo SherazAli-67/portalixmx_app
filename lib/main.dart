@@ -22,11 +22,11 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseAppCheck.instance.activate(
     providerAndroid: kDebugMode
-        ? const AndroidDebugProvider()
-        : const AndroidPlayIntegrityProvider(),
+        ? AndroidDebugProvider(debugToken: AppConstants.appCheckDebugTokenAndroid)
+        : AndroidPlayIntegrityProvider(),
     providerApple: kDebugMode
-        ? const AppleDebugProvider()
-        : const AppleAppAttestProvider(),
+        ? AppleDebugProvider(debugToken: AppConstants.appCheckDebugTokenIOS)
+        : AppleDeviceCheckProvider(),
   );
   if (kDebugMode) {
     try {

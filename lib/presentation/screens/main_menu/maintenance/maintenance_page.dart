@@ -5,6 +5,7 @@ import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/presentation/widgets/bg_gradient_screen.dart';
 import 'package:portalixmx_app/presentation/widgets/complaint_status_widget.dart';
 import 'package:portalixmx_app/presentation/widgets/date_range_filter_bar.dart';
+import 'package:portalixmx_app/presentation/widgets/empty_state_widget.dart';
 import 'package:portalixmx_app/presentation/widgets/full_page_loading_widget.dart';
 import 'package:portalixmx_app/presentation/widgets/loading_widget.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
@@ -48,32 +49,45 @@ class MaintenanceMenu extends StatelessWidget{
                       ),
                       Expanded(
                           child: provider.loadingComplaints
-                              ? LoadingWidget()
+                              ? const LoadingWidget()
                               : RefreshIndicator(
                             onRefresh: provider.refreshComplaints,
-                            child: ListView.builder(
+                            child: provider.filteredComplaints.isEmpty
+                                ? ListView(
+                                    physics: const AlwaysScrollableScrollPhysics(),
+                                    children: [
+                                      SizedBox(
+                                        height: MediaQuery.of(context).size.height * 0.45,
+                                        child: EmptyStateWidget(
+                                          message: AppLocalizations.of(context)!.noComplaintsYet,
+                                          icon: Icons.build_outlined,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : ListView.builder(
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 itemCount: provider.filteredComplaints.length,
                                 itemBuilder: (ctx, index){
                                   ComplaintModel complaint = provider.filteredComplaints[index];
                                   return Card(
-                                    margin: .only(bottom: 10),
+                                    margin: const EdgeInsets.only(bottom: 10),
                                     child: ListTile(
                                       onTap: ()=> context.push(NamedRoutes.complaintSummary.routeName, extra: complaint),
-                                      contentPadding: .only(left: 15),
+                                      contentPadding: const EdgeInsets.only(left: 15),
                                       title: Text(complaint.complaint, style: AppTextStyles.tileTitleTextStyle),
                                       subtitle: Text(DateTimeFormatHelpers.formatDateTime(complaint.createdAt), style: AppTextStyles.tileSubtitleTextStyle,),
                                       trailing: Row(
-                                        mainAxisSize: .min,
+                                        mainAxisSize: MainAxisSize.min,
                                         spacing: 8,
                                         children: [
                                           ComplaintStatusWidget(status: complaint.status),
                                           PopupMenuButton(
                                               elevation: 0,
                                               color: Colors.white,
-                                              position: .under,
-                                              padding: .zero,
-                                              icon: Icon(Icons.more_vert_rounded),
+                                              position: PopupMenuPosition.under,
+                                              padding: EdgeInsets.zero,
+                                              icon: const Icon(Icons.more_vert_rounded),
                                               onSelected: (_)=> provider.deleteComplaintByID(complaint.id),
                                               itemBuilder: (ctx){
                                                 return [

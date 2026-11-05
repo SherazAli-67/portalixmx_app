@@ -228,10 +228,35 @@
   "emailRequired": "Email is required",
   "pleaseEnterValidEmail": "Please enter a valid email address",
   "passwordRequired": "Password is required",
+  "passwordMinLength": "Password must be at least 8 characters",
   "fullNameRequired": "Full name is required",
   "fullNameMinLength": "Full name must be at least 2 characters",
+  "phoneRequired": "Phone number is required",
+  "phoneMustBe10Digits": "Phone number must be exactly 10 digits",
+  "plateMinLength": "License plate must be at least 3 characters",
+  "pleaseEnterValidPlate": "Please enter a valid license plate",
+  "houseNumber": "House Number",
+  "houseNumberRequired": "House number is required",
+  "address": "Address",
+  "addressRequired": "Address is required",
+  "addressMinLength": "Address must be at least 3 characters",
+  "personalEmergencyPhone": "Personal Emergency Phone",
+  "otpRequired": "OTP is required",
+  "otpMinLength": "OTP must be at least 4 digits",
+  "complaintRequired": "Please enter a complaint",
+  "maxPhotosReached": "You can attach up to {count} photos",
+  "@maxPhotosReached": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "vehicleNameMinLength": "Vehicle name must be at least 2 characters",
+  "colorMinLength": "Color must be at least 2 characters",
   "appointmentDateRequired": "Appointment date is required",
   "dayMustBeBetween": "Day must be between 1 and 31",
+  "visitDurationMustBePositive": "Visit end time must be after start time",
   "pleaseUploadProfilePicture": "Please upload your profile picture",
   "userNotFound": "User not found",
   "userNotFoundLoginAgain": "User not found. Please log in again",
@@ -239,6 +264,17 @@
   "inProgress": "In Progress",
   "resolved": "Resolved",
   "rejected": "Rejected",
+  "resubmitReceipt": "Resubmit Receipt",
+  "paymentRejectedResubmitHint": "Your receipt was rejected. Please upload a new receipt and resubmit.",
+  "photoTooLarge": "Each photo must be {maxMb} MB or smaller",
+  "@photoTooLarge": {
+    "placeholders": {
+      "maxMb": {
+        "type": "int"
+      }
+    }
+  },
+  "noComplaintsYet": "No maintenance complaints yet",
   "authInvalidEmail": "The email address is not valid.",
   "authUserDisabled": "This user account has been disabled.",
   "authUserNotFound": "No user found for that email.",

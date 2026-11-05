@@ -3,6 +3,7 @@ import 'package:portalixmx_app/core/models/visitor_model.dart';
 import 'package:portalixmx_app/core/res/app_colors.dart';
 import 'package:portalixmx_app/core/res/app_textstyles.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/presentation/widgets/empty_state_widget.dart';
 import 'package:portalixmx_app/presentation/widgets/guest_item_widget.dart';
 import 'package:portalixmx_app/presentation/widgets/primary_btn.dart';
 import 'package:portalixmx_app/presentation/widgets/regular_visitor_item_widget.dart';
@@ -26,7 +27,9 @@ class DirectoryGuestsSheet extends StatelessWidget{
           spacing: 10,
           children: [
             Text(localization.guestsDirectory, style: AppTextStyles.btnTextStyle.copyWith(color: AppColors.primaryColor),),
-            Expanded(child: provider.directoryGuests.isEmpty ? Center(child: Text(localization.noVisitorFound),) : ListView.separated(itemBuilder: (ctx, index){
+            Expanded(child: provider.directoryGuests.isEmpty
+                ? EmptyStateWidget(message: localization.noVisitorFound, icon: Icons.person_outline)
+                : ListView.separated(itemBuilder: (ctx, index){
               BaseVisitor visitor = provider.directoryGuests[index];
               return visitor is GuestVisitor
                   ? GuestItemWidget(guest: visitor, onDeleteTap: (val) {}, onTap: ()=> Navigator.pop(context, {'visitor' : visitor}),)

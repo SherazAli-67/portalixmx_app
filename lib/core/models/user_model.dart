@@ -27,6 +27,9 @@ class UserModel {
   final String? societyID;
   final UserStatus status;
   final List<String> emergencyContacts;
+  final String? personalEmergencyPhone;
+  final String? houseNumber;
+  final String? address;
   final String? zkPin;
   final DateTime? zkProvisionedAt;
   final List<String> zkAccLevelIds;
@@ -41,6 +44,9 @@ class UserModel {
     this.societyID,
     this.vehicleInformation,
     this.emergencyContacts = const [],
+    this.personalEmergencyPhone,
+    this.houseNumber,
+    this.address,
     this.status = UserStatus.pending,
     this.zkPin,
     this.zkProvisionedAt,
@@ -58,6 +64,9 @@ class UserModel {
       'profileImg': profileImg,
       'vehicleInformation': vehicleInformation?.toMap(),
       'emergencyContacts': emergencyContacts,
+      'personalEmergencyPhone': personalEmergencyPhone,
+      'houseNumber': houseNumber,
+      'address': address,
       'status': status.index,
       'zkPin': zkPin,
       'zkProvisionedAt': zkProvisionedAt?.toIso8601String(),
@@ -81,7 +90,9 @@ class UserModel {
       emergencyContacts: map['emergencyContacts'] != null
           ? List<String>.from(map['emergencyContacts'])
           : [],
-
+      personalEmergencyPhone: map['personalEmergencyPhone'],
+      houseNumber: map['houseNumber'],
+      address: map['address'],
       status: _userStatusFromMap(map['status']),
       zkPin: map['zkPin'],
       zkProvisionedAt: map['zkProvisionedAt'] != null
@@ -108,6 +119,9 @@ class UserModel {
     UserStatus? status,
     VehicleInformation? vehicleInformation,
     List<String>? emergencyContacts,
+    String? personalEmergencyPhone,
+    String? houseNumber,
+    String? address,
     String? zkPin,
     DateTime? zkProvisionedAt,
     List<String>? zkAccLevelIds,
@@ -124,6 +138,10 @@ class UserModel {
       vehicleInformation ?? this.vehicleInformation,
       emergencyContacts:
       emergencyContacts ?? this.emergencyContacts,
+      personalEmergencyPhone:
+      personalEmergencyPhone ?? this.personalEmergencyPhone,
+      houseNumber: houseNumber ?? this.houseNumber,
+      address: address ?? this.address,
       status: status ?? this.status,
       zkPin: zkPin ?? this.zkPin,
       zkProvisionedAt: zkProvisionedAt ?? this.zkProvisionedAt,

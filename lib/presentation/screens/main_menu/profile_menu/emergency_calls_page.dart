@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:portalixmx_app/core/common_ui.dart';
 import 'package:portalixmx_app/core/models/user_model.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/presentation/widgets/empty_state_widget.dart';
 import 'package:portalixmx_app/presentation/widgets/loading_widget.dart';
 import 'package:portalixmx_app/presentation/widgets/popup_menu_item_widget.dart';
 import 'package:portalixmx_app/providers/emergency_calls_provider.dart';
@@ -110,7 +111,7 @@ class EmergencyCallsPage extends StatelessWidget {
                             child: provider.loadingContacts
                                 ? LoadingWidget(color: AppColors.primaryColor)
                                 : provider.contacts.isEmpty
-                                    ? Center(child: Text(localization.noEmergencyContacts, style: AppTextStyles.tileSubtitleTextStyle,))
+                                    ? EmptyStateWidget(message: localization.noEmergencyContacts, icon: Icons.phone_outlined)
                                     : ListView.builder(
                                         itemCount: provider.contacts.length,
                                         itemBuilder: (ctx, index) {

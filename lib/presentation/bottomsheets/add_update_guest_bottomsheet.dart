@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:portalixmx_app/core/common_ui.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
+import 'package:portalixmx_app/core/validators/validators.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/presentation/widgets/drop_down_textfield_widget.dart';
 import 'package:portalixmx_app/providers/datetime_format_helpers.dart';
@@ -47,6 +48,7 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
   TimeOfDay? _selectedToTime;
 
   List<DayTimeModel> _regularVisitorTime = [];
+  final _formKey = GlobalKey<FormState>();
   
   @override
   void initState() {
@@ -112,55 +114,68 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
     final localization = AppLocalizations.of(context)!;
     return Material(
       color: Colors.white,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 23),
+      child: Form(
+        key: _formKey,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 15,
           children: [
-            Align(
-                alignment: Alignment.center,
-                child: Text(widget.isEdit
-                    ? localization.editGuest
-                    : localization.addGuest, style: TextStyle(fontSize: 20, fontWeight: .w700, color: AppColors.primaryColor),)),
-            AppTextField(controller: _nameController,
-              hintText: localization.name,
-              fillColor: AppColors.fillColorGrey,
-              hintTextColor: AppColors.hintTextColor,
-              borderColor: AppColors.borderColor,),
-            if(_guestTypes.isNotEmpty)
-              DropdownTextFieldWidget(isEmpty: selectedGuestTypeIndex == -1,
-                  selectedValue: _guestTypes[selectedGuestTypeIndex],
-                  onChanged: (val) => setState(() => selectedGuestTypeIndex = _guestTypes.indexOf(val!)),
-                  guestTypes: _guestTypes,
-                  hintText: localization.guest),
-            AppTextField(controller: _contactNumberController,
-              hintText: localization.contactNum,
-              fillColor: AppColors.fillColorGrey,
-              hintTextColor: AppColors.hintTextColor,
-              borderColor: AppColors.borderColor,
-              textInputType: .numberWithOptions(),),
-            AppTextField(controller: _accessFor,
-              hintText: localization.accessFor,
-              fillColor: AppColors.fillColorGrey,
-              hintTextColor: AppColors.hintTextColor,
-              borderColor: AppColors.borderColor,),
-            AppTextField(controller: _carPlatNumberController, hintText: localization.carPlateNumber, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
-            AppTextField(controller: _vehicleModelController, hintText: localization.vehicleModel, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
-            AppTextField(controller: _colorController, hintText: localization.color, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor,),
-            selectedGuestTypeIndex == 0
-                ? _buildRegularVisitorWidget(localization)
-                : _buildGuestWidget(localization),
-      
-            Consumer<HomeProvider>(builder: (ctx, provider, _) {
-              return SizedBox(
-                height: 50,
-                width: .infinity,
-                child: PrimaryBtn(onTap: _onSubmitTap,
-                  btnText: localization.submit,
-                  isLoading: provider.addingGuestVisitor,),
-              );
-            })
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 23),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 15,
+                  children: [
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(widget.isEdit
+                            ? localization.editGuest
+                            : localization.addGuest, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.primaryColor),)),
+                    AppTextField(controller: _nameController,
+                      hintText: localization.name,
+                      fillColor: AppColors.fillColorGrey,
+                      hintTextColor: AppColors.hintTextColor,
+                      borderColor: AppColors.borderColor,
+                      validator: Validators.validateFullName(localization),),
+                    if(_guestTypes.isNotEmpty)
+                      DropdownTextFieldWidget(isEmpty: selectedGuestTypeIndex == -1,
+                          selectedValue: _guestTypes[selectedGuestTypeIndex],
+                          onChanged: (val) => setState(() => selectedGuestTypeIndex = _guestTypes.indexOf(val!)),
+                          guestTypes: _guestTypes,
+                          hintText: localization.guest),
+                    AppTextField(controller: _contactNumberController,
+                      hintText: localization.contactNum,
+                      fillColor: AppColors.fillColorGrey,
+                      hintTextColor: AppColors.hintTextColor,
+                      borderColor: AppColors.borderColor,
+                      textInputType: TextInputType.number,
+                      validator: Validators.validatePhone(localization),),
+                    AppTextField(controller: _accessFor,
+                      hintText: localization.accessFor,
+                      fillColor: AppColors.fillColorGrey,
+                      hintTextColor: AppColors.hintTextColor,
+                      borderColor: AppColors.borderColor,),
+                    AppTextField(controller: _carPlatNumberController, hintText: localization.carPlateNumber, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor, validator: Validators.validateLicensePlate(localization),),
+                    AppTextField(controller: _vehicleModelController, hintText: localization.vehicleModel, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor, validator: Validators.validateMinLength(localization, emptyMessage: localization.pleaseEnterVehicleModel, minLengthMessage: localization.vehicleNameMinLength),),
+                    AppTextField(controller: _colorController, hintText: localization.color, fillColor: AppColors.fillColorGrey, hintTextColor: AppColors.hintTextColor,borderColor: AppColors.borderColor, validator: Validators.validateMinLength(localization, emptyMessage: localization.pleaseEnterColor, minLengthMessage: localization.colorMinLength),),
+                    selectedGuestTypeIndex == 0
+                        ? _buildRegularVisitorWidget(localization)
+                        : _buildGuestWidget(localization),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(13, 0, 13, 23),
+              child: Consumer<HomeProvider>(builder: (ctx, provider, _) {
+                return SizedBox(
+                  height: 50,
+                  width: double.infinity,
+                  child: PrimaryBtn(onTap: _onSubmitTap,
+                    btnText: localization.submit,
+                    isLoading: provider.addingGuestVisitor,),
+                );
+              }),
+            ),
           ],
         ),
       ),
@@ -313,11 +328,12 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
       if (!mounted) return;
 
       if (success) {
-        Fluttertoast.showToast(
-          msg: widget.isEdit
+        CommonUI.showSnackBarMessage(
+          context,
+          isSuccess: true,
+          message: widget.isEdit
               ? localization.visitorUpdatedSuccessfully
               : localization.visitorAddedSuccessfully,
-          toastLength: Toast.LENGTH_SHORT,
         );
 
         if (!widget.isEdit &&
@@ -333,69 +349,40 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
 
         if (mounted) Navigator.pop(context);
       } else {
-        Fluttertoast.showToast(
-          msg: localization.somethingWentWrong,
-          toastLength: Toast.LENGTH_SHORT,
-        );
+        CommonUI.showSnackBarMessage(context, isError: true, message: localization.somethingWentWrong);
       }
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: '${localization.error}: $e',
-        toastLength: Toast.LENGTH_SHORT,
-      );
+    } catch (_) {
+      CommonUI.showSnackBarMessage(context, isError: true, message: localization.somethingWentWrong);
     }
   }
 
   bool _validateInputs(AppLocalizations localization) {
-    if (_nameController.text.trim().isEmpty) {
-      Fluttertoast.showToast(msg: localization.pleaseEnterName);
+    if (!(_formKey.currentState?.validate() ?? false)) {
       return false;
     }
-    
-    if (_contactNumberController.text.trim().isEmpty) {
-      Fluttertoast.showToast(msg: localization.pleaseEnterContactNumber);
-      return false;
-    }
-    
-    if (_carPlatNumberController.text.trim().isEmpty) {
-      Fluttertoast.showToast(msg: localization.pleaseEnterCarPlateNumber);
-      return false;
-    }
-    
-    if (_vehicleModelController.text.trim().isEmpty) {
-      Fluttertoast.showToast(msg: localization.pleaseEnterVehicleModel);
-      return false;
-    }
-    
-    if (_colorController.text.trim().isEmpty) {
-      Fluttertoast.showToast(msg: localization.pleaseEnterColor);
-      return false;
-    }
-    
-    // Guest-specific validation
+
     if (selectedGuestTypeIndex == 1) {
       if (_selectedFromDateTime == null || _selectedFromTime == null) {
-        Fluttertoast.showToast(msg: localization.pleaseSelectFromDateTime);
+        CommonUI.showSnackBarMessage(context, isError: true, message: localization.pleaseSelectFromDateTime);
         return false;
       }
       
       if (_selectedToDateTime == null || _selectedToTime == null) {
-        Fluttertoast.showToast(msg: localization.pleaseSelectToDateTime);
+        CommonUI.showSnackBarMessage(context, isError: true, message: localization.pleaseSelectToDateTime);
         return false;
       }
       
       final fromDateTime = _combineDateTime(_selectedFromDateTime!, _selectedFromTime!);
       final toDateTime = _combineDateTime(_selectedToDateTime!, _selectedToTime!);
       
-      if (toDateTime.isBefore(fromDateTime)) {
-        Fluttertoast.showToast(msg: localization.toDateTimeMustBeAfterFromDateTime);
+      if (!toDateTime.isAfter(fromDateTime)) {
+        CommonUI.showSnackBarMessage(context, isError: true, message: localization.visitDurationMustBePositive);
         return false;
       }
     } else {
-      // Regular visitor validation - at least one day should have time set
       bool hasAtLeastOneDay = _regularVisitorTime.any((day) => day.time != null && day.endTime != null);
       if (!hasAtLeastOneDay) {
-        Fluttertoast.showToast(msg: localization.pleaseSelectAtLeastOneDay);
+        CommonUI.showSnackBarMessage(context, isError: true, message: localization.pleaseSelectAtLeastOneDay);
         return false;
       }
     }

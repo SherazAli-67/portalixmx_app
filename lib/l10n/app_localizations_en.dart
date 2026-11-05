@@ -711,16 +711,74 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordRequired => 'Password is required';
 
   @override
+  String get passwordMinLength => 'Password must be at least 8 characters';
+
+  @override
   String get fullNameRequired => 'Full name is required';
 
   @override
   String get fullNameMinLength => 'Full name must be at least 2 characters';
 
   @override
+  String get phoneRequired => 'Phone number is required';
+
+  @override
+  String get phoneMustBe10Digits => 'Phone number must be exactly 10 digits';
+
+  @override
+  String get plateMinLength => 'License plate must be at least 3 characters';
+
+  @override
+  String get pleaseEnterValidPlate => 'Please enter a valid license plate';
+
+  @override
+  String get houseNumber => 'House Number';
+
+  @override
+  String get houseNumberRequired => 'House number is required';
+
+  @override
+  String get address => 'Address';
+
+  @override
+  String get addressRequired => 'Address is required';
+
+  @override
+  String get addressMinLength => 'Address must be at least 3 characters';
+
+  @override
+  String get personalEmergencyPhone => 'Personal Emergency Phone';
+
+  @override
+  String get otpRequired => 'OTP is required';
+
+  @override
+  String get otpMinLength => 'OTP must be at least 4 digits';
+
+  @override
+  String get complaintRequired => 'Please enter a complaint';
+
+  @override
+  String maxPhotosReached(int count) {
+    return 'You can attach up to $count photos';
+  }
+
+  @override
+  String get vehicleNameMinLength =>
+      'Vehicle name must be at least 2 characters';
+
+  @override
+  String get colorMinLength => 'Color must be at least 2 characters';
+
+  @override
   String get appointmentDateRequired => 'Appointment date is required';
 
   @override
   String get dayMustBeBetween => 'Day must be between 1 and 31';
+
+  @override
+  String get visitDurationMustBePositive =>
+      'Visit end time must be after start time';
 
   @override
   String get pleaseUploadProfilePicture => 'Please upload your profile picture';
@@ -743,6 +801,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rejected => 'Rejected';
+
+  @override
+  String get resubmitReceipt => 'Resubmit Receipt';
+
+  @override
+  String get paymentRejectedResubmitHint =>
+      'Your receipt was rejected. Please upload a new receipt and resubmit.';
+
+  @override
+  String photoTooLarge(int maxMb) {
+    return 'Each photo must be $maxMb MB or smaller';
+  }
+
+  @override
+  String get noComplaintsYet => 'No maintenance complaints yet';
 
   @override
   String get authInvalidEmail => 'The email address is not valid.';

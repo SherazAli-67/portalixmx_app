@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:portalixmx_app/core/common_ui.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
 import 'package:portalixmx_app/presentation/widgets/loading_widget.dart';
 import 'package:portalixmx_app/services/access_requests_service/access_request_service.dart';
@@ -159,17 +159,17 @@ class _RequestForAccessSheetState extends State<RequestForAccessSheet> {
   void _onSubmitTap() {
     final localization = AppLocalizations.of(context)!;
     if(_selectedDate == null){
-      Fluttertoast.showToast(msg: localization.selectDateForAccessRequest);
+      CommonUI.showSnackBarMessage(context, isError: true, message: localization.selectDateForAccessRequest);
       return;
     }
 
     if(_selectedTime == null){
-      Fluttertoast.showToast(msg: localization.selectTimeForAccessRequest);
+      CommonUI.showSnackBarMessage(context, isError: true, message: localization.selectTimeForAccessRequest);
       return;
     }
 
     if(_selectedAccess == null){
-      Fluttertoast.showToast(msg: localization.selectAccessForRequest);
+      CommonUI.showSnackBarMessage(context, isError: true, message: localization.selectAccessForRequest);
       return;
     }
 

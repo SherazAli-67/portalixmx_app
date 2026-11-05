@@ -228,10 +228,35 @@
   "emailRequired": "El correo electrónico es obligatorio",
   "pleaseEnterValidEmail": "Por favor ingresa un correo electrónico válido",
   "passwordRequired": "La contraseña es obligatoria",
+  "passwordMinLength": "La contraseña debe tener al menos 8 caracteres",
   "fullNameRequired": "El nombre completo es obligatorio",
   "fullNameMinLength": "El nombre completo debe tener al menos 2 caracteres",
+  "phoneRequired": "El número de teléfono es obligatorio",
+  "phoneMustBe10Digits": "El número de teléfono debe tener exactamente 10 dígitos",
+  "plateMinLength": "La placa debe tener al menos 3 caracteres",
+  "pleaseEnterValidPlate": "Por favor ingresa una placa válida",
+  "houseNumber": "Número de casa",
+  "houseNumberRequired": "El número de casa es obligatorio",
+  "address": "Dirección",
+  "addressRequired": "La dirección es obligatoria",
+  "addressMinLength": "La dirección debe tener al menos 3 caracteres",
+  "personalEmergencyPhone": "Teléfono de emergencia personal",
+  "otpRequired": "El OTP es obligatorio",
+  "otpMinLength": "El OTP debe tener al menos 4 dígitos",
+  "complaintRequired": "Por favor ingresa una queja",
+  "maxPhotosReached": "Puedes adjuntar hasta {count} fotos",
+  "@maxPhotosReached": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "vehicleNameMinLength": "El nombre del vehículo debe tener al menos 2 caracteres",
+  "colorMinLength": "El color debe tener al menos 2 caracteres",
   "appointmentDateRequired": "La fecha de la cita es obligatoria",
   "dayMustBeBetween": "El día debe estar entre 1 y 31",
+  "visitDurationMustBePositive": "La hora de fin debe ser posterior a la de inicio",
   "pleaseUploadProfilePicture": "Por favor sube tu foto de perfil",
   "userNotFound": "Usuario no encontrado",
   "userNotFoundLoginAgain": "Usuario no encontrado. Inicia sesión de nuevo",
@@ -239,6 +264,17 @@
   "inProgress": "En progreso",
   "resolved": "Resuelto",
   "rejected": "Rechazado",
+  "resubmitReceipt": "Reenviar recibo",
+  "paymentRejectedResubmitHint": "Tu recibo fue rechazado. Sube un nuevo recibo y vuelve a enviarlo.",
+  "photoTooLarge": "Cada foto debe ser de {maxMb} MB o menos",
+  "@photoTooLarge": {
+    "placeholders": {
+      "maxMb": {
+        "type": "int"
+      }
+    }
+  },
+  "noComplaintsYet": "Aún no hay quejas de mantenimiento",
   "authInvalidEmail": "La dirección de correo electrónico no es válida.",
   "authUserDisabled": "Esta cuenta de usuario ha sido deshabilitada.",
   "authUserNotFound": "No se encontró ningún usuario con ese correo.",

@@ -16,7 +16,7 @@ class PrimaryBtn extends StatelessWidget{
         style: ElevatedButton.styleFrom(
             backgroundColor: bgColor
         ),
-        onPressed: onTap, child: isLoading ? LoadingWidget() : Text(btnText,style: AppTextStyles.btnTextStyle.copyWith(color: textColor),));
+        onPressed: isLoading ? null : onTap, child: isLoading ? LoadingWidget() : Text(btnText,style: AppTextStyles.btnTextStyle.copyWith(color: textColor),));
   }
 
 }

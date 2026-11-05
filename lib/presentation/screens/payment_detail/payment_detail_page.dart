@@ -16,20 +16,29 @@ import '../../widgets/loading_widget.dart';
 import '../../widgets/primary_btn.dart';
 import '../main_menu/homepage/widgets/vistor_info_item_widget.dart';
 import '../main_menu/main_menu.dart';
+
 class PaymentDetailPage extends StatelessWidget{
   const PaymentDetailPage({super.key, required this.payment});
   final PaymentModel payment;
+
+  PaymentStatus _statusFromSubmission(PaymentSubmittedModel? submission) {
+    if (submission == null) return PaymentStatus.pending;
+    if (submission.isReceived) return PaymentStatus.received;
+    if (submission.isRejected) return PaymentStatus.rejected;
+    return PaymentStatus.submitted;
+  }
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return BgGradientScreen(child: Column(
       spacing: 20,
       children: [
-        Padding(padding: .only(top: 65),
+        Padding(padding: const EdgeInsets.only(top: 65),
           child: Row(
-            mainAxisAlignment: .spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              BackButton(color: Colors.white,),
+              const BackButton(color: Colors.white,),
               Text(localizations.paymentDetail, style: AppTextStyles.regularTextStyle,),
               const SizedBox(width: 40,)
             ],
@@ -41,13 +50,13 @@ class PaymentDetailPage extends StatelessWidget{
             color: Colors.white,
             elevation: 0,
             margin: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30))
             ),
             child: Padding(
-                padding: const .only(top: 36.0, left: 18, right: 18),
+                padding: const EdgeInsets.only(top: 36.0, left: 18, right: 18),
                 child: Column(
-                  crossAxisAlignment: .start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 10,
                   children: [
                     Text(localizations.paymentDetail, style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.btnColor),),
@@ -55,19 +64,16 @@ class PaymentDetailPage extends StatelessWidget{
                       child: FutureBuilder<PaymentSubmittedModel?>(
                         future: PaymentsService.instance.getMySubmission(paymentID: payment.paymentID),
                         builder: (ctx, snapshot) {
-                          if(snapshot.connectionState == .waiting){
-                            return LoadingWidget(color: AppColors.primaryColor,);
+                          if(snapshot.connectionState == ConnectionState.waiting){
+                            return const LoadingWidget(color: AppColors.primaryColor,);
                           }
                           final submission = snapshot.data;
-                          final status = submission == null
-                              ? PaymentStatus.pending
-                              : submission.approvedOnDate != null
-                                  ? PaymentStatus.received
-                                  : PaymentStatus.submitted;
+                          final status = _statusFromSubmission(submission);
+                          final canSubmit = status == PaymentStatus.pending || status == PaymentStatus.rejected;
                           return Padding(
-                            padding: const .only(bottom: 16.0),
+                            padding: const EdgeInsets.only(bottom: 16.0),
                             child: Column(
-                              crossAxisAlignment: .start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   spacing: 20,
@@ -82,9 +88,30 @@ class PaymentDetailPage extends StatelessWidget{
                                   ],
                                 ),
                                 VisitorInfoItemWidget(title: localizations.date, subTitle: DateTimeFormatHelpers.formatDateTime(payment.dateTime), showDivider: true ),
+                                if (status == PaymentStatus.rejected)
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: Text(
+                                      localizations.paymentRejectedResubmitHint,
+                                      style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: AppColors.statusError),
+                                    ),
+                                  ),
                                 Expanded(
-                                  child: status == .pending
-                                      ? _buildSubmitPaymentBtn(localizations, context)
+                                  child: canSubmit
+                                      ? Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            if (submission?.receipt != null && submission!.receipt!.isNotEmpty)
+                                              Expanded(child: _buildReceiptImage(localizations, receipt: submission.receipt))
+                                            else
+                                              const Spacer(),
+                                            _buildSubmitPaymentBtn(
+                                              localizations,
+                                              context,
+                                              isResubmit: status == PaymentStatus.rejected,
+                                            ),
+                                          ],
+                                        )
                                       : _buildReceiptImage(localizations, receipt: submission?.receipt),
                                 ),
                               ],
@@ -102,47 +129,42 @@ class PaymentDetailPage extends StatelessWidget{
     ),);
   }
 
-  _buildSubmitPaymentBtn(AppLocalizations localization, BuildContext context) {
+  Widget _buildSubmitPaymentBtn(AppLocalizations localization, BuildContext context, {required bool isResubmit}) {
     return Padding(
-      padding: const.only(bottom: 20.0),
-      child: Column(
-        children: [
-          const Spacer(),
-          SizedBox(
-            width: .infinity,
-            child: PrimaryBtn(onTap: ()async{
-              final result = await BottomSheetHelper.showDraggableBottomSheet(
-                  scaffoldKey: scaffoldKey,
-                  initialHeight: .6,
-                  child: SubmitPaymentToAdminBottomSheet(payment: payment));
-              if(result != null){
-                _updatePaymentStatus(context, result['receipt']);
-              }
-            }, btnText: localization.submit),
-          ),
-        ],
+      padding: const EdgeInsets.only(bottom: 20.0, top: 12),
+      child: SizedBox(
+        width: double.infinity,
+        child: PrimaryBtn(onTap: ()async{
+          final result = await BottomSheetHelper.showDraggableBottomSheet(
+              scaffoldKey: scaffoldKey,
+              initialHeight: 0.6,
+              child: SubmitPaymentToAdminBottomSheet(payment: payment));
+          if(result != null && context.mounted){
+            _updatePaymentStatus(context, result['receipt']);
+          }
+        }, btnText: isResubmit ? localization.resubmitReceipt : localization.submit),
       ),
     );
   }
 
-  _buildReceiptImage(AppLocalizations localizations,{String? receipt}) {
+  Widget _buildReceiptImage(AppLocalizations localizations,{String? receipt}) {
     return Column(
       spacing: 10,
-      crossAxisAlignment: .start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(localizations.receipt, style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.btnColor)),
         ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: receipt == null || receipt.isEmpty
               ? Center(child: Text(localizations.receiptUnavailable, style: AppTextStyles.tileSubtitleTextStyle))
-              : CachedNetworkImage(imageUrl: receipt, fit: .cover, height: 200, width: .infinity),
+              : CachedNetworkImage(imageUrl: receipt, fit: BoxFit.contain, height: 200, width: double.infinity),
         )
       ],
     );
   }
 
-  void _updatePaymentStatus(BuildContext context, XFile receiptImage)async {
-    final updatedPayment = payment.copyWith(receipt: receiptImage.path, paymentStatus: .submitted);
+  void _updatePaymentStatus(BuildContext context, XFile receiptImage) {
+    final updatedPayment = payment.copyWith(receipt: receiptImage.path, paymentStatus: PaymentStatus.submitted);
     Navigator.pop(context, updatedPayment);
   }
 }

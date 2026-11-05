@@ -17,26 +17,26 @@ class ComplaintStatusWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(99),
-        color: getColorByStatus(status).withValues(alpha: 0.1),
+        color: getColorByStatus(status).withValues(alpha: 0.12),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Text(
        StatusDisplayHelper.label(status, l10n),
-        style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: getColorByStatus(status)),
+        style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: getColorByStatus(status), fontWeight: FontWeight.w600),
       ),
     );
   }
 
   Color getColorByStatus(ComplaintStatus status) {
     switch(status){
-      case .pending:
-        return AppColors.btnColor;
-      case .rejected:
-        return AppColors.btnColorDark;
-      case .resolved:
-        return Colors.green;
-      case .inProgress:
-        return AppColors.primaryColor;
+      case ComplaintStatus.pending:
+        return AppColors.statusPending;
+      case ComplaintStatus.rejected:
+        return AppColors.statusError;
+      case ComplaintStatus.resolved:
+        return AppColors.statusSuccess;
+      case ComplaintStatus.inProgress:
+        return AppColors.statusSubmitted;
     }
   }
 }

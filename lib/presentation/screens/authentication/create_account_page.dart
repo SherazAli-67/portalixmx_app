@@ -28,9 +28,11 @@ class CreateAccountPage extends StatefulWidget {
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
 
-  final TextEditingController _emailController = .new();
-  final TextEditingController _nameController = .new();
-  final TextEditingController _passwordController = .new();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _houseNumberController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
   late AuthenticationProvider _provider;
 
   final _formKey = GlobalKey<FormState>();
@@ -39,6 +41,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     _emailController.dispose();
     _nameController.dispose();
     _passwordController.dispose();
+    _houseNumberController.dispose();
+    _addressController.dispose();
     super.dispose();
   }
 
@@ -48,23 +52,23 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     _provider = Provider.of<AuthenticationProvider>(context);
     return ScreenWithBgLogo(
       child: Padding(
-        padding: const .symmetric(horizontal: 16, vertical: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10.0),
         child: Column(
           spacing: 16,
           children: [
             Text(localization.createAccount, style: AppTextStyles.headingTextStyle),
-            Text(localization.createAccountDescription, style: AppTextStyles.subHeadingTextStyle, textAlign: .center,),
+            Text(localization.createAccountDescription, style: AppTextStyles.subHeadingTextStyle, textAlign: TextAlign.center,),
             Expanded(
               child: SingleChildScrollView(
-                padding: .only(top: 16),
+                padding: const EdgeInsets.only(top: 16),
                 child: Form(
                   key: _formKey,
                   child: Column(
-                    crossAxisAlignment: .start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 16,
                     children: [
                       Align(
-                        alignment: .center,
+                        alignment: Alignment.center,
                         child: GestureDetector(
                           onTap: _provider.onPickImageTap,
                           child: Stack(
@@ -77,19 +81,18 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                     backgroundImage: _provider.pickedImage != null
                                         ? FileImage(File(_provider.pickedImage!.path))
                                         : null,
-                                    // backgroundImage: AssetImage(AppIcons.icSplashLogo),
                                   ),
                                 ),
                               Positioned(
                                 bottom: 0,
                                 right: 2,
                                 child: Container(
-                                  decoration: BoxDecoration(
-                                      shape: .circle,
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
                                       color: AppColors.btnColor
                                   ),
-                                  padding: .all(5),
-                                  child: Icon(Icons.edit, color: Colors.white, size: 18,),
+                                  padding: const EdgeInsets.all(5),
+                                  child: const Icon(Icons.edit, color: Colors.white, size: 18,),
                                 ),
                               )
                             ],
@@ -99,6 +102,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       AppTextField(title: localization.name, controller: _nameController, hintText: localization.name,validator: Validators.validateFullName(localization),),
                       AppTextField(title: localization.email, controller: _emailController, hintText: localization.email,textInputType: TextInputType.emailAddress, validator: Validators.validateEmail(localization),),
                       AppTextField(title: localization.password, controller: _passwordController, hintText: localization.password, isPassword: true, validator: Validators.validatePassword(localization),),
+                      AppTextField(title: localization.houseNumber, controller: _houseNumberController, hintText: localization.houseNumber, validator: Validators.validateHouseNumber(localization),),
+                      AppTextField(title: localization.address, controller: _addressController, hintText: localization.address, validator: Validators.validateAddress(localization), maxLines: 2,),
                       if (_provider.loadingSocieties)
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8),
@@ -106,7 +111,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         )
                       else if (_provider.societiesError != null)
                         Column(
-                          crossAxisAlignment: .start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           spacing: 8,
                           children: [
                             Text(
@@ -127,8 +132,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           onChanged: (val) => _provider.onSelectSocietyTap(val),
                           getTitle: (item) => item.name,
                         ),
-                      // AppDropdownWidget<SocietyModel>(title: localization.selectSociety, list: _provider.societies, value: _provider.selectedSociety, onChanged: (val)=> _provider.onSelectSocietyTap(val), getTitle: (item) => item.name)
-
                     ],
                   ),
                 ),
@@ -147,7 +150,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   TextSpan(
                       text: localization.login,
                       recognizer: TapGestureRecognizer()..onTap = ()=> context.go(NamedRoutes.login.routeName),
-                      style: AppTextStyles.subHeadingTextStyle.copyWith(fontFamily: AppConstants.appFontFamily, fontWeight: .w600)
+                      style: AppTextStyles.subHeadingTextStyle.copyWith(fontFamily: AppConstants.appFontFamily, fontWeight: FontWeight.w600)
                   )
                 ]
             ))
@@ -162,7 +165,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       String name = _nameController.text.trim();
       String email = _emailController.text.trim();
       String password = _passwordController.text.trim();
-      String? isError = await _provider.onCreateAccountTap(name: name, email: email, password: password);
+      String houseNumber = _houseNumberController.text.trim();
+      String address = _addressController.text.trim();
+      String? isError = await _provider.onCreateAccountTap(name: name, email: email, password: password, houseNumber: houseNumber, address: address);
       if (!mounted) return;
       if(isError != null){
         CommonUI.showSnackBarMessage(context, isError: true, message: AuthErrorLocalizer.localize(AppLocalizations.of(context)!, isError), title: AppLocalizations.of(context)!.signupFailed);

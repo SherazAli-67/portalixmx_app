@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:portalixmx_app/core/common_ui.dart';
 import 'package:portalixmx_app/core/models/user_model.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
@@ -181,7 +181,9 @@ class HomeProvider extends ChangeNotifier {
       final user = await getCurrentUser();
       if (user == null) throw Exception('User not found');
       if (!user.isApproved) {
-        Fluttertoast.showToast(msg: AppLocalizations.of(context)!.accountMustBeApprovedForQr);
+        if (context.mounted) {
+          CommonUI.showSnackBarMessage(context, isError: true, message: AppLocalizations.of(context)!.accountMustBeApprovedForQr);
+        }
         return;
       }
 
@@ -204,11 +206,13 @@ class HomeProvider extends ChangeNotifier {
       );
     } catch (e) {
       final msg = _zkbioService.mapFirebaseError(e);
-      Fluttertoast.showToast(
-        msg: context.mounted
-            ? AuthErrorLocalizer.localize(AppLocalizations.of(context)!, msg)
-            : msg,
-      );
+      if (context.mounted) {
+        CommonUI.showSnackBarMessage(
+          context,
+          isError: true,
+          message: AuthErrorLocalizer.localize(AppLocalizations.of(context)!, msg),
+        );
+      }
     } finally {
       loading = false;
       notifyListeners();

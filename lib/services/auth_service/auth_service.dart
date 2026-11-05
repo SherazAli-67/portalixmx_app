@@ -27,7 +27,7 @@ class AuthService {
     );
   }
 
-  Future<User?> signup({required String name, required String email, required String password, required String societyID, XFile? image}) async {
+  Future<User?> signup({required String name, required String email, required String password, required String societyID, required String houseNumber, required String address, XFile? image}) async {
     try{
       final userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       var authUser = userCredential.user;
@@ -43,6 +43,8 @@ class AuthService {
         email: email,
         createdAt: DateTime.now().toUtc(),
         societyID: societyID,
+        houseNumber: houseNumber,
+        address: address,
       );
       final userMap = user.toMap();
       try {

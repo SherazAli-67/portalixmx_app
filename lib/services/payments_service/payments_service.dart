@@ -72,7 +72,14 @@ class PaymentsService {
           .collection(
           FirebaseConst.paymentsSubmittedCol)
           .doc(paymentSubmitted.paymentByUID)
-          .set(paymentSubmitted.toMap());
+          .set({
+            'paymentByUID': paymentSubmitted.paymentByUID,
+            'submittedOnDate': paymentSubmitted.submittedOnDate.toIso8601String(),
+            'approvedOnDate': null,
+            'rejectedOnDate': null,
+            'receipt': paymentSubmitted.receipt,
+            'status': 'submitted',
+          });
     }catch(e){
       throw Exception(e.toString());
     }
@@ -99,7 +106,9 @@ class PaymentsService {
     try{
       final submission = await getMySubmission(paymentID: paymentID);
       if(submission == null) return PaymentStatus.pending;
-      return submission.approvedOnDate != null ? PaymentStatus.received : PaymentStatus.submitted;
+      if (submission.isReceived) return PaymentStatus.received;
+      if (submission.isRejected) return PaymentStatus.rejected;
+      return PaymentStatus.submitted;
     }catch(e){
       throw Exception(e.toString());
     }

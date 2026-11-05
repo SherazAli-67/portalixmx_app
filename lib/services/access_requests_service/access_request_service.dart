@@ -63,6 +63,13 @@ class AccessRequestService {
             .toList());
   }
 
+  Stream<AccessRequestModel?> watchRequestById(String requestId) {
+    return _getAccessRequestsCollection.doc(requestId).snapshots().map((snapshot) {
+      if (!snapshot.exists || snapshot.data() == null) return null;
+      return AccessRequestModel.fromMap(snapshot.data()! as Map<String, dynamic>);
+    });
+  }
+
   Future<List<AccessModel>> fetchAllAccess({required String societyID}) async {
     try {
       final snapshot = await _firestore

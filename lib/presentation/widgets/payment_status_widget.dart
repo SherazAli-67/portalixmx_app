@@ -17,24 +17,26 @@ class PaymentStatusWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(99),
-        color: getColorByStatus(status).withValues(alpha: 0.1),
+        color: getColorByStatus(status).withValues(alpha: 0.12),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Text(
        StatusDisplayHelper.label(status, l10n),
-        style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: getColorByStatus(status)),
+        style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: getColorByStatus(status), fontWeight: FontWeight.w600),
       ),
     );
   }
 
   Color getColorByStatus(PaymentStatus status) {
     switch(status){
-      case .pending:
-        return AppColors.btnColor;
-      case .submitted:
-        return AppColors.primaryColor;
-      case .received:
-        return Colors.green;
+      case PaymentStatus.pending:
+        return AppColors.statusPending;
+      case PaymentStatus.submitted:
+        return AppColors.statusSubmitted;
+      case PaymentStatus.received:
+        return AppColors.statusSuccess;
+      case PaymentStatus.rejected:
+        return AppColors.statusError;
     }
   }
 }

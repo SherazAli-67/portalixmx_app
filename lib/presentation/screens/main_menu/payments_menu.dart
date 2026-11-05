@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:portalixmx_app/core/helpers/auth_error_localizer.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/presentation/widgets/empty_state_widget.dart';
 import 'package:portalixmx_app/presentation/widgets/payment_status_widget.dart';
 import 'package:provider/provider.dart';
 import '../../../core/common_ui.dart';
@@ -63,9 +65,10 @@ class PaymentsMenu extends StatelessWidget{
                               physics: const AlwaysScrollableScrollPhysics(),
                               children: [
                                 SizedBox(
-                                  height: 200,
-                                  child: Center(
-                                    child: Text(localization.noPaymentRequestsFound, style: AppTextStyles.regularTextStyle,),
+                                  height: 220,
+                                  child: EmptyStateWidget(
+                                    message: localization.noPaymentRequestsFound,
+                                    icon: Icons.payments_outlined,
                                   ),
                                 ),
                               ],
@@ -98,7 +101,7 @@ class PaymentsMenu extends StatelessWidget{
                                                     mainAxisAlignment: .spaceBetween,
                                                     children: [
                                                       Text(payment.paymentForTitle, style: AppTextStyles.tileTitleTextStyle.copyWith(color: AppColors.primaryColor),),
-                                                      Text("\$${payment.amount}", style: TextStyle(fontSize: 12, fontWeight: .w700, color: AppColors.btnColor),)
+                                                      Text(NumberFormat.currency(symbol: '\$', decimalDigits: 2).format(payment.amount), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.btnColor),)
                                                     ],
                                                   ),
                                                   Text(DateTimeFormatHelpers.formatDateTime(payment.dateTime), style: TextStyle(fontSize: 10, fontWeight: .w500, color: AppColors.serviceSubTitleGreyColor),),

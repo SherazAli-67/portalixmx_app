@@ -9,6 +9,7 @@ import '../../../providers/community_polls/community_polls_provider.dart';
 import '../../../providers/datetime_format_helpers.dart';
 import '../../../router/app_router.dart';
 import '../../widgets/bg_gradient_screen.dart';
+import '../../widgets/empty_state_widget.dart';
 import '../../widgets/loading_widget.dart';
 
 class CommunityPollsPage extends StatelessWidget {
@@ -50,7 +51,7 @@ class CommunityPollsPage extends StatelessWidget {
                       child: provider.loadingCommunityPolls
                           ? LoadingWidget(color: AppColors.primaryColor)
                           : provider.communityPolls.isEmpty
-                          ? Center(child: Text(localization.noPollsYet))
+                          ? EmptyStateWidget(message: localization.noPollsYet, icon: Icons.poll_outlined)
                           : ListView.builder(
                         itemCount: provider.communityPolls.length,
                         itemBuilder: (ctx, index) {

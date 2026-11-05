@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:portalixmx_app/core/models/complaints_model.dart';
 import 'package:portalixmx_app/core/models/society_model.dart';
@@ -22,6 +21,7 @@ class ComplaintsService {
 
   Future<ComplaintModel?> addComplaint({required String complaintText, List<String>? images, required SocietyModel society}) async {
     try {
+
       DateTime now = DateTime.now().toUtc();
       ComplaintModel complaint = ComplaintModel(id: now.toIso8601String(),
           complaint: complaintText,
@@ -32,7 +32,6 @@ class ComplaintsService {
           status: ComplaintStatus.pending,
           createdAt: now,
           updatedAt: now);
-      // print("ComplaintS: ${complaint.toMap()}");
       await _getComplaintsCollection.doc(complaint.id).set(complaint.toMap());
       return complaint;
     } catch (e) {
@@ -62,6 +61,13 @@ class ComplaintsService {
             .toList());
   }
 
+  Stream<ComplaintModel?> watchComplaintById(String complaintId) {
+    return _getComplaintsCollection.doc(complaintId).snapshots().map((snapshot) {
+      if (!snapshot.exists || snapshot.data() == null) return null;
+      return ComplaintModel.fromMap(snapshot.data()! as Map<String, dynamic>);
+    });
+  }
+
   Future<void> deleteComplaintByID(String complaintID) async{
     try {
       await _getComplaintsCollection.doc(complaintID).delete();
@@ -71,7 +77,6 @@ class ComplaintsService {
   }
 
   Future<List<String>> uploadComplaintImages({required List<XFile> files}) async {
-    debugPrint("Uploading complaint image: ${files.length}");
     try{
       String currentUID = FirebaseAuth.instance.currentUser!.uid;
       List<String> imagesUrl = [];

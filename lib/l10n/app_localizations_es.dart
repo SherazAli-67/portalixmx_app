@@ -724,6 +724,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get passwordRequired => 'La contraseña es obligatoria';
 
   @override
+  String get passwordMinLength =>
+      'La contraseña debe tener al menos 8 caracteres';
+
+  @override
   String get fullNameRequired => 'El nombre completo es obligatorio';
 
   @override
@@ -731,10 +735,67 @@ class AppLocalizationsEs extends AppLocalizations {
       'El nombre completo debe tener al menos 2 caracteres';
 
   @override
+  String get phoneRequired => 'El número de teléfono es obligatorio';
+
+  @override
+  String get phoneMustBe10Digits =>
+      'El número de teléfono debe tener exactamente 10 dígitos';
+
+  @override
+  String get plateMinLength => 'La placa debe tener al menos 3 caracteres';
+
+  @override
+  String get pleaseEnterValidPlate => 'Por favor ingresa una placa válida';
+
+  @override
+  String get houseNumber => 'Número de casa';
+
+  @override
+  String get houseNumberRequired => 'El número de casa es obligatorio';
+
+  @override
+  String get address => 'Dirección';
+
+  @override
+  String get addressRequired => 'La dirección es obligatoria';
+
+  @override
+  String get addressMinLength =>
+      'La dirección debe tener al menos 3 caracteres';
+
+  @override
+  String get personalEmergencyPhone => 'Teléfono de emergencia personal';
+
+  @override
+  String get otpRequired => 'El OTP es obligatorio';
+
+  @override
+  String get otpMinLength => 'El OTP debe tener al menos 4 dígitos';
+
+  @override
+  String get complaintRequired => 'Por favor ingresa una queja';
+
+  @override
+  String maxPhotosReached(int count) {
+    return 'Puedes adjuntar hasta $count fotos';
+  }
+
+  @override
+  String get vehicleNameMinLength =>
+      'El nombre del vehículo debe tener al menos 2 caracteres';
+
+  @override
+  String get colorMinLength => 'El color debe tener al menos 2 caracteres';
+
+  @override
   String get appointmentDateRequired => 'La fecha de la cita es obligatoria';
 
   @override
   String get dayMustBeBetween => 'El día debe estar entre 1 y 31';
+
+  @override
+  String get visitDurationMustBePositive =>
+      'La hora de fin debe ser posterior a la de inicio';
 
   @override
   String get pleaseUploadProfilePicture => 'Por favor sube tu foto de perfil';
@@ -758,6 +819,21 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get rejected => 'Rechazado';
+
+  @override
+  String get resubmitReceipt => 'Reenviar recibo';
+
+  @override
+  String get paymentRejectedResubmitHint =>
+      'Tu recibo fue rechazado. Sube un nuevo recibo y vuelve a enviarlo.';
+
+  @override
+  String photoTooLarge(int maxMb) {
+    return 'Cada foto debe ser de $maxMb MB o menos';
+  }
+
+  @override
+  String get noComplaintsYet => 'Aún no hay quejas de mantenimiento';
 
   @override
   String get authInvalidEmail =>

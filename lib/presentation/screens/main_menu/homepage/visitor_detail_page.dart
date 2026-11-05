@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:portalixmx_app/core/common_ui.dart';
 import 'package:portalixmx_app/core/helpers/auth_error_localizer.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
 import 'package:portalixmx_app/core/models/zkbio_qr_model.dart';
@@ -225,12 +225,11 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                   if (!context.mounted) return;
 
                   if (result) {
-                    Fluttertoast.showToast(msg: AppLocalizations.of(context)!.visitorDeletedSuccessfully);
+                    CommonUI.showSnackBarMessage(context, isSuccess: true, message: AppLocalizations.of(context)!.visitorDeletedSuccessfully);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   } else {
-                    Fluttertoast.showToast(
-                        msg: AppLocalizations.of(context)!.failedToDeleteVisitor);
+                    CommonUI.showSnackBarMessage(context, isError: true, message: AppLocalizations.of(context)!.failedToDeleteVisitor);
                     Navigator.of(context).pop();
                   }
                 },
