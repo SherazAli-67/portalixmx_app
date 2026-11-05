@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/core/models/community_event_model.dart';
 import 'package:portalixmx_app/core/models/community_poll_model.dart';
@@ -20,7 +20,6 @@ import '../core/models/fund_report_model.dart';
 import '../presentation/screens/authentication/create_account_page.dart';
 import '../presentation/screens/authentication/forget_password_page.dart';
 import '../presentation/screens/authentication/login_page.dart';
-import '../presentation/screens/authentication/otp_page.dart';
 import '../presentation/screens/complete_profile_screen/complete_profile_screen.dart';
 import '../presentation/screens/main_menu/access/access_page.dart';
 import '../presentation/screens/main_menu/access/access_summary_page.dart';
@@ -33,11 +32,9 @@ import '../presentation/screens/main_menu/profile_menu/community_calendar.dart';
 import '../presentation/screens/main_menu/profile_menu/community_detail_page.dart';
 import '../presentation/screens/community_polls/community_polls_detail_page.dart';
 import '../presentation/screens/community_polls/community_polls_page.dart';
-import '../presentation/screens/main_menu/profile_menu/directory_detail_page.dart';
 import '../presentation/screens/main_menu/profile_menu/directory_page.dart';
 import '../presentation/screens/main_menu/profile_menu/edit_profile_page.dart';
 import '../presentation/screens/main_menu/profile_menu/emergency_calls_page.dart';
-import '../presentation/screens/main_menu/profile_menu/guard_tracking_map_page.dart';
 import '../presentation/screens/main_menu/profile_menu/profile_guards_page.dart';
 import '../presentation/screens/main_menu/profile_menu/profile_page.dart';
 import '../presentation/screens/main_menu/main_menu.dart';
@@ -86,7 +83,6 @@ GoRouter appRouter = GoRouter(
     GoRoute(path: NamedRoutes.complaintSummary.routeName, builder: (ctx, state)=> ComplaintSummaryPage(complaint: state.extra as ComplaintModel,)),
       GoRoute(path: NamedRoutes.editProfile.routeName, builder: (ctx, state)=> EditProfilePage()),
       GoRoute(path: NamedRoutes.userDirectory.routeName, builder: (ctx, state)=> DirectoryPage()),
-    GoRoute(path: NamedRoutes.directoryDetail.routeName, builder: (ctx, state)=> DirectoryDetailPage(visitor: state.extra as BaseVisitor?)),
 
     GoRoute(path: NamedRoutes.communityCalendar.routeName, builder: (ctx, state)=> CommunityCalendarPage()),
     GoRoute(path: NamedRoutes.communityCalendarDetail.routeName, builder: (ctx, state)=> CommunityCalendarDetailPage(event: state.extra as CommunityEventModel,)),
@@ -96,11 +92,7 @@ GoRouter appRouter = GoRouter(
 
     GoRoute(path: NamedRoutes.profileGuard.routeName, builder: (ctx, state)=> ProfileGuardsPage()),
 
-    GoRoute(path: NamedRoutes.carPooling.routeName, builder: (ctx, state)=> Center(child: Text("Car Pooling Page"),)),
       GoRoute(path: NamedRoutes.emergencyCalls.routeName, builder: (ctx, state)=> EmergencyCallsPage()),
-    GoRoute(path: NamedRoutes.guardTracking.routeName, builder: (ctx, state)=> GuardTrackingMapPage()),
-
-    GoRoute(path: NamedRoutes.verifyOtp.routeName, builder: (ctx, state)=> VerifyOTPPage()),
     GoRoute(path: NamedRoutes.previewImage.routeName, builder: (ctx, state){
       final map = state.extra as Map<String, dynamic>;
       return PreviewImageScreen(title: map['title'] as String, imageUrl:  map['imageUrl'],);
@@ -177,17 +169,13 @@ enum NamedRoutes {
   complaintSummary('/complaint-detail'),
   editProfile('/edit-profile'),
   userDirectory('/user-directory'),
-  directoryDetail('/directory-detail'),
   communityCalendar('/community-calendar'),
   communityCalendarDetail('/community-calendar-detail'),
   communityPolls('/community-polls'),
   communityPollsDetail('/community-poll-detail'),
   profileGuard('/profile-guard'),
-  guardTracking('/guard-tracking'),
-  carPooling('/car-pooling'),
   emergencyCalls('/emergency-calls'),
   completeProfile('/complete-profile'),
-  verifyOtp('/verify-otp'),
   accountPending('/account-pending'),
   paymentDetail('/payment-details'),
   myAccessQr('/my-access-qr'),

@@ -12,16 +12,10 @@ class AppIcons {
   static const icCamera = 'assets/icons/ic_camera.svg';
   static const icUploadPhotos = 'assets/icons/ic_upload_photos.svg';
   static const icGame = 'assets/icons/ic_game.svg';
-  static const icGym = 'assets/icons/ic_gym.svg';
-  static const icPool = 'assets/icons/ic_pool.svg';
   static const icDirectory = 'assets/icons/ic_directory.svg';
   static const icCalendar = 'assets/icons/ic_calendar.svg';
   static const icGuards = 'assets/icons/ic_guards.svg';
-  static const icCarPooling = 'assets/icons/ic_car.svg';
   static const icEmergencyCalls = 'assets/icons/ic_emergency_calls.svg';
   static const icCommunityPolls = 'assets/icons/ic_community_polls.svg';
-  static const icProfileEdit = 'assets/icons/ic_profile_edit.svg';
-  static const icMap = 'assets/icons/ic_map.png';
-  static const icMyLocation = 'assets/icons/ic_my_location.png';
   static const accountPending = 'assets/icons/account_pending.png';
 }

@@ -113,18 +113,6 @@ class Validators {
     };
   }
 
-  static String? Function(String?) validateOtp(AppLocalizations l10n) {
-    return (String? value) {
-      if (value == null || value.trim().isEmpty) {
-        return l10n.otpRequired;
-      }
-      if (value.trim().length < 4) {
-        return l10n.otpMinLength;
-      }
-      return null;
-    };
-  }
-
   static String? Function(String?) validateComplaint(AppLocalizations l10n) {
     return (String? value) {
       if (value == null || value.trim().isEmpty) {

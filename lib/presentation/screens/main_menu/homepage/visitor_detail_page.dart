@@ -18,7 +18,6 @@ import '../../../../core/res/app_icons.dart';
 import '../../../../core/res/app_textstyles.dart';
 import '../../../widgets/bg_gradient_screen.dart';
 import '../../../widgets/loading_widget.dart';
-import '../../../widgets/primary_btn.dart';
 import '../../../bottomsheets/add_update_guest_bottomsheet.dart';
 import 'widgets/vistor_info_item_widget.dart';
 
@@ -368,56 +367,37 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
   }
 
   Widget _buildVisitorDetailPage(BuildContext context) {
-    final localization = AppLocalizations.of(context)!;
     return Column(
-      children: [
-        Column(
-            children: List.generate(7, (index) {
-          final time = getVisitorTimeByIndex(index);
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppData.getDays(context)[index],
-                      style: AppTextStyles.visitorDetailTitleTextStyle,
-                    ),
-                    Text(
-                      time != null && time.time != null && time.endTime != null
-                          ? '${time.time!.hour.toString().padLeft(2, '0')}:${time.time!.minute.toString().padLeft(2, '0')} - ${time.endTime!.hour.toString().padLeft(2, '0')}:${time.endTime!.minute.toString().padLeft(2, '0')}'
-                          : '',
-                      style: AppTextStyles.visitorDetailSubtitleTextStyle,
-                    )
-                  ],
-                ),
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: AppColors.dividerColor,
-                ),
-              ],
-            ),
-          );
-        })),
-        Text(
-          localization.qrCode,
-          style: AppTextStyles.visitorDetailTitleTextStyle,
-        ),
-        Image.asset(AppIcons.icQRCode),
-        const SizedBox(height: 20),
-        SizedBox(
-          height: 50,
-          width: double.infinity,
-          child: PrimaryBtn(
-            onTap: () {},
-            btnText: localization.shareKey,
-            bgColor: AppColors.primaryColor,
+      children: List.generate(7, (index) {
+        final time = getVisitorTimeByIndex(index);
+        return Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppData.getDays(context)[index],
+                    style: AppTextStyles.visitorDetailTitleTextStyle,
+                  ),
+                  Text(
+                    time != null && time.time != null && time.endTime != null
+                        ? '${time.time!.hour.toString().padLeft(2, '0')}:${time.time!.minute.toString().padLeft(2, '0')} - ${time.endTime!.hour.toString().padLeft(2, '0')}:${time.endTime!.minute.toString().padLeft(2, '0')}'
+                        : '',
+                    style: AppTextStyles.visitorDetailSubtitleTextStyle,
+                  )
+                ],
+              ),
+              Container(
+                height: 1,
+                width: double.infinity,
+                color: AppColors.dividerColor,
+              ),
+            ],
           ),
-        )
-      ],
+        );
+      }),
     );
   }
 

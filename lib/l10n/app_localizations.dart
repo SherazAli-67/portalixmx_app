@@ -254,47 +254,17 @@ abstract class AppLocalizations {
   /// **'Access Requests'**
   String get accessRequests;
 
-  /// No description provided for @poolAccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Pool Access'**
-  String get poolAccess;
-
   /// No description provided for @add.
   ///
   /// In en, this message translates to:
   /// **'Add'**
   String get add;
 
-  /// No description provided for @twoStepVerification.
-  ///
-  /// In en, this message translates to:
-  /// **'2 Step Verification'**
-  String get twoStepVerification;
-
-  /// No description provided for @twoStepVerificationDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter the 2 step verification code sent on your email address'**
-  String get twoStepVerificationDescription;
-
-  /// No description provided for @otp.
-  ///
-  /// In en, this message translates to:
-  /// **'OTP'**
-  String get otp;
-
   /// No description provided for @submit.
   ///
   /// In en, this message translates to:
   /// **'Submit'**
   String get submit;
-
-  /// No description provided for @needHelp.
-  ///
-  /// In en, this message translates to:
-  /// **'Need Help'**
-  String get needHelp;
 
   /// No description provided for @home.
   ///
@@ -344,12 +314,6 @@ abstract class AppLocalizations {
   /// **'Access For'**
   String get accessFor;
 
-  /// No description provided for @teacher.
-  ///
-  /// In en, this message translates to:
-  /// **'Teacher'**
-  String get teacher;
-
   /// No description provided for @accessApprovedDate.
   ///
   /// In en, this message translates to:
@@ -386,12 +350,6 @@ abstract class AppLocalizations {
   /// **'To'**
   String get to;
 
-  /// No description provided for @shareKey.
-  ///
-  /// In en, this message translates to:
-  /// **'Share Key'**
-  String get shareKey;
-
   /// No description provided for @qrCode.
   ///
   /// In en, this message translates to:
@@ -403,36 +361,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Payments & Billing'**
   String get paymentsAndBilling;
-
-  /// No description provided for @currentService.
-  ///
-  /// In en, this message translates to:
-  /// **'Current Service'**
-  String get currentService;
-
-  /// No description provided for @otherServices.
-  ///
-  /// In en, this message translates to:
-  /// **'Other Services'**
-  String get otherServices;
-
-  /// No description provided for @serviceName.
-  ///
-  /// In en, this message translates to:
-  /// **'Service Name'**
-  String get serviceName;
-
-  /// No description provided for @cleaningOfCommonAreas.
-  ///
-  /// In en, this message translates to:
-  /// **'Cleaning of common areas'**
-  String get cleaningOfCommonAreas;
-
-  /// No description provided for @garbageCollection.
-  ///
-  /// In en, this message translates to:
-  /// **'Garbage Collection'**
-  String get garbageCollection;
 
   /// No description provided for @complaint.
   ///
@@ -523,12 +451,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Guards'**
   String get guards;
-
-  /// No description provided for @carPooling.
-  ///
-  /// In en, this message translates to:
-  /// **'Car Pooling'**
-  String get carPooling;
 
   /// No description provided for @emergencyCalls.
   ///
@@ -632,12 +554,6 @@ abstract class AppLocalizations {
   /// **'Edit Profile'**
   String get editProfile;
 
-  /// No description provided for @updateYour.
-  ///
-  /// In en, this message translates to:
-  /// **'Update your {userInfo}'**
-  String updateYour(Object userInfo);
-
   /// No description provided for @addGuest.
   ///
   /// In en, this message translates to:
@@ -649,18 +565,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete Complaint'**
   String get deleteComplaint;
-
-  /// No description provided for @profileInfoUpdated.
-  ///
-  /// In en, this message translates to:
-  /// **'Profile information updated'**
-  String get profileInfoUpdated;
-
-  /// No description provided for @profileInfoUpdateFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Profile updating failed, Please try again'**
-  String get profileInfoUpdateFailed;
 
   /// No description provided for @show.
   ///
@@ -770,30 +674,6 @@ abstract class AppLocalizations {
   /// **'Date To'**
   String get dateTo;
 
-  /// No description provided for @hasBeenEditedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'{name} has been updated'**
-  String hasBeenEditedMessage(Object name);
-
-  /// No description provided for @hasBeenAddedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'{name} has been added as a {guestType}'**
-  String hasBeenAddedMessage(Object guestType, Object name);
-
-  /// No description provided for @accessRequestPending.
-  ///
-  /// In en, this message translates to:
-  /// **'The request for {accessTitle} is already in pending state'**
-  String accessRequestPending(Object accessTitle);
-
-  /// No description provided for @accessRequestSubmitted.
-  ///
-  /// In en, this message translates to:
-  /// **'The request for {accessTitle} is submitted to Portalix Admin'**
-  String accessRequestSubmitted(Object accessTitle);
-
   /// No description provided for @createAccount.
   ///
   /// In en, this message translates to:
@@ -830,30 +710,6 @@ abstract class AppLocalizations {
   /// **'Please provide the rest information to complete your profile'**
   String get completeProfileDescription;
 
-  /// No description provided for @additionalDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'Additional Details'**
-  String get additionalDetails;
-
-  /// No description provided for @pleaseEnterName.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter name'**
-  String get pleaseEnterName;
-
-  /// No description provided for @pleaseEnterContactNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter contact number'**
-  String get pleaseEnterContactNumber;
-
-  /// No description provided for @pleaseEnterCarPlateNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter car plate number'**
-  String get pleaseEnterCarPlateNumber;
-
   /// No description provided for @pleaseEnterVehicleModel.
   ///
   /// In en, this message translates to:
@@ -877,12 +733,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please select to date and time'**
   String get pleaseSelectToDateTime;
-
-  /// No description provided for @toDateTimeMustBeAfterFromDateTime.
-  ///
-  /// In en, this message translates to:
-  /// **'To date/time must be after from date/time'**
-  String get toDateTimeMustBeAfterFromDateTime;
 
   /// No description provided for @pleaseSelectAtLeastOneDay.
   ///
@@ -920,12 +770,6 @@ abstract class AppLocalizations {
   /// **'All'**
   String get all;
 
-  /// No description provided for @week.
-  ///
-  /// In en, this message translates to:
-  /// **'Week'**
-  String get week;
-
   /// No description provided for @month.
   ///
   /// In en, this message translates to:
@@ -937,12 +781,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Visitor Code'**
   String get automaticVisitorCode;
-
-  /// No description provided for @generateAccessCode.
-  ///
-  /// In en, this message translates to:
-  /// **'Generate Access Code'**
-  String get generateAccessCode;
 
   /// No description provided for @myAccessQr.
   ///
@@ -1028,18 +866,6 @@ abstract class AppLocalizations {
   /// **'Fund Management'**
   String get fundManagement;
 
-  /// No description provided for @createFundReport.
-  ///
-  /// In en, this message translates to:
-  /// **'Create Fund Report'**
-  String get createFundReport;
-
-  /// No description provided for @reportTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Report Title'**
-  String get reportTitle;
-
   /// No description provided for @income.
   ///
   /// In en, this message translates to:
@@ -1052,18 +878,6 @@ abstract class AppLocalizations {
   /// **'Expenses'**
   String get expenses;
 
-  /// No description provided for @expenseLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Expense Label'**
-  String get expenseLabel;
-
-  /// No description provided for @addExpense.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Expense'**
-  String get addExpense;
-
   /// No description provided for @balance.
   ///
   /// In en, this message translates to:
@@ -1075,18 +889,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Note'**
   String get note;
-
-  /// No description provided for @publishReport.
-  ///
-  /// In en, this message translates to:
-  /// **'Publish Report'**
-  String get publishReport;
-
-  /// No description provided for @saveAsDraft.
-  ///
-  /// In en, this message translates to:
-  /// **'Save as Draft'**
-  String get saveAsDraft;
 
   /// No description provided for @published.
   ///
@@ -1268,12 +1070,6 @@ abstract class AppLocalizations {
   /// **'Photos'**
   String get photos;
 
-  /// No description provided for @visitorType.
-  ///
-  /// In en, this message translates to:
-  /// **'Visitor Type'**
-  String get visitorType;
-
   /// No description provided for @phoneNumber.
   ///
   /// In en, this message translates to:
@@ -1309,12 +1105,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select'**
   String get select;
-
-  /// No description provided for @informationUnavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Information unavailable'**
-  String get informationUnavailable;
 
   /// No description provided for @contact.
   ///
@@ -1364,12 +1154,6 @@ abstract class AppLocalizations {
   /// **'Failed to delete visitor. Please try again.'**
   String get failedToDeleteVisitor;
 
-  /// No description provided for @loginFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Login failed. Please try again.'**
-  String get loginFailed;
-
   /// No description provided for @pleaseEnterVehicleName.
   ///
   /// In en, this message translates to:
@@ -1393,12 +1177,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter vehicle registration number'**
   String get pleaseEnterRegistrationNumber;
-
-  /// No description provided for @nameCannotBeEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'Name cannot be empty. Please enter your name'**
-  String get nameCannotBeEmpty;
 
   /// No description provided for @portalixAccessQr.
   ///
@@ -1501,18 +1279,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Personal Emergency Phone'**
   String get personalEmergencyPhone;
-
-  /// No description provided for @otpRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'OTP is required'**
-  String get otpRequired;
-
-  /// No description provided for @otpMinLength.
-  ///
-  /// In en, this message translates to:
-  /// **'OTP must be at least 4 digits'**
-  String get otpMinLength;
 
   /// No description provided for @complaintRequired.
   ///

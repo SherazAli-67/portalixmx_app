@@ -92,26 +92,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accessRequests => 'Access Requests';
 
   @override
-  String get poolAccess => 'Pool Access';
-
-  @override
   String get add => 'Add';
 
   @override
-  String get twoStepVerification => '2 Step Verification';
-
-  @override
-  String get twoStepVerificationDescription =>
-      'Enter the 2 step verification code sent on your email address';
-
-  @override
-  String get otp => 'OTP';
-
-  @override
   String get submit => 'Submit';
-
-  @override
-  String get needHelp => 'Need Help';
 
   @override
   String get home => 'Home';
@@ -138,9 +122,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accessFor => 'Access For';
 
   @override
-  String get teacher => 'Teacher';
-
-  @override
   String get accessApprovedDate => 'Access Approved Date';
 
   @override
@@ -159,28 +140,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get to => 'To';
 
   @override
-  String get shareKey => 'Share Key';
-
-  @override
   String get qrCode => 'QR CODE';
 
   @override
   String get paymentsAndBilling => 'Payments & Billing';
-
-  @override
-  String get currentService => 'Current Service';
-
-  @override
-  String get otherServices => 'Other Services';
-
-  @override
-  String get serviceName => 'Service Name';
-
-  @override
-  String get cleaningOfCommonAreas => 'Cleaning of common areas';
-
-  @override
-  String get garbageCollection => 'Garbage Collection';
 
   @override
   String get complaint => 'Complaint';
@@ -228,9 +191,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guards => 'Guards';
-
-  @override
-  String get carPooling => 'Car Pooling';
 
   @override
   String get emergencyCalls => 'Emergency Calls';
@@ -284,22 +244,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editProfile => 'Edit Profile';
 
   @override
-  String updateYour(Object userInfo) {
-    return 'Update your $userInfo';
-  }
-
-  @override
   String get addGuest => 'Add Guest';
 
   @override
   String get deleteComplaint => 'Delete Complaint';
-
-  @override
-  String get profileInfoUpdated => 'Profile information updated';
-
-  @override
-  String get profileInfoUpdateFailed =>
-      'Profile updating failed, Please try again';
 
   @override
   String get show => 'Show';
@@ -356,26 +304,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dateTo => 'Date To';
 
   @override
-  String hasBeenEditedMessage(Object name) {
-    return '$name has been updated';
-  }
-
-  @override
-  String hasBeenAddedMessage(Object guestType, Object name) {
-    return '$name has been added as a $guestType';
-  }
-
-  @override
-  String accessRequestPending(Object accessTitle) {
-    return 'The request for $accessTitle is already in pending state';
-  }
-
-  @override
-  String accessRequestSubmitted(Object accessTitle) {
-    return 'The request for $accessTitle is submitted to Portalix Admin';
-  }
-
-  @override
   String get createAccount => 'Create Account';
 
   @override
@@ -396,18 +324,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please provide the rest information to complete your profile';
 
   @override
-  String get additionalDetails => 'Additional Details';
-
-  @override
-  String get pleaseEnterName => 'Please enter name';
-
-  @override
-  String get pleaseEnterContactNumber => 'Please enter contact number';
-
-  @override
-  String get pleaseEnterCarPlateNumber => 'Please enter car plate number';
-
-  @override
   String get pleaseEnterVehicleModel => 'Please enter vehicle model';
 
   @override
@@ -418,10 +334,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pleaseSelectToDateTime => 'Please select to date and time';
-
-  @override
-  String get toDateTimeMustBeAfterFromDateTime =>
-      'To date/time must be after from date/time';
 
   @override
   String get pleaseSelectAtLeastOneDay =>
@@ -443,16 +355,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get all => 'All';
 
   @override
-  String get week => 'Week';
-
-  @override
   String get month => 'Month';
 
   @override
   String get automaticVisitorCode => 'Visitor Code';
-
-  @override
-  String get generateAccessCode => 'Generate Access Code';
 
   @override
   String get myAccessQr => 'My Access QR';
@@ -502,34 +408,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundManagement => 'Fund Management';
 
   @override
-  String get createFundReport => 'Create Fund Report';
-
-  @override
-  String get reportTitle => 'Report Title';
-
-  @override
   String get income => 'Income';
 
   @override
   String get expenses => 'Expenses';
 
   @override
-  String get expenseLabel => 'Expense Label';
-
-  @override
-  String get addExpense => 'Add Expense';
-
-  @override
   String get balance => 'Balance';
 
   @override
   String get note => 'Note';
-
-  @override
-  String get publishReport => 'Publish Report';
-
-  @override
-  String get saveAsDraft => 'Save as Draft';
 
   @override
   String get published => 'Published';
@@ -627,9 +515,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get photos => 'Photos';
 
   @override
-  String get visitorType => 'Visitor Type';
-
-  @override
   String get phoneNumber => 'Phone Number';
 
   @override
@@ -646,9 +531,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get select => 'Select';
-
-  @override
-  String get informationUnavailable => 'Information unavailable';
 
   @override
   String get contact => 'Contact';
@@ -678,9 +560,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Failed to delete visitor. Please try again.';
 
   @override
-  String get loginFailed => 'Login failed. Please try again.';
-
-  @override
   String get pleaseEnterVehicleName => 'Please enter vehicle name';
 
   @override
@@ -693,10 +572,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pleaseEnterRegistrationNumber =>
       'Please enter vehicle registration number';
-
-  @override
-  String get nameCannotBeEmpty =>
-      'Name cannot be empty. Please enter your name';
 
   @override
   String get portalixAccessQr => 'Portalix access QR';
@@ -748,12 +623,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get personalEmergencyPhone => 'Personal Emergency Phone';
-
-  @override
-  String get otpRequired => 'OTP is required';
-
-  @override
-  String get otpMinLength => 'OTP must be at least 4 digits';
 
   @override
   String get complaintRequired => 'Please enter a complaint';

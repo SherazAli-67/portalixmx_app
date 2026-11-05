@@ -17,7 +17,6 @@ class AppColors {
   static const serviceSubTitleGreyColor = Color(0xff5C5C5C);
   static const lightGreyBackgroundColor = Color(0xffEFEFEF);
   static const postGreyColor = Color(0xff5C5C5C);
-  static const lightWhiteColor = Color(0xffFDFDFD);
   static const statusPending = Color(0xff9A4F00);
   static const statusSubmitted = Color(0xff2F2A9E);
   static const statusSuccess = Color(0xff1B5E20);
