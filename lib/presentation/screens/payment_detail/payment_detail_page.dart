@@ -1,14 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:portalixmx_app/core/helpers/status_display_helper.dart';
 import '../../../../core/res/app_colors.dart';
 import '../../../../core/res/app_textstyles.dart';
 import '../../../../providers/datetime_format_helpers.dart';
 import '../../../core/helpers/bottom_sheet_helper.dart';
+import '../../../core/helpers/image_url_helper.dart';
 import '../../../core/models/payment_model.dart';
 import '../../../core/models/payment_submitted_model.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../router/app_router.dart';
 import '../../../services/payments_service/payments_service.dart';
 import '../../bottomsheets/submit_payment_to_admin_bottomsheet.dart';
 import '../../widgets/bg_gradient_screen.dart';
@@ -102,7 +106,7 @@ class PaymentDetailPage extends StatelessWidget{
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             if (submission?.receipt != null && submission!.receipt!.isNotEmpty)
-                                              Expanded(child: _buildReceiptImage(localizations, receipt: submission.receipt))
+                                              Expanded(child: _buildReceiptImage(context, localizations, title: payment.paymentForTitle, receipt: submission.receipt))
                                             else
                                               const Spacer(),
                                             _buildSubmitPaymentBtn(
@@ -112,7 +116,7 @@ class PaymentDetailPage extends StatelessWidget{
                                             ),
                                           ],
                                         )
-                                      : _buildReceiptImage(localizations, receipt: submission?.receipt),
+                                      : _buildReceiptImage(context, localizations, title: payment.paymentForTitle, receipt: submission?.receipt),
                                 ),
                               ],
                             ),
@@ -147,7 +151,7 @@ class PaymentDetailPage extends StatelessWidget{
     );
   }
 
-  Widget _buildReceiptImage(AppLocalizations localizations,{String? receipt}) {
+  Widget _buildReceiptImage(BuildContext context,  AppLocalizations localizations,{String? receipt, String? title}) {
     return Column(
       spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +161,20 @@ class PaymentDetailPage extends StatelessWidget{
           borderRadius: BorderRadius.circular(15),
           child: receipt == null || receipt.isEmpty
               ? Center(child: Text(localizations.receiptUnavailable, style: AppTextStyles.tileSubtitleTextStyle))
-              : CachedNetworkImage(imageUrl: receipt, fit: BoxFit.contain, height: 200, width: double.infinity),
+              : GestureDetector(
+            onTap: ()=> context.push(NamedRoutes.previewImage.routeName, extra: {
+              'title' : title ?? 'Payment',
+              'imageUrl': ImageUrlHelper.getImageUrl(receipt)
+            }),
+                child: CachedNetworkImage(
+                            imageUrl: receipt,
+                            fit: BoxFit.contain,
+                            height: 200,
+                            width: double.infinity,
+                            progressIndicatorBuilder: (context, url, downloadProgress) => CupertinoActivityIndicator(),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+                          ),
+              ),
         )
       ],
     );

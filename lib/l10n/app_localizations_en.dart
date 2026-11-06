@@ -515,6 +515,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get photos => 'Photos';
 
   @override
+  String get noComplaintPhotos => 'No complaint photos shared by the resident';
+
+  @override
   String get phoneNumber => 'Phone Number';
 
   @override

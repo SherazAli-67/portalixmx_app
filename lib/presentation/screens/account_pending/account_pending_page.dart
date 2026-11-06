@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import '../../../core/res/app_icons.dart';
 import '../../../core/res/app_textstyles.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../widgets/full_page_loading_widget.dart';
 import '../../widgets/primary_btn.dart';
 
 class PendingRequestPage extends StatefulWidget {
@@ -27,40 +28,47 @@ class _PendingRequestPageState extends State<PendingRequestPage> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    final authProvider = context.watch<AuthenticationProvider>();
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const .symmetric(horizontal: 24.0),
-            child: Column(
-              mainAxisAlignment: .center,
-              spacing: 16,
-              children: [
-                Image.asset(AppIcons.accountPending, height: 48, width: 48, color: Colors.white,),
-                FutureBuilder(
-                  future: AuthService.instance.getSociety(),
-                  builder: (ctx, snapshot) {
-                    String societyName = snapshot.data?.name ?? localization.society;
-                    return Text(localization.accountRequestPending(societyName), style: AppTextStyles.regularTextStyle, textAlign: .center,);
-                  },
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Center(
+              child: Padding(
+                padding: const .symmetric(horizontal: 24.0),
+                child: Column(
+                  mainAxisAlignment: .center,
+                  spacing: 16,
+                  children: [
+                    Image.asset(AppIcons.accountPending, height: 48, width: 48, color: Colors.white,),
+                    FutureBuilder(
+                      future: AuthService.instance.getSociety(),
+                      builder: (ctx, snapshot) {
+                        String societyName = snapshot.data?.name ?? localization.society;
+                        return Text(localization.accountRequestPending(societyName), style: AppTextStyles.regularTextStyle, textAlign: .center,);
+                      },
+                    ),
+                    SizedBox(
+                      height: 48,
+                      width: .infinity,
+                      child: PrimaryBtn(
+                        onTap: _refreshing ? () {} : _onRefreshTap,
+                        btnText: localization.refresh,
+                        isLoading: _refreshing,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: authProvider.isLoggingOut ? null : _onLogoutTap,
+                      child: Text(localization.logout, style: AppTextStyles.tileTitleTextStyle2),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: 48,
-                  width: .infinity,
-                  child: PrimaryBtn(
-                    onTap: _refreshing ? () {} : _onRefreshTap,
-                    btnText: localization.refresh,
-                    isLoading: _refreshing,
-                  ),
-                ),
-                TextButton(
-                  onPressed: _onLogoutTap,
-                  child: Text(localization.logout, style: AppTextStyles.tileTitleTextStyle2),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
+          if (authProvider.isLoggingOut)
+            const FullPageLoadingWidget(),
+        ],
       ),
     );
   }

@@ -78,7 +78,7 @@ class _AddComplaintBottomSheetState extends State<AddComplaintBottomSheet> {
                                     File(image.path),
                                     width: 72,
                                     height: 72,
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.contain,
                                   ),
                                 ),
                                 Positioned(

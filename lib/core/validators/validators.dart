@@ -6,7 +6,10 @@ class Validators {
       if (value == null || value.trim().isEmpty) {
         return l10n.emailRequired;
       }
-      if (!RegExp(r'^[\w\.\-+]+@([\w\-]+\.)+[\w\-]{2,}$').hasMatch(value.trim())) {
+      final emailRegExp = RegExp(
+        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+      );
+      if (!emailRegExp.hasMatch(value.trim())) {
         return l10n.pleaseEnterValidEmail;
       }
       return null;

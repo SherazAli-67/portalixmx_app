@@ -522,6 +522,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get photos => 'Fotos';
 
   @override
+  String get noComplaintPhotos =>
+      'El residente no compartió fotografías relacionadas con la queja.';
+
+  @override
   String get phoneNumber => 'Número de teléfono';
 
   @override

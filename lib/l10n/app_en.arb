@@ -169,6 +169,7 @@
   "receiptSubmittedToAdmin": "Your receipt has been submitted to the admin",
   "accessTitleLabel": "{title} Access",
   "photos": "Photos",
+  "noComplaintPhotos" : "No complaint photos shared by the resident",
   "phoneNumber": "Phone Number",
   "vehicleNameHint": "e.g. ALTO",
   "colorHint": "e.g. Black",

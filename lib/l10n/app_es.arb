@@ -169,6 +169,7 @@
   "receiptSubmittedToAdmin": "Tu recibo ha sido enviado al administrador",
   "accessTitleLabel": "Acceso a {title}",
   "photos": "Fotos",
+  "noComplaintPhotos" : "El residente no compartió fotografías relacionadas con la queja.",
   "phoneNumber": "Número de teléfono",
   "vehicleNameHint": "ej. ALTO",
   "colorHint": "ej. Negro",

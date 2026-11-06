@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/l10n/app_localizations.dart';
+import 'package:portalixmx_app/presentation/widgets/full_page_loading_widget.dart';
 import 'package:portalixmx_app/presentation/widgets/profile_image_widget.dart';
 import 'package:portalixmx_app/providers/authentication_provider/authentication_provider.dart';
 import 'package:portalixmx_app/providers/home_provider.dart';
@@ -20,108 +21,117 @@ class ProfileMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ProfileProvider>(context);
+    final authProvider = Provider.of<AuthenticationProvider>(context);
     final localization = AppLocalizations.of(context)!;
-    return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          spacing: 34,
-          children: [
-            provider.loadingProfile
-                ? LoadingWidget()
-                : provider.user != null
-                ? Padding(
-                    padding: const EdgeInsets.only(top: 45.0),
-                    child: Column(
-                      spacing: 5,
-                      children: [
-                        ProfileImageWidget(imageUrl: provider.user!.profileImg),
-                        Text(
-                          provider.user!.userName,
-                          style: AppTextStyles.bottomSheetHeadingTextStyle
-                              .copyWith(color: Colors.white),
-                        ),
-                        InkWell(
-                          onTap: () =>
-                              context.push(NamedRoutes.editProfile.routeName),
-                          child: Text(
-                            localization.viewProfile,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : const SizedBox(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
+      children: [
+        Center(
+          child: SingleChildScrollView(
+            child: Column(
+              spacing: 34,
               children: [
-                ProfileItemWidget(
-                  title: localization.myAccessQr,
-                  icon: AppIcons.icQRCode,
-                  isPng: true,
-                  onTap: () => context.push(NamedRoutes.myAccessQr.routeName),
-                ),
-                ProfileItemWidget(
-                  title: localization.directory,
-                  icon: AppIcons.icDirectory,
-                  onTap: () => _onDirectoryTap(context),
-                ),
-                ProfileItemWidget(
-                  title: localization.communityCalendar,
-                  icon: AppIcons.icCalendar,
-                  onTap: () => _onCommunityCalendarTap(context),
-                ),
-                ProfileItemWidget(
-                  title: localization.communityPolls,
-                  icon: AppIcons.icCommunityPolls,
-                  onTap: () => _onCommunityPollsTap(context),
-                ),
+                provider.loadingProfile
+                    ? LoadingWidget()
+                    : provider.user != null
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 45.0),
+                        child: Column(
+                          spacing: 5,
+                          children: [
+                            ProfileImageWidget(imageUrl: provider.user!.profileImg),
+                            Text(
+                              provider.user!.userName,
+                              style: AppTextStyles.bottomSheetHeadingTextStyle
+                                  .copyWith(color: Colors.white),
+                            ),
+                            InkWell(
+                              onTap: () =>
+                                  context.push(NamedRoutes.editProfile.routeName),
+                              child: Text(
+                                localization.viewProfile,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : const SizedBox(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ProfileItemWidget(
+                      title: localization.myAccessQr,
+                      icon: AppIcons.icQRCode,
+                      isPng: true,
+                      onTap: () => context.push(NamedRoutes.myAccessQr.routeName),
+                    ),
+                    ProfileItemWidget(
+                      title: localization.directory,
+                      icon: AppIcons.icDirectory,
+                      onTap: () => _onDirectoryTap(context),
+                    ),
+                    ProfileItemWidget(
+                      title: localization.communityCalendar,
+                      icon: AppIcons.icCalendar,
+                      onTap: () => _onCommunityCalendarTap(context),
+                    ),
+                    ProfileItemWidget(
+                      title: localization.communityPolls,
+                      icon: AppIcons.icCommunityPolls,
+                      onTap: () => _onCommunityPollsTap(context),
+                    ),
 
-                ProfileItemWidget(
-                  title: localization.fundManagement,
-                  icon: AppIcons.icPaymentsMenu,
-                  onTap: () => _onReportsTap(context),
-                ),
-                ProfileItemWidget(
-                  title: localization.guards,
-                  icon: AppIcons.icGuards,
-                  onTap: () => _onGuardsTap(context),
-                ),
-                ProfileItemWidget(
-                  title: localization.emergencyCalls,
-                  icon: AppIcons.icEmergencyCalls,
-                  onTap: () => _onEmergencyTap(context),
-                ),
-                TextButton(
-                  onPressed: () => _onPrivacyPolicyTap(),
-                  child: Text(
-                    localization.privacyPolicy,
-                    style: AppTextStyles.tileTitleTextStyle2,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => _onTermsOfServiceTap(),
-                  child: Text(
-                    localization.termsOfService,
-                    style: AppTextStyles.tileTitleTextStyle2,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => _onLogoutTap(context),
-                  child: Text(
-                    localization.logout,
-                    style: AppTextStyles.tileTitleTextStyle2,
-                  ),
+                    ProfileItemWidget(
+                      title: localization.fundManagement,
+                      icon: AppIcons.icPaymentsMenu,
+                      onTap: () => _onReportsTap(context),
+                    ),
+                    ProfileItemWidget(
+                      title: localization.guards,
+                      icon: AppIcons.icGuards,
+                      onTap: () => _onGuardsTap(context),
+                    ),
+                    ProfileItemWidget(
+                      title: localization.emergencyCalls,
+                      icon: AppIcons.icEmergencyCalls,
+                      onTap: () => _onEmergencyTap(context),
+                    ),
+                    TextButton(
+                      onPressed: () => _onPrivacyPolicyTap(),
+                      child: Text(
+                        localization.privacyPolicy,
+                        style: AppTextStyles.tileTitleTextStyle2,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => _onTermsOfServiceTap(),
+                      child: Text(
+                        localization.termsOfService,
+                        style: AppTextStyles.tileTitleTextStyle2,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: authProvider.isLoggingOut
+                          ? null
+                          : () => _onLogoutTap(context),
+                      child: Text(
+                        localization.logout,
+                        style: AppTextStyles.tileTitleTextStyle2,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
+        if (authProvider.isLoggingOut)
+          const FullPageLoadingWidget(),
+      ],
     );
   }
 

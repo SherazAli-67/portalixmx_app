@@ -13,11 +13,13 @@ class AuthenticationProvider extends ChangeNotifier{
 
   bool _isSigningUp = false;
   bool _isSigningIn = false;
+  bool _isLoggingOut = false;
 
   bool _isCompletingProfile = false;
 
   bool get isSigningUp => _isSigningUp;
   bool get isSigningIn => _isSigningIn;
+  bool get isLoggingOut => _isLoggingOut;
   bool get isCompletingProfile => _isCompletingProfile;
   SocietyModel? selectedSociety;
 
@@ -36,11 +38,18 @@ class AuthenticationProvider extends ChangeNotifier{
   }
 
   Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    await PushNotificationService.instance.removeTokenForSignOut();
-    clearUserState();
-    await FirebaseAuth.instance.signOut();
+    _isLoggingOut = true;
+    notifyListeners();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+      await PushNotificationService.instance.removeTokenForSignOut();
+      clearUserState();
+      await FirebaseAuth.instance.signOut();
+    } finally {
+      _isLoggingOut = false;
+      notifyListeners();
+    }
   }
   void onPickImageTap()async{
     ImagePicker imagPicked = ImagePicker();

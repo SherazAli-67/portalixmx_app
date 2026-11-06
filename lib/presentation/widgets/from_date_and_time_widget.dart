@@ -7,9 +7,22 @@ import '../../providers/datetime_format_helpers.dart';
 class FromDateAndTimeWidget extends StatelessWidget {
   const FromDateAndTimeWidget({
     super.key,
-    required String title, required VoidCallback onDateTap, required VoidCallback onTimeTap, DateTime? selectedDate, TimeOfDay? selectedTime, bool showTitle = true
-  }): _title = title, _onDateTap = onDateTap, _onTimeTap = onTimeTap, _selectedDate = selectedDate, _selectedTime = selectedTime, _showTitle = showTitle;
-
+    required String title,
+    required VoidCallback onDateTap,
+    required VoidCallback onTimeTap,
+    DateTime? selectedDate,
+    TimeOfDay? selectedTime,
+    bool showTitle = true,
+    bool hasError = false,
+    String? errorText,
+  }): _title = title,
+      _onDateTap = onDateTap,
+      _onTimeTap = onTimeTap,
+      _selectedDate = selectedDate,
+      _selectedTime = selectedTime,
+      _showTitle = showTitle,
+      _hasError = hasError,
+      _errorText = errorText;
 
   final String _title;
   final VoidCallback _onDateTap;
@@ -17,8 +30,12 @@ class FromDateAndTimeWidget extends StatelessWidget {
   final DateTime? _selectedDate;
   final TimeOfDay? _selectedTime;
   final bool _showTitle;
+  final bool _hasError;
+  final String? _errorText;
+
   @override
   Widget build(BuildContext context) {
+    final borderColor = _hasError ? AppColors.btnColorDark : AppColors.borderColor;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 5,
@@ -31,7 +48,7 @@ class FromDateAndTimeWidget extends StatelessWidget {
             Expanded(child: Container(
                 padding: EdgeInsets.only(left: 15,  top: 2, bottom: 2),
                 decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.borderColor),
+                    border: Border.all(color: borderColor),
                     color: AppColors.fillColorGrey,
                     borderRadius: BorderRadius.circular(8)
                 ),
@@ -46,7 +63,7 @@ class FromDateAndTimeWidget extends StatelessWidget {
             Expanded(child: Container(
                 padding: EdgeInsets.only(left: 15, top: 2, bottom: 2),
                 decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.borderColor),
+                    border: Border.all(color: borderColor),
                     color: AppColors.fillColorGrey,
                     borderRadius: BorderRadius.circular(8)
                 ),
@@ -59,7 +76,12 @@ class FromDateAndTimeWidget extends StatelessWidget {
                 )
             ),)
           ],
-        )
+        ),
+        if (_errorText != null)
+          Text(
+            _errorText!,
+            style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: AppColors.statusError),
+          ),
       ],
     );
   }

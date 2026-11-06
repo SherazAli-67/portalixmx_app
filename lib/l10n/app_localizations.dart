@@ -1070,6 +1070,12 @@ abstract class AppLocalizations {
   /// **'Photos'**
   String get photos;
 
+  /// No description provided for @noComplaintPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'No complaint photos shared by the resident'**
+  String get noComplaintPhotos;
+
   /// No description provided for @phoneNumber.
   ///
   /// In en, this message translates to:

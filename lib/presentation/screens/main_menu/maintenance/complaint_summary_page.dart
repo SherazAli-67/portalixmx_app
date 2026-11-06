@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portalixmx_app/core/helpers/status_display_helper.dart';
@@ -67,7 +68,10 @@ class ComplaintSummaryPage extends StatelessWidget{
                       const Divider(),
                       VisitorInfoItemWidget(title: localization.complaint, subTitle: current.complaint, showDivider: true),
                       Text(localization.photos, style: AppTextStyles.visitorDetailTitleTextStyle,),
-                      Expanded(child: snapshot.connectionState == ConnectionState.waiting && snapshot.data == null
+
+                      Expanded(
+                          child: current.images.isNotEmpty ?
+                          snapshot.connectionState == ConnectionState.waiting && snapshot.data == null
                           ? const LoadingWidget()
                           : GridView.builder(
                           itemCount: current.images.length,
@@ -80,10 +84,16 @@ class ComplaintSummaryPage extends StatelessWidget{
                           }),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                            child: CachedNetworkImage(imageUrl: ImageUrlHelper.getImageUrl(current.images[index]), height: 75, fit: BoxFit.cover,),
+                            child: CachedNetworkImage(
+                              imageUrl: ImageUrlHelper.getImageUrl(current.images[index]),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              progressIndicatorBuilder: (context, url, downloadProgress) => CupertinoActivityIndicator(),
+                              height: 75,
+                              fit: BoxFit.cover,),
                           ),
                         );
-                      }))
+                      }) : Text(localization.noComplaintPhotos, style: AppTextStyles.visitorDetailSubtitleTextStyle.copyWith(fontSize: 14),),
+                      )
                     ],
                   )
                 );

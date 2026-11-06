@@ -17,11 +17,11 @@ class EmptyStateWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: 12,
           children: [
-            Icon(icon ?? Icons.inbox_outlined, size: 40, color: AppColors.greyColor),
+            Icon(icon ?? Icons.inbox_outlined, size: 40, color: Colors.white),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: AppColors.darkGreyColor),
+              style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: Colors.white),
             ),
           ],
         ),

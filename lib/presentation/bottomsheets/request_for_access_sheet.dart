@@ -49,7 +49,7 @@ class _RequestForAccessSheetState extends State<RequestForAccessSheet> {
             const SizedBox(height: 10,),
             FromDateAndTimeWidget(title: AppLocalizations.of(context)!.from, onDateTap: _onDateTap, onTimeTap: _onTimeTap, selectedDate: _selectedDate, selectedTime: _selectedTime, showTitle: false,),
             Text(AppLocalizations.of(context)!.accessFor, style: AppTextStyles.tileSubtitleTextStyle.copyWith(color: Color(0xff666666)),),
-            if(_loading)
+           /* if(_loading)
               LoadingWidget()
             else
               Expanded(
@@ -109,7 +109,54 @@ class _RequestForAccessSheetState extends State<RequestForAccessSheet> {
                     );
                   },
                 ),
-              ),
+              ),*/
+            Wrap(
+              children: _accessList.map((access){
+                // final access = _accessList[index];
+                bool isSelected = _selectedAccess == access;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8, bottom: 20),
+                  child: GestureDetector(
+                    onTap: ()=>  setState(()=> _selectedAccess = access),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:isSelected ? AppColors.primaryColor :  Colors.white,
+                            border: Border.all(color: AppColors.borderColor),
+                            boxShadow: [
+                              BoxShadow(
+                                offset: Offset.zero,
+                                blurRadius: 30,
+                                spreadRadius: 0,
+                                color: Colors.black.withValues(alpha: 0.09),
+                              ),
+                            ],
+                          ),
+                          padding: .all(4),
+                          child: access.image.isNotEmpty
+                              ? CircleAvatar(
+                            backgroundImage: CachedNetworkImageProvider(access.image),
+                            radius: 35,
+                          )
+                              : const Icon(Icons.lock_outline, size: 48),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          access.name,
+                          textAlign: .center,
+                          style: AppTextStyles.tileSubtitleTextStyle,
+                          maxLines: 2,
+                          overflow: .ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
             SizedBox(
               height: 50,
               width: double.infinity,

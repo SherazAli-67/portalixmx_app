@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:portalixmx_app/core/common_ui.dart';
 import 'package:portalixmx_app/core/models/visitor_model.dart';
 import 'package:portalixmx_app/core/validators/validators.dart';
@@ -49,6 +50,7 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
 
   List<DayTimeModel> _regularVisitorTime = [];
   final _formKey = GlobalKey<FormState>();
+  String? _dateRangeError;
   
   @override
   void initState() {
@@ -189,7 +191,7 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
         firstDate: DateTime.now(),
         lastDate: DateTime.now().add(Duration(days: 365)));
     if (_selectedFromDateTime != null) {
-      setState(() {});
+      setState(() => _dateRangeError = null);
     }
   }
   void _onFromTimeTap()async{
@@ -198,7 +200,10 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
       initialTime: TimeOfDay.now(),
     );
     if(pickedTime != null){
-      setState(() =>  _selectedFromTime = pickedTime);
+      setState(() {
+        _selectedFromTime = pickedTime;
+        _dateRangeError = null;
+      });
     }
   }
 
@@ -207,7 +212,7 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
         firstDate: DateTime.now(),
         lastDate: DateTime.now().add(Duration(days: 365)));
     if (_selectedToDateTime != null) {
-      setState(() {});
+      setState(() => _dateRangeError = null);
     }
   }
   void _onToTimeTap()async{
@@ -216,16 +221,35 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
       initialTime: TimeOfDay.now(),
     );
     if(pickedTime != null){
-      setState(() =>  _selectedToTime = pickedTime);
+      setState(() {
+        _selectedToTime = pickedTime;
+        _dateRangeError = null;
+      });
     }
   }
 
   Widget _buildGuestWidget(AppLocalizations localization) {
+    final hasRangeError = _dateRangeError != null;
     return Column(
       spacing: 15,
       children: [
-        FromDateAndTimeWidget(title: localization.from,onDateTap: _onFromDateTap, onTimeTap: _onFromTimeTap, selectedDate: _selectedFromDateTime, selectedTime: _selectedFromTime),
-        FromDateAndTimeWidget(title: localization.to,onDateTap: _onToDateTap, onTimeTap: _onToTimeTap, selectedDate: _selectedToDateTime, selectedTime: _selectedToTime),
+        FromDateAndTimeWidget(
+          title: localization.from,
+          onDateTap: _onFromDateTap,
+          onTimeTap: _onFromTimeTap,
+          selectedDate: _selectedFromDateTime,
+          selectedTime: _selectedFromTime,
+          hasError: hasRangeError,
+        ),
+        FromDateAndTimeWidget(
+          title: localization.to,
+          onDateTap: _onToDateTap,
+          onTimeTap: _onToTimeTap,
+          selectedDate: _selectedToDateTime,
+          selectedTime: _selectedToTime,
+          hasError: hasRangeError,
+          errorText: _dateRangeError,
+        ),
       ],
     );
   }
@@ -376,7 +400,7 @@ class _AddUpdateGuestBottomSheetState extends State<AddUpdateGuestBottomSheet> {
       final toDateTime = _combineDateTime(_selectedToDateTime!, _selectedToTime!);
       
       if (!toDateTime.isAfter(fromDateTime)) {
-        CommonUI.showSnackBarMessage(context, isError: true, message: localization.visitDurationMustBePositive);
+        setState(() => _dateRangeError = localization.visitDurationMustBePositive);
         return false;
       }
     } else {
