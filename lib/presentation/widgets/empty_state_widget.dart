@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../core/res/app_colors.dart';
 import '../../core/res/app_textstyles.dart';
 
 class EmptyStateWidget extends StatelessWidget {
