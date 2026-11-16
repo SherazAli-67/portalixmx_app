@@ -31,8 +31,7 @@ class ReportsPage extends StatelessWidget {
                     mainAxisAlignment: .spaceBetween,
                     children: [
                       const BackButton(color: Colors.white),
-                      Text(localization.fundManagement,
-                          style: AppTextStyles.regularTextStyle),
+                      Text(localization.fundManagement, style: AppTextStyles.regularTextStyle),
                       const SizedBox(width: 40,)
                     ],
                   ),

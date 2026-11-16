@@ -32,6 +32,7 @@ class FundReportsService {
     if (societyID.isEmpty) return Stream.value([]);
     return _getReportsCollection()
         .where('societyID', isEqualTo: societyID)
+        .where('status', isEqualTo: FundReportStatus.published.index)
         .where('showToResidents', isEqualTo: true)
         .snapshots()
         .map((snapshot) => snapshot.docs

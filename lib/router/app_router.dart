@@ -51,8 +51,8 @@ GoRouter appRouter = GoRouter(
 
     GoRoute(path: NamedRoutes.completeProfile.routeName, builder: (ctx, state)=> CompleteProfileScreen()),
     GoRoute(path: NamedRoutes.login.routeName, builder: (ctx, state)=> LoginPage()),
-      GoRoute(path: NamedRoutes.forgetPassword.routeName, builder: (ctx, state)=> ForgetPasswordPage()),
-      StatefulShellRoute.indexedStack(
+    GoRoute(path: NamedRoutes.forgetPassword.routeName, builder: (ctx, state)=> ForgetPasswordPage()),
+    StatefulShellRoute.indexedStack(
           builder: (ctx, state, navigationShell){
             return MainMenuPage(navigationShell: navigationShell,);
           },
@@ -76,13 +76,13 @@ GoRouter appRouter = GoRouter(
       GoRoute(path: NamedRoutes.guestDetail.routeName, builder: (ctx, state){
         return GuestDetailPage(visitor: state.extra as BaseVisitor);
       }),
+
     GoRoute(path: NamedRoutes.myAccessQr.routeName, builder: (ctx, state)=> const MyAccessQrPage()),
     GoRoute(path: NamedRoutes.paymentDetail.routeName, builder: (ctx, state)=> PaymentDetailPage(payment: state.extra as PaymentModel)),
-
     GoRoute(path: NamedRoutes.accessRequestDetail.routeName, builder: (ctx, state)=> AccessSummaryPage(access: state.extra as AccessRequestModel)),
     GoRoute(path: NamedRoutes.complaintSummary.routeName, builder: (ctx, state)=> ComplaintSummaryPage(complaint: state.extra as ComplaintModel,)),
-      GoRoute(path: NamedRoutes.editProfile.routeName, builder: (ctx, state)=> EditProfilePage()),
-      GoRoute(path: NamedRoutes.userDirectory.routeName, builder: (ctx, state)=> DirectoryPage()),
+    GoRoute(path: NamedRoutes.editProfile.routeName, builder: (ctx, state)=> EditProfilePage()),
+    GoRoute(path: NamedRoutes.userDirectory.routeName, builder: (ctx, state)=> DirectoryPage()),
 
     GoRoute(path: NamedRoutes.communityCalendar.routeName, builder: (ctx, state)=> CommunityCalendarPage()),
     GoRoute(path: NamedRoutes.communityCalendarDetail.routeName, builder: (ctx, state)=> CommunityCalendarDetailPage(event: state.extra as CommunityEventModel,)),
@@ -103,8 +103,7 @@ GoRouter appRouter = GoRouter(
         builder: (ctx, state) => ReportsPage()),
     GoRoute(
         path: NamedRoutes.reportDetail.routeName,
-        builder: (ctx, state) => FundReportDetailPage(
-            report: state.extra as FundReportModel)),
+        builder: (ctx, state) => FundReportDetailPage(report: state.extra as FundReportModel)),
   ],
   redirect: (BuildContext context, GoRouterState state) async {
     final loc = state.matchedLocation;
@@ -116,10 +115,7 @@ GoRouter appRouter = GoRouter(
 
     final firebaseUser = FirebaseAuth.instance.currentUser;
     if (firebaseUser == null) {
-      if (!isOnSignupPage &&
-          !isOnLoginPage &&
-          !isOnForgetPasswordPage &&
-          !isOnCompleteProfilePage) {
+      if (!isOnSignupPage && !isOnLoginPage && !isOnForgetPasswordPage && !isOnCompleteProfilePage) {
         return NamedRoutes.login.routeName;
       }
       return null;
@@ -139,7 +135,6 @@ GoRouter appRouter = GoRouter(
       return NamedRoutes.completeProfile.routeName;
     }
 
-    // debugPrint("User ${profile.userID}, Name: ${profile.userName}");
    if (profile.status == UserStatus.pending) {
       if (isOnAccountPendingPage || isOnCompleteProfilePage || isOnSignupPage) {
         return null;

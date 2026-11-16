@@ -47,6 +47,7 @@ class CommunityPollsProvider extends ChangeNotifier {
       _pollsSub?.cancel();
       _pollsSub = _pollsService.watchPolls(sid).listen((polls) {
         _communityPolls = polls;
+        _communityPolls.sort((a, b) => b.createdAt.compareTo(a.createdAt));
         loadingCommunityPolls = false;
         notifyListeners();
       }, onError: (e) {
